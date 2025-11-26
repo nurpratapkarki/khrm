@@ -239,6 +239,18 @@ class DocumentSerializer(serializers.ModelSerializer):
         read_only_fields = ['download_count', 'uploaded_at']
 
 
+class PrivacyPolicySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PrivacyPolicy
+        fields = '__all__'
+
+
+class TermsOfServiceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TermsOfService
+        fields = '__all__'
+
+
 # ==================== FAQ & CONTACT SERIALIZERS ====================
 
 class FAQSerializer(serializers.ModelSerializer):

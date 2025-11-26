@@ -368,6 +368,40 @@ class DocumentViewSet(viewsets.ReadOnlyModelViewSet):
         return Response(docs_by_type)
 
 
+# ==================== LEGAL CONTENT VIEWSETS ====================
+
+class PrivacyPolicyViewSet(viewsets.ReadOnlyModelViewSet):
+    """API endpoint for privacy policy"""
+    queryset = PrivacyPolicy.objects.filter(is_active=True)
+    serializer_class = PrivacyPolicySerializer
+    permission_classes = [AllowAny]
+    lookup_field = 'slug'
+
+    def list(self, request, *args, **kwargs):
+        """Return the latest active privacy policy as a single object"""
+        policy = self.queryset.order_by('-last_updated').first()
+        if policy:
+            serializer = self.get_serializer(policy)
+            return Response(serializer.data)
+        return Response({})
+
+
+class TermsOfServiceViewSet(viewsets.ReadOnlyModelViewSet):
+    """API endpoint for terms of service"""
+    queryset = TermsOfService.objects.filter(is_active=True)
+    serializer_class = TermsOfServiceSerializer
+    permission_classes = [AllowAny]
+    lookup_field = 'slug'
+
+    def list(self, request, *args, **kwargs):
+        """Return the latest active terms of service as a single object"""
+        terms = self.queryset.order_by('-last_updated').first()
+        if terms:
+            serializer = self.get_serializer(terms)
+            return Response(serializer.data)
+        return Response({})
+
+
 # ==================== FAQ & CONTACT VIEWSETS ====================
 
 class FAQViewSet(viewsets.ReadOnlyModelViewSet):

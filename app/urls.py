@@ -32,6 +32,10 @@ router.register(r'news', views.NewsPostViewSet, basename='news')
 # Documents
 router.register(r'documents', views.DocumentViewSet, basename='document')
 
+# Legal
+router.register(r'privacy-policy', views.PrivacyPolicyViewSet, basename='privacy-policy')
+router.register(r'terms-of-service', views.TermsOfServiceViewSet, basename='terms-of-service')
+
 # FAQ & Contact
 router.register(r'faqs', views.FAQViewSet, basename='faq')
 router.register(r'contact-messages', views.ContactMessageViewSet, basename='contact-message')

@@ -367,6 +367,24 @@ class CSRProjectAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
     date_hierarchy = 'date'
 
+# ==================== LEGAL ADMIN ====================
+
+@admin.register(PrivacyPolicy)
+class PrivacyPolicyAdmin(admin.ModelAdmin):
+    list_display = ['title', 'last_updated', 'is_active']
+    list_filter = ['is_active', 'last_updated']
+    search_fields = ['title', 'content']
+    readonly_fields = ['last_updated']
+    list_editable = ['is_active']
+
+
+@admin.register(TermsOfService)
+class TermsOfServiceAdmin(admin.ModelAdmin):
+    list_display = ['title', 'last_updated', 'is_active']
+    list_filter = ['is_active', 'last_updated']
+    search_fields = ['title', 'content']
+    readonly_fields = ['last_updated']
+    list_editable = ['is_active']
 
 # ==================== CUSTOM ADMIN GROUPING ====================
 
@@ -379,6 +397,7 @@ ADMIN_SIDEBAR_GROUP_ORDER = [
     'Team',
     'Communications',
     'Media',
+    'Legal',
     'System',  # fallback bucket for everything else
 ]
 
@@ -419,6 +438,9 @@ MODEL_TO_GROUP = {
     # Media (albums, photos)
     'MediaAlbum': 'Media',
     'MediaPhoto': 'Media',
+    # Legal (privacy, terms, etc.)
+    'PrivacyPolicy': 'Legal',
+    'TermsOfService': 'Legal',
 }
 
 

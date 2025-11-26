@@ -215,8 +215,16 @@ class Job(models.Model):
         ordering = ['-created_at']
     
     def save(self, *args, **kwargs):
+        """Automatically generate a unique slug based on the title."""
         if not self.slug:
-            self.slug = slugify(self.title)
+            base_slug = slugify(self.title)
+            slug = base_slug
+            counter = 1
+            # Ensure slug uniqueness in case multiple jobs share the same title
+            while Job.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+            self.slug = slug
         super().save(*args, **kwargs)
     
     def __str__(self):
@@ -479,6 +487,40 @@ class Document(models.Model):
     class Meta:
         ordering = ['display_order', 'title']
     
+    def __str__(self):
+        return self.title
+
+
+# ==================== LEGAL CONTENT MODELS ====================
+
+class PrivacyPolicy(models.Model):
+    """Privacy policy content"""
+    title = models.CharField(max_length=200, default="Privacy Policy")
+    slug = models.SlugField(unique=True, default="privacy-policy")
+    content = models.TextField()
+    last_updated = models.DateField(auto_now=True)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name = "Privacy Policy"
+        verbose_name_plural = "Privacy Policies"
+
+    def __str__(self):
+        return self.title
+
+
+class TermsOfService(models.Model):
+    """Terms of service content"""
+    title = models.CharField(max_length=200, default="Terms of Service")
+    slug = models.SlugField(unique=True, default="terms-of-service")
+    content = models.TextField()
+    last_updated = models.DateField(auto_now=True)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name = "Terms of Service"
+        verbose_name_plural = "Terms of Service"
+
     def __str__(self):
         return self.title
 
