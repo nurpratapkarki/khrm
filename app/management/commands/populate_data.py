@@ -63,19 +63,28 @@ class Command(BaseCommand):
         
         self.stdout.write('Creating news posts...')
         news = self.create_news_posts()
-        
+
         self.stdout.write('Creating documents...')
         documents = self.create_documents()
-        
+
+        self.stdout.write('Creating policies (privacy & terms)...')
+        policies = self.create_policies()
+
         self.stdout.write('Creating FAQs...')
         faqs = self.create_faqs()
-        
+
         self.stdout.write('Creating contact messages...')
         messages = self.create_contact_messages()
-        
+
         self.stdout.write('Creating CSR projects...')
         csr = self.create_csr_projects()
-        
+
+        self.stdout.write('Creating careers (internal hiring)...')
+        careers = self.create_careers()
+
+        self.stdout.write('Creating Japan landing content...')
+        japan_page, japan_bullets, japan_team = self.create_japan_landing()
+
         self.stdout.write(self.style.SUCCESS('✅ Data population completed successfully!'))
         self.print_summary()
 
@@ -88,6 +97,12 @@ class Command(BaseCommand):
         FAQ.objects.all().delete()
         ContactMessage.objects.all().delete()
         CSRProject.objects.all().delete()
+        JapanTeamMember.objects.all().delete()
+        JapanBulletPoint.objects.all().delete()
+        JapanLandingPage.objects.all().delete()
+        Career.objects.all().delete()
+        PrivacyPolicy.objects.all().delete()
+        TermsOfService.objects.all().delete()
         JobApplication.objects.all().delete()
         Job.objects.all().delete()
         JobCategory.objects.all().delete()
@@ -617,6 +632,7 @@ class Command(BaseCommand):
                 title='Scholarship Program for Underprivileged Students',
                 description='Annual scholarship program providing education support to 50 students from rural Nepal.',
                 impact_statement='Supported 500+ students since 2010, with 80% completing their education successfully.',
+                featured_image='csr/scholarship-program.jpg',
                 date=datetime(2023, 6, 15).date(),
                 location='Various districts of Nepal',
                 is_active=True
@@ -625,12 +641,225 @@ class Command(BaseCommand):
                 title='Skill Development for Returnee Migrants',
                 description='Free training program for returnee migrant workers to help them find employment in Nepal.',
                 impact_statement='Trained 200+ returnee workers in various skills including agriculture, small business, and trades.',
+                featured_image='csr/skill-development-returnees.jpg',
                 date=datetime(2023, 9, 1).date(),
                 location='Kathmandu, Nepal',
                 is_active=True
             ),
         ]
         return projects
+
+    def create_policies(self):
+        """Create sample Privacy Policy and Terms of Service entries.
+
+        These are meant for local/demo data population only. In production,
+        you will likely edit them directly from the admin with the final
+        legal copy.
+        """
+
+        privacy = PrivacyPolicy.objects.create(
+            content=(
+                "This is sample privacy policy content for the KHRM demo "
+                "environment. Replace this text with the actual approved "
+                "privacy policy before going live."
+            ),
+            is_active=True,
+        )
+
+        terms = TermsOfService.objects.create(
+            content=(
+                "These are sample terms of service for the KHRM demo "
+                "environment. Replace this content with the final legal "
+                "terms before production use."
+            ),
+            is_active=True,
+        )
+
+        return privacy, terms
+
+    def create_careers(self):
+        """Create internal career opportunities used on the Careers pages."""
+
+        careers = []
+
+        careers.append(
+            Career.objects.create(
+                title="Japan Desk Recruitment Officer",
+                department="Japan Desk",
+                location="Kathmandu, Nepal",
+                employment_type="Full-time",
+                summary=(
+                    "Coordinate end-to-end recruitment activities for "
+                    "Japan-focused hiring, including candidate screening, "
+                    "interview scheduling, and client updates."
+                ),
+                responsibilities=(
+                    "- Manage candidate pipeline for Japan opportunities\n"
+                    "- Coordinate with Japanese employers and local partners\n"
+                    "- Maintain accurate documentation and reporting"
+                ),
+                requirements=(
+                    "- Bachelor's degree in any discipline\n"
+                    "- Strong communication skills in English (Japanese is a plus)\n"
+                    "- Prior experience in recruitment or HR preferred"
+                ),
+                application_email="careers@khrm.com.np",
+                is_active=True,
+                priority=1,
+            )
+        )
+
+        careers.append(
+            Career.objects.create(
+                title="Training & Compliance Coordinator (Japan)",
+                department="Training",
+                location="Kathmandu, Nepal",
+                employment_type="Full-time",
+                summary=(
+                    "Oversee pre-departure training, compliance documentation, "
+                    "and orientation for candidates traveling to Japan."
+                ),
+                responsibilities=(
+                    "- Coordinate language and cultural training sessions\n"
+                    "- Ensure documentation complies with Japan regulations\n"
+                    "- Liaise with candidates, trainers, and partner institutions"
+                ),
+                requirements=(
+                    "- Bachelor's degree in management or related field\n"
+                    "- Excellent organisational skills\n"
+                    "- Experience in training or compliance is an advantage"
+                ),
+                application_email="careers@khrm.com.np",
+                is_active=True,
+                priority=2,
+            )
+        )
+
+        return careers
+
+    def create_japan_landing(self):
+        """Create Japan-focused landing page content, bullets and team."""
+
+        landing = JapanLandingPage.objects.create(
+            intro_title="Japan-focused recruitment from Nepal",
+            intro_description=(
+                "KHRM Nepal connects motivated Nepali talent with trusted "
+                "employers in Japan through a transparent, compliant and "
+                "well-prepared process."
+            ),
+            commitment_title="Our commitment to Japan and Nepali workers",
+            commitment_intro=(
+                "We invest in long-term partnerships built on trust, "
+                "compliance and continuous support for both employers and "
+                "candidates."
+            ),
+            preparation_title="Japan-focused preparation system",
+            preparation_intro=(
+                "From language and culture to workplace discipline, "
+                "candidates go through a structured preparation journey "
+                "before departure."
+            ),
+            trust_title="Why Japan trusts KHRM Nepal",
+            trust_intro=(
+                "A combination of compliance, transparency and strong "
+                "on-the-ground support makes us a reliable partner for Japan."
+            ),
+            vision_title="Vision for the Japan-Nepal workforce partnership",
+            vision_intro=(
+                "To build a sustainable bridge between Japan and Nepal where "
+                "skilled, well-prepared workers contribute to both economies."
+            ),
+        )
+
+        bullets_data = [
+            # Commitment
+            {
+                "section": "commitment",
+                "title": "Ethical recruitment",
+                "description": "Zero-tolerance policy on illegal fees and unfair practices.",
+                "order": 1,
+            },
+            {
+                "section": "commitment",
+                "title": "Long-term support",
+                "description": "Support for workers before departure and after arrival in Japan.",
+                "order": 2,
+            },
+            # Preparation system
+            {
+                "section": "preparation",
+                "title": "Language & culture training",
+                "description": "JLPT-focused language classes and practical cultural orientation.",
+                "order": 1,
+            },
+            {
+                "section": "preparation",
+                "title": "Workplace discipline",
+                "description": "Emphasis on safety, punctuality and teamwork in Japanese workplaces.",
+                "order": 2,
+            },
+            # Trust
+            {
+                "section": "trust",
+                "title": "Transparent processes",
+                "description": "Clear documentation, communication and reporting for clients.",
+                "order": 1,
+            },
+            {
+                "section": "trust",
+                "title": "Compliance-first mindset",
+                "description": "Aligned with regulations in both Nepal and Japan.",
+                "order": 2,
+            },
+            # Vision
+            {
+                "section": "vision",
+                "title": "Sustainable partnerships",
+                "description": "Build a stable corridor of skilled workers between Japan and Nepal.",
+                "order": 1,
+            },
+            {
+                "section": "vision",
+                "title": "Shared growth",
+                "description": "Create opportunities that benefit employers, workers and communities.",
+                "order": 2,
+            },
+        ]
+
+        bullets = []
+        for data in bullets_data:
+            bullets.append(JapanBulletPoint.objects.create(page=landing, **data))
+
+        team = []
+        team.append(
+            JapanTeamMember.objects.create(
+                page=landing,
+                name="Japan Program Director",
+                role="Leads Japan market strategy and employer relations",
+                bio=(
+                    "Over a decade of experience connecting Nepali talent with "
+                    "international opportunities, with a dedicated focus on Japan."
+                ),
+                photo="japan/team/director.jpg",
+                order=1,
+            )
+        )
+
+        team.append(
+            JapanTeamMember.objects.create(
+                page=landing,
+                name="Training & Compliance Lead",
+                role="Oversees pre-departure training and documentation",
+                bio=(
+                    "Ensures every candidate is well-prepared, compliant and "
+                    "confident before travelling to Japan."
+                ),
+                photo="japan/team/training-lead.jpg",
+                order=2,
+            )
+        )
+
+        return landing, bullets, team
 
     def print_summary(self):
         """Print summary of created data"""
@@ -655,4 +884,10 @@ class Command(BaseCommand):
         self.stdout.write(f'  • FAQs: {FAQ.objects.count()}')
         self.stdout.write(f'  • Contact Messages: {ContactMessage.objects.count()}')
         self.stdout.write(f'  • CSR Projects: {CSRProject.objects.count()}')
+        self.stdout.write(f'  • Careers: {Career.objects.count()}')
+        self.stdout.write(f'  • Japan Landing Pages: {JapanLandingPage.objects.count()}')
+        self.stdout.write(f'  • Japan Bullet Points: {JapanBulletPoint.objects.count()}')
+        self.stdout.write(f'  • Japan Team Members: {JapanTeamMember.objects.count()}')
+        self.stdout.write(f'  • Privacy Policies: {PrivacyPolicy.objects.count()}')
+        self.stdout.write(f'  • Terms of Service: {TermsOfService.objects.count()}')
         self.stdout.write(self.style.SUCCESS('\n✅ Database is ready for testing!'))

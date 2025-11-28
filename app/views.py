@@ -223,6 +223,24 @@ class JobApplicationViewSet(viewsets.ModelViewSet):
         )
 
 
+class CareerViewSet(viewsets.ReadOnlyModelViewSet):
+    """Internal career opportunities at KHRM (separate from overseas jobs)."""
+
+    queryset = Career.objects.filter(is_active=True)
+    permission_classes = [AllowAny]
+    lookup_field = 'slug'
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['department', 'location', 'employment_type']
+    search_fields = ['title', 'summary', 'responsibilities', 'requirements']
+    ordering_fields = ['posted_at', 'priority']
+    ordering = ['priority', '-posted_at']
+
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return CareerDetailSerializer
+        return CareerListSerializer
+
+
 class EmployerInquiryViewSet(viewsets.ModelViewSet):
     """API endpoint for employer inquiries"""
     queryset = EmployerInquiry.objects.all()
@@ -454,6 +472,19 @@ class CSRProjectViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [AllowAny]
     lookup_field = 'slug'
     ordering = ['-date']
+
+
+class JapanLandingViewSet(viewsets.ViewSet):
+    """Provides the single Japan landing page configuration with nested content."""
+
+    permission_classes = [AllowAny]
+
+    def list(self, request):
+        page = JapanLandingPage.objects.order_by('-created_at').first()
+        if not page:
+            return Response({})
+        serializer = JapanLandingPageSerializer(page)
+        return Response(serializer.data)
 
 
 # ==================== HOME PAGE VIEWSET ====================

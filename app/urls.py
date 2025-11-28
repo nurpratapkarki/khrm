@@ -40,8 +40,10 @@ router.register(r'terms-of-service', views.TermsOfServiceViewSet, basename='term
 router.register(r'faqs', views.FAQViewSet, basename='faq')
 router.register(r'contact-messages', views.ContactMessageViewSet, basename='contact-message')
 
-# CSR
+# CSR & Careers & Japan
 router.register(r'csr-projects', views.CSRProjectViewSet, basename='csr-project')
+router.register(r'careers', views.CareerViewSet, basename='career')
+router.register(r'japan-landing', views.JapanLandingViewSet, basename='japan-landing')
 
 # Home
 router.register(r'home', views.HomeViewSet, basename='home')

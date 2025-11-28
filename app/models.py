@@ -606,3 +606,120 @@ class CSRProject(models.Model):
     
     def __str__(self):
         return self.title
+
+
+# ==================== CAREER & JAPAN LANDING MODELS ====================
+
+
+class Career(models.Model):
+    """Internal career opportunities at KHRM (not overseas jobs)."""
+
+    title = models.CharField(max_length=200)
+    slug = models.SlugField(unique=True, blank=True)
+    department = models.CharField(max_length=100, blank=True)
+    location = models.CharField(max_length=200)
+    employment_type = models.CharField(max_length=100, blank=True)
+
+    summary = models.TextField(blank=True)
+    responsibilities = models.TextField(blank=True)
+    requirements = models.TextField(blank=True)
+
+    application_email = models.EmailField(blank=True)
+    apply_url = models.URLField(blank=True)
+
+    is_active = models.BooleanField(default=True)
+    priority = models.IntegerField(default=0)
+    posted_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['priority', '-posted_at']
+        verbose_name = "Career"
+        verbose_name_plural = "Careers"
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title
+
+
+class JapanLandingPage(models.Model):
+    """Structured content for Japan-focused homepage section."""
+
+    intro_title = models.CharField(max_length=200)
+    intro_description = models.TextField()
+
+    commitment_title = models.CharField(max_length=200)
+    commitment_intro = models.TextField(blank=True)
+
+    preparation_title = models.CharField(max_length=200)
+    preparation_intro = models.TextField(blank=True)
+
+    trust_title = models.CharField(max_length=200)
+    trust_intro = models.TextField(blank=True)
+
+    vision_title = models.CharField(max_length=200)
+    vision_intro = models.TextField(blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Japan Landing Page"
+        verbose_name_plural = "Japan Landing Pages"
+
+    def __str__(self):
+        return self.intro_title
+
+
+class JapanBulletPoint(models.Model):
+    """Bullet points for the different sections of the Japan landing page."""
+
+    SECTION_CHOICES = [
+        ('commitment', 'Commitment'),
+        ('preparation', 'Preparation System'),
+        ('trust', 'Why Japan Trusts KHRM'),
+        ('vision', 'Vision'),
+    ]
+
+    page = models.ForeignKey(
+        JapanLandingPage,
+        on_delete=models.CASCADE,
+        related_name='bullet_points',
+    )
+    section = models.CharField(max_length=20, choices=SECTION_CHOICES)
+    title = models.CharField(max_length=200, blank=True)
+    description = models.TextField()
+    order = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ['section', 'order']
+
+    def __str__(self):
+        return f"{self.get_section_display()} - {self.title or self.description[:40]}"
+
+
+class JapanTeamMember(models.Model):
+    """People behind Japan recruitment (for Japan landing page)."""
+
+    page = models.ForeignKey(
+        JapanLandingPage,
+        on_delete=models.CASCADE,
+        related_name='team_members',
+    )
+    name = models.CharField(max_length=200)
+    role = models.CharField(max_length=200, blank=True)
+    bio = models.TextField(blank=True)
+    photo = models.ImageField(upload_to='japan/team/', blank=True)
+    order = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ['order']
+        verbose_name = "Japan Team Member"
+        verbose_name_plural = "Japan Team Members"
+
+    def __str__(self):
+        return self.name

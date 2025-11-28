@@ -18,6 +18,47 @@ class TestimonialInline(admin.TabularInline):
     extra = 0
     fields = ['person_name', 'person_position', 'rating', 'is_featured']
 
+# Make sure these inline classes are defined BEFORE the JapanLandingPageAdmin
+class JapanBulletPointInline(admin.StackedInline):
+    """Inline for structured bullet points on the Japan landing page."""
+    model = JapanBulletPoint
+    fk_name = 'page'
+    extra = 1
+    fields = ['section', 'title', 'description', 'order']
+    ordering = ['section', 'order']
+    verbose_name = "Bullet Point"
+    verbose_name_plural = "Japan Bullet Points"
+
+
+class JapanTeamMemberInline(admin.StackedInline):
+    """Inline for the team behind Japan recruitment."""
+    model = JapanTeamMember
+    fk_name = 'page'
+    extra = 1
+    fields = ['name', 'role', 'bio', 'photo', 'order']
+    ordering = ['order']
+    verbose_name = "Team Member"
+    verbose_name_plural = "Japan Team Members"
+
+@admin.register(JapanBulletPoint)
+class JapanBulletPointAdmin(admin.ModelAdmin):
+	"""Fallback admin so bullet points can be edited directly if needed."""
+
+	list_display = ['page', 'section', 'title', 'order']
+	list_filter = ['section', 'page']
+	search_fields = ['title', 'description']
+	ordering = ['page', 'section', 'order']
+
+
+@admin.register(JapanTeamMember)
+class JapanTeamMemberAdmin(admin.ModelAdmin):
+	"""Fallback admin for managing Japan team members directly."""
+
+	list_display = ['name', 'role', 'page', 'order']
+	list_filter = ['page']
+	search_fields = ['name', 'role', 'bio']
+	ordering = ['page', 'order']
+
 
 # ==================== CORE COMPANY ADMINS ====================
 
@@ -385,6 +426,78 @@ class TermsOfServiceAdmin(admin.ModelAdmin):
     search_fields = ['title', 'content']
     readonly_fields = ['last_updated']
     list_editable = ['is_active']
+    
+# ==================== CAREER ADMIN ====================4
+
+@admin.register(Career)
+class CareerAdmin(admin.ModelAdmin):
+    list_display = ['title', 'department', 'location', 'employment_type', 'is_active', 'priority', 'posted_at']
+    list_filter = ['is_active', 'department', 'location', 'employment_type']
+    search_fields = ['title', 'summary', 'responsibilities', 'requirements']
+    prepopulated_fields = {'slug': ('title',)}
+    date_hierarchy = 'posted_at'
+    list_editable = ['is_active', 'priority']
+    readonly_fields = ['posted_at', 'updated_at']
+    ordering = ['priority', '-posted_at']
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('title', 'slug', 'department', 'location', 'employment_type')
+        }),
+        ('Job Details', {
+            'fields': ('summary', 'responsibilities', 'requirements')
+        }),
+        ('Application', {
+            'fields': ('application_email', 'apply_url')
+        }),
+        ('Status', {
+            'fields': ('is_active', 'priority')
+        }),
+        ('Timestamps', {
+            'fields': ('posted_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+
+# ==================== JAPAN LANDING ADMIN ====================
+@admin.register(JapanLandingPage)
+class JapanLandingPageAdmin(admin.ModelAdmin):
+    list_display = ['intro_title', 'created_at', 'updated_at']
+    list_filter = ['created_at', 'updated_at']
+    readonly_fields = ['created_at', 'updated_at']
+    
+    # The inlines will appear as sections below the main form
+    inlines = [JapanBulletPointInline, JapanTeamMemberInline]
+
+    fieldsets = (
+        ('Intro', {
+            'fields': ('intro_title', 'intro_description'),
+        }),
+        ('Commitment Section', {
+            'fields': ('commitment_title', 'commitment_intro'),
+        }),
+        ('Preparation System', {
+            'fields': ('preparation_title', 'preparation_intro'),
+        }),
+        ('Why Japan Trusts KHRM', {
+            'fields': ('trust_title', 'trust_intro'),
+        }),
+        ('Vision', {
+            'fields': ('vision_title', 'vision_intro'),
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',),
+        }),
+    )
+
+    def has_add_permission(self, request):
+        """Allow only a single JapanLandingPage instance."""
+        return not JapanLandingPage.objects.exists()
+
+    def has_delete_permission(self, request, obj=None):
+        """Prevent deletion so the singleton is always available to the site."""
+        return False
+
 
 # ==================== CUSTOM ADMIN GROUPING ====================
 
@@ -398,6 +511,7 @@ ADMIN_SIDEBAR_GROUP_ORDER = [
     'Communications',
     'Media',
     'Legal',
+    'Careers',
     'System',  # fallback bucket for everything else
 ]
 
@@ -406,6 +520,7 @@ MODEL_TO_GROUP = {
     # Homepage
     'CompanyInfo': 'Homepage',
     'Office': 'Homepage',
+    'JapanLandingPage': 'Homepage',
     'Certification': 'Homepage',
 
     # Study (training / learning)
@@ -441,6 +556,9 @@ MODEL_TO_GROUP = {
     # Legal (privacy, terms, etc.)
     'PrivacyPolicy': 'Legal',
     'TermsOfService': 'Legal',
+
+    # Careers (Japan landing page)
+    'Career': 'Careers',
 }
 
 

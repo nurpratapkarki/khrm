@@ -276,3 +276,52 @@ class CSRProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = CSRProject
         fields = '__all__'
+
+
+# ==================== CAREER & JAPAN LANDING SERIALIZERS ====================
+
+
+class CareerListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Career
+        fields = [
+            'id', 'title', 'slug', 'department', 'location',
+            'employment_type', 'summary', 'is_active', 'priority', 'posted_at',
+        ]
+
+
+class CareerDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Career
+        fields = '__all__'
+
+
+class JapanBulletPointSerializer(serializers.ModelSerializer):
+    section_display = serializers.CharField(source='get_section_display', read_only=True)
+
+    class Meta:
+        model = JapanBulletPoint
+        fields = ['id', 'section', 'section_display', 'title', 'description', 'order']
+
+
+class JapanTeamMemberSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = JapanTeamMember
+        fields = ['id', 'name', 'role', 'bio', 'photo', 'order']
+
+
+class JapanLandingPageSerializer(serializers.ModelSerializer):
+    bullet_points = JapanBulletPointSerializer(many=True, read_only=True)
+    team_members = JapanTeamMemberSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = JapanLandingPage
+        fields = [
+            'id',
+            'intro_title', 'intro_description',
+            'commitment_title', 'commitment_intro',
+            'preparation_title', 'preparation_intro',
+            'trust_title', 'trust_intro',
+            'vision_title', 'vision_intro',
+            'bullet_points', 'team_members',
+        ]
