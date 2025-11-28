@@ -353,6 +353,64 @@ export interface CSRProject {
   is_active: boolean;
 }
 
+// ==================== Careers (Internal Hiring) ====================
+
+export interface Career {
+  id: number;
+  title: string;
+  slug: string;
+  department?: string;
+  location: string;
+  employment_type?: string;
+  summary?: string;
+  responsibilities?: string;
+  requirements?: string;
+  application_email?: string;
+  apply_url?: string;
+  is_active: boolean;
+  priority: number;
+  posted_at: string;
+  updated_at: string;
+}
+
+// ==================== Japan Landing Page ====================
+
+export type JapanBulletSection = 'commitment' | 'preparation' | 'trust' | 'vision';
+
+export interface JapanBulletPoint {
+  id: number;
+  section: JapanBulletSection;
+  section_display: string;
+  title?: string;
+  description: string;
+  order: number;
+}
+
+export interface JapanTeamMember {
+  id: number;
+  name: string;
+  role?: string;
+  bio?: string;
+  photo?: string;
+  order: number;
+}
+
+export interface JapanLandingPage {
+  id: number;
+  intro_title: string;
+  intro_description: string;
+  commitment_title: string;
+  commitment_intro?: string;
+  preparation_title: string;
+  preparation_intro?: string;
+  trust_title: string;
+  trust_intro?: string;
+  vision_title: string;
+  vision_intro?: string;
+  bullet_points: JapanBulletPoint[];
+  team_members: JapanTeamMember[];
+}
+
 // ==================== HOME PAGE DATA TYPE ====================
 
 export interface HomePageData {

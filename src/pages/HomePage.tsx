@@ -1,6 +1,6 @@
 // src/pages/HomePage.tsx
 import { useApi } from '@/hooks/useApi';
-import { homeApi, type HomePageData } from '@/api';
+import { homeApi, japanApi, type HomePageData, type JapanLandingPage } from '@/api';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -9,6 +9,10 @@ import { Link } from 'react-router-dom';
 
 export default function HomePage() {
   const { data, loading, error } = useApi<HomePageData>(() => homeApi.getHomePageData(), []);
+  const { data: japanLandingRaw } = useApi<JapanLandingPage | Record<string, never>>(
+    () => japanApi.getJapanLanding(),
+    [],
+  );
 
   if (loading) {
     return (
@@ -29,9 +33,13 @@ export default function HomePage() {
     );
   }
 
+  const japanLanding = japanLandingRaw && (japanLandingRaw as any).id
+    ? (japanLandingRaw as JapanLandingPage)
+    : null;
+
   return (
     <div className="flex flex-col">
-      {/* Hero Section */}
+      {/* Hero Section (global) */}
       <section className="relative bg-linear-to-br from-primary/10 via-background to-primary/5 border-b">
         <div className="container mx-auto px-4 py-24 md:py-32">
           <div className="max-w-4xl mx-auto text-center">
@@ -98,6 +106,70 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Japan-focused section (highlights Japan as key destination) */}
+      {japanLanding && (
+        <section className="py-20 bg-[color:var(--japan-background)] border-b">
+          <div className="container mx-auto px-4 grid gap-10 md:grid-cols-2 items-start">
+            <div className="space-y-4">
+              <Badge className="w-fit" variant="outline">
+                Japan Focused
+              </Badge>
+              <h2 className="text-3xl md:text-4xl font-bold text-[color:var(--japan-foreground)]">
+                {japanLanding.intro_title}
+              </h2>
+              <p className="text-[color:var(--japan-foreground)]/80 whitespace-pre-line">
+                {japanLanding.intro_description}
+              </p>
+              {japanLanding.commitment_intro && (
+                <p className="text-sm text-[color:var(--japan-foreground)]/70">
+                  {japanLanding.commitment_intro}
+                </p>
+              )}
+              <div className="flex flex-wrap gap-3 pt-2">
+                <Button
+                  size="lg"
+                  className="bg-[color:var(--japan-primary)] text-white hover:bg-[color:var(--japan-accent)]"
+                  asChild
+                >
+                  <Link to="/japan">Explore Japan Programme</Link>
+                </Button>
+                <Button size="lg" variant="outline" asChild>
+                  <Link to="/employer-inquiry">Request Japan manpower</Link>
+                </Button>
+              </div>
+            </div>
+
+            <div className="rounded-2xl bg-white shadow-sm border border-[color:var(--japan-primary)]/20 p-6 space-y-4">
+              <h3 className="text-xl font-semibold mb-1">{japanLanding.preparation_title}</h3>
+              {japanLanding.preparation_intro && (
+                <p className="text-sm text-muted-foreground whitespace-pre-line">
+                  {japanLanding.preparation_intro}
+                </p>
+              )}
+              <ul className="space-y-2 text-sm">
+                {japanLanding.bullet_points
+                  .filter((p) => p.section === 'preparation')
+                  .sort((a, b) => a.order - b.order)
+                  .slice(0, 4)
+                  .map((point) => (
+                    <li key={point.id} className="flex gap-2">
+                      <CheckCircle2 className="h-4 w-4 text-[color:var(--japan-primary)] mt-0.5" />
+                      <div>
+                        {point.title && (
+                          <div className="font-medium leading-snug">{point.title}</div>
+                        )}
+                        <p className="text-muted-foreground whitespace-pre-line">
+                          {point.description}
+                        </p>
+                      </div>
+                    </li>
+                  ))}
+              </ul>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Trusted Clients Section */}
       <section className="py-24 bg-muted/30">

@@ -13,6 +13,11 @@ import EmployerInquiryPage from '@/pages/EmployerInquiryPage';
 import PrivacyPolicyPage from '@/pages/PrivacyPolicyPage';
 import TermsOfServicePage from '@/pages/TermsOfServicePage';
 import RecruitmentProcessPage from '@/pages/RecruitmentProcessPage';
+import CSRPage from '@/pages/CSRPage';
+import CSRDetailPage from '@/pages/CSRDetailPage';
+import CareersPage from '@/pages/CareersPage';
+import CareerDetailPage from '@/pages/CareerDetailPage';
+import JapanLandingPage from '@/pages/JapanLandingPage';
 
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -27,7 +32,8 @@ function App() {
         <Header />
         <main className="grow">
           <Routes>
-            <Route path="/" element={<HomePage />} />
+	            <Route path="/" element={<HomePage />} />
+	            <Route path="/japan" element={<JapanLandingPage />} />
             <Route path="/about" element={<AboutPage />} />
 	            <Route path="/contact" element={<ContactPage />} />
 	            <Route path="/industries" element={<IndustriesPage />} />
@@ -43,6 +49,10 @@ function App() {
 	            <Route path="/employer-inquiry" element={<EmployerInquiryPage />} />
 	            <Route path="/privacy" element={<PrivacyPolicyPage />} />
 	            <Route path="/terms" element={<TermsOfServicePage />} />
+		            <Route path="/csr" element={<CSRPage />} />
+		            <Route path="/csr/:slug" element={<CSRDetailPage />} />
+		            <Route path="/careers" element={<CareersPage />} />
+		            <Route path="/careers/:slug" element={<CareerDetailPage />} />
 	            <Route path="/recruitment-process" element={<RecruitmentProcessPage />} />
           </Routes>
         </main>

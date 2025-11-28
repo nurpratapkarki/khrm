@@ -16,3 +16,6 @@ export { mediaApi } from './modules/mediaApi';
 export { documentApi } from './modules/documentApi';
 export { employerApi } from './modules/employerApi';
 export { policyApi } from './modules/policyApi';
+export { csrApi } from './modules/csrApi';
+export { careersApi } from './modules/careersApi';
+export { japanApi } from './modules/japanApi';
