@@ -45,6 +45,12 @@ class CompanyInfo(models.Model):
     values = models.TextField()
     about_text = models.TextField()
     about_image = models.ImageField(upload_to='company/', blank=True)
+    # Branding & visual identity
+    logo = models.ImageField(upload_to='company/logo/', blank=True)
+    mission_image = models.ImageField(upload_to='company/sections/', blank=True)
+    vision_image = models.ImageField(upload_to='company/sections/', blank=True)
+    values_image = models.ImageField(upload_to='company/sections/', blank=True)
+    about_background_image = models.ImageField(upload_to='company/sections/', blank=True)
     hero_image = models.ImageField(upload_to='hero/', blank=True)
     hero_headline = models.CharField(max_length=200, default="Trusted International Recruitment Partner Since 2003")
     hero_subtext = models.CharField(max_length=200, default="Nepal • UAE • Kuwait")
@@ -663,6 +669,12 @@ class JapanLandingPage(models.Model):
 
     vision_title = models.CharField(max_length=200)
     vision_intro = models.TextField(blank=True)
+
+    # Optional imagery for each major section
+    commitment_image = models.ImageField(upload_to='japan/sections/', blank=True)
+    preparation_image = models.ImageField(upload_to='japan/sections/', blank=True)
+    trust_image = models.ImageField(upload_to='japan/sections/', blank=True)
+    vision_image = models.ImageField(upload_to='japan/sections/', blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

@@ -323,5 +323,6 @@ class JapanLandingPageSerializer(serializers.ModelSerializer):
             'preparation_title', 'preparation_intro',
             'trust_title', 'trust_intro',
             'vision_title', 'vision_intro',
+            'commitment_image', 'preparation_image', 'trust_image', 'vision_image',
             'bullet_points', 'team_members',
         ]

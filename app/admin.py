@@ -87,13 +87,13 @@ class OfficeAdmin(admin.ModelAdmin):
 class CompanyInfoAdmin(admin.ModelAdmin):
     fieldsets = (
         ('Company Details', {
-            'fields': ('establishment_year', 'license_number', 'total_deployments')
+            'fields': ('establishment_year', 'license_number', 'total_deployments', 'logo')
         }),
         ('About Section', {
-            'fields': ('about_text', 'about_image')
+            'fields': ('about_text', 'about_image', 'about_background_image')
         }),
         ('Mission, Vision & Values', {
-            'fields': ('mission', 'vision', 'values')
+            'fields': ('mission', 'vision', 'values', 'mission_image', 'vision_image', 'values_image')
         }),
         ('Hero Banner', {
             'fields': ('hero_headline', 'hero_subtext', 'hero_image')
@@ -473,16 +473,16 @@ class JapanLandingPageAdmin(admin.ModelAdmin):
             'fields': ('intro_title', 'intro_description'),
         }),
         ('Commitment Section', {
-            'fields': ('commitment_title', 'commitment_intro'),
+            'fields': ('commitment_title', 'commitment_intro', 'commitment_image'),
         }),
         ('Preparation System', {
-            'fields': ('preparation_title', 'preparation_intro'),
+            'fields': ('preparation_title', 'preparation_intro', 'preparation_image'),
         }),
         ('Why Japan Trusts KHRM', {
-            'fields': ('trust_title', 'trust_intro'),
+            'fields': ('trust_title', 'trust_intro', 'trust_image'),
         }),
         ('Vision', {
-            'fields': ('vision_title', 'vision_intro'),
+            'fields': ('vision_title', 'vision_intro', 'vision_image'),
         }),
         ('Timestamps', {
             'fields': ('created_at', 'updated_at'),
