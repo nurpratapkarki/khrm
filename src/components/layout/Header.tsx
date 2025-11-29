@@ -2,13 +2,16 @@ import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
+import { useApi } from '@/hooks/useApi';
+import { companyApi } from '@/api';
+import type { CompanyInfo } from '@/api';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { data: companyInfo } = useApi<CompanyInfo>(() => companyApi.getCompanyInfo(), []);
 
   const navigation = [
     { name: 'Home', href: '/' },
-    { name: 'Japan', href: '/japan' },
     { name: 'About', href: '/about' },
     { name: 'Industries', href: '/industries' },
     { name: 'Jobs', href: '/jobs' },
@@ -23,10 +26,22 @@ export default function Header() {
       <nav className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            <div className="font-bold text-2xl bg-linear-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-              KHRM
-            </div>
+          <Link to="/" className="flex items-center  space-x-2">
+            {companyInfo?.logo ? (
+             <div className='flex '>
+               <img
+                src={companyInfo.logo}
+                alt="KHRM logo"
+                className="h-8 w-auto object-contain"
+              />
+              <p className='pr-2 font-bold text-2xl bg-linear-to-r from-primary to-primary/60 bg-clip-text text-transparent'>KHRM</p>
+             </div>
+            
+            ) : (
+              <div className="font-bold text-2xl bg-linear-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+                KHRM
+              </div>
+            )}
           </Link>
 
           {/* Desktop Navigation */}

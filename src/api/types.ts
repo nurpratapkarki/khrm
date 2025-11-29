@@ -50,6 +50,11 @@ export interface CompanyInfo {
   values: string;
   about_text: string;
   about_image?: string;
+  logo?: string;
+  mission_image?: string;
+  vision_image?: string;
+  values_image?: string;
+  about_background_image?: string;
   hero_image?: string;
   hero_headline: string;
   hero_subtext: string;
@@ -407,6 +412,10 @@ export interface JapanLandingPage {
   trust_intro?: string;
   vision_title: string;
   vision_intro?: string;
+  commitment_image?: string;
+  preparation_image?: string;
+  trust_image?: string;
+  vision_image?: string;
   bullet_points: JapanBulletPoint[];
   team_members: JapanTeamMember[];
 }

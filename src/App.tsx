@@ -31,30 +31,32 @@ function App() {
       <div className="flex flex-col min-h-screen">
         <Header />
         <main className="grow">
-          <Routes>
-	            <Route path="/" element={<HomePage />} />
-	            <Route path="/japan" element={<JapanLandingPage />} />
-            <Route path="/about" element={<AboutPage />} />
-	            <Route path="/contact" element={<ContactPage />} />
-	            <Route path="/industries" element={<IndustriesPage />} />
-	            <Route path="/industries/:slug" element={<IndustryDetailPage />} />
-	            <Route path="/training" element={<TrainingPage />} />
-	            <Route path="/training/:slug" element={<TrainingCourseDetailPage />} />
-            <Route path="/jobs" element={<JobsPage />} />
-            <Route path="/jobs/:slug" element={<JobDetailPage />} />
-	            <Route path="/jobs/:slug/apply" element={<JobApplicationPage />} />
-	            <Route path="/gallery" element={<GalleryPage />} />
-	            <Route path="/gallery/:slug" element={<GalleryAlbumDetailPage />} />
-	            <Route path="/documents" element={<DocumentsPage />} />
-	            <Route path="/employer-inquiry" element={<EmployerInquiryPage />} />
-	            <Route path="/privacy" element={<PrivacyPolicyPage />} />
-	            <Route path="/terms" element={<TermsOfServicePage />} />
-		            <Route path="/csr" element={<CSRPage />} />
-		            <Route path="/csr/:slug" element={<CSRDetailPage />} />
-		            <Route path="/careers" element={<CareersPage />} />
-		            <Route path="/careers/:slug" element={<CareerDetailPage />} />
-	            <Route path="/recruitment-process" element={<RecruitmentProcessPage />} />
-          </Routes>
+      
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/japan" element={<JapanLandingPage />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/contact" element={<ContactPage />} />
+              <Route path="/industries" element={<IndustriesPage />} />
+              <Route path="/industries/:slug" element={<IndustryDetailPage />} />
+              <Route path="/training" element={<TrainingPage />} />
+              <Route path="/training/:slug" element={<TrainingCourseDetailPage />} />
+              <Route path="/jobs" element={<JobsPage />} />
+              <Route path="/jobs/:slug" element={<JobDetailPage />} />
+              <Route path="/jobs/:slug/apply" element={<JobApplicationPage />} />
+              <Route path="/gallery" element={<GalleryPage />} />
+              <Route path="/gallery/:slug" element={<GalleryAlbumDetailPage />} />
+              <Route path="/documents" element={<DocumentsPage />} />
+              <Route path="/employer-inquiry" element={<EmployerInquiryPage />} />
+              <Route path="/privacy" element={<PrivacyPolicyPage />} />
+              <Route path="/terms" element={<TermsOfServicePage />} />
+              <Route path="/csr" element={<CSRPage />} />
+              <Route path="/csr/:slug" element={<CSRDetailPage />} />
+              <Route path="/careers" element={<CareersPage />} />
+              <Route path="/careers/:slug" element={<CareerDetailPage />} />
+              <Route path="/recruitment-process" element={<RecruitmentProcessPage />} />
+            </Routes>
+          
         </main>
         <Footer />
       </div>

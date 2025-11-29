@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { CheckCircle2 } from 'lucide-react';
+import { motion, useReducedMotion } from 'framer-motion';
 
 function renderBullets(points: JapanBulletPoint[], section: JapanBulletPoint['section']) {
   return points
@@ -12,7 +13,7 @@ function renderBullets(points: JapanBulletPoint[], section: JapanBulletPoint['se
     .sort((a, b) => a.order - b.order)
     .map((point) => (
       <li key={point.id} className="flex gap-3">
-        <CheckCircle2 className="h-5 w-5 text-[color:var(--japan-primary)] mt-0.5" />
+        <CheckCircle2 className="h-5 w-5 text-(--japan-primary) mt-0.5" />
         <div>
           {point.title && <div className="font-medium mb-0.5">{point.title}</div>}
           <p className="text-sm text-[color:var(--japan-foreground)]/80 whitespace-pre-line">
@@ -23,18 +24,19 @@ function renderBullets(points: JapanBulletPoint[], section: JapanBulletPoint['se
     ));
 }
 
-export default function JapanLandingPage() {
+export default function JapanPage() {
   const { data, loading, error } = useApi<JapanLandingPage | Record<string, never>>(
     () => japanApi.getJapanLanding(),
     [],
   );
 
   const hasData = data && (data as any).id;
+	  const prefersReducedMotion = useReducedMotion();
 
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[color:var(--japan-primary)]" />
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-(--japan-primary)" />
       </div>
     );
   }
@@ -67,98 +69,165 @@ export default function JapanLandingPage() {
     );
   }
 
-  const landing = data as JapanLandingPage;
+	  const landing = data as JapanLandingPage;
 
-  return (
-    <div className="bg-[color:var(--japan-background)] text-[color:var(--japan-foreground)]">
-      {/* Intro / Hero */}
-      <section className="border-b bg-linear-to-br from-[color:var(--japan-primary-soft)]/40 to-[color:var(--japan-background)]">
-        <div className="container mx-auto px-4 py-16 md:py-24">
-          <div className="max-w-4xl mx-auto text-center">
-            <Badge className="mb-4" variant="outline">
-              Japan Focused Recruitment
-            </Badge>
-            <h1 className="text-3xl md:text-5xl font-bold mb-4 text-[color:var(--japan-foreground)]">
-              {landing.intro_title}
-            </h1>
-            <p className="text-lg md:text-xl text-[color:var(--japan-foreground)]/80 mb-8">
-              {landing.intro_description}
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-[color:var(--japan-primary)] text-white hover:bg-[color:var(--japan-accent)]" asChild>
-                <Link to="/employer-inquiry">Hire from Nepal for Japan</Link>
-              </Button>
-              <Button size="lg" variant="outline" asChild>
-                <Link to="/training">Explore Japan-focused training</Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
+	  return (
+	    <div className="bg-[color:var(--japan-background)] text-[color:var(--japan-foreground)]">
+	      {/* Intro / Hero */}
+	      <section className="border-b bg-linear-to-br from-[color:var(--japan-primary-soft)]/40 to-[color:var(--japan-background)]">
+	        <div className="container mx-auto px-4 py-16 md:py-24">
+	          <motion.div
+	            className="max-w-4xl mx-auto text-center"
+	            initial={prefersReducedMotion ? false : { opacity: 0, y: 16 }}
+	            animate={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
+	            transition={{ duration: 0.4, ease: 'easeOut' }}
+	          >
+	            <Badge className="mb-4" variant="outline">
+	              Japan Focused Recruitment
+	            </Badge>
+	            <h1 className="text-3xl md:text-5xl font-bold mb-4 text-[color:var(--japan-foreground)]">
+	              {landing.intro_title}
+	            </h1>
+	            <p className="text-lg md:text-xl text-[color:var(--japan-foreground)]/80 mb-8">
+	              {landing.intro_description}
+	            </p>
+	            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+	              <Button
+	                size="lg"
+	                className="bg-(--japan-primary) text-white hover:bg-[color:var(--japan-accent)]"
+	                asChild
+	              >
+	                <Link to="/employer-inquiry">Hire from Nepal for Japan</Link>
+	              </Button>
+	              <Button size="lg" variant="outline" asChild>
+	                <Link to="/training">Explore Japan-focused training</Link>
+	              </Button>
+	            </div>
+	          </motion.div>
+	        </div>
+	      </section>
 
-      {/* Commitment & Preparation */}
-      <section className="py-16 md:py-20 border-b">
-        <div className="container mx-auto px-4 grid gap-10 md:grid-cols-2 items-start">
-          <div className="space-y-4">
-            <h2 className="text-2xl md:text-3xl font-bold mb-2">{landing.commitment_title}</h2>
-            {landing.commitment_intro && (
-              <p className="text-[color:var(--japan-foreground)]/80 whitespace-pre-line">
-                {landing.commitment_intro}
-              </p>
-            )}
-            <ul className="mt-4 space-y-3">
-              {renderBullets(landing.bullet_points, 'commitment')}
-            </ul>
-          </div>
+	      {/* Commitment & Preparation */}
+	      <section className="py-16 md:py-20 border-b">
+	        <div className="container mx-auto px-4 grid gap-10 md:grid-cols-2 items-start">
+	          <motion.div
+	            className="space-y-4"
+	            initial={prefersReducedMotion ? false : { opacity: 0, x: -16 }}
+	            whileInView={prefersReducedMotion ? undefined : { opacity: 1, x: 0 }}
+	            viewport={{ once: true, amount: 0.3 }}
+	            transition={{ duration: 0.45, ease: 'easeOut' }}
+	          >
+	            {landing.commitment_image && (
+	              <div className="mb-4 rounded-2xl overflow-hidden border border-(--japan-primary)/20 bg-white/80">
+	                <img
+	                  src={landing.commitment_image}
+	                  alt="Commitment section illustration"
+	                  className="h-52 w-full object-cover"
+	                />
+	              </div>
+	            )}
+	            <h2 className="text-2xl md:text-3xl font-bold mb-2">{landing.commitment_title}</h2>
+	            {landing.commitment_intro && (
+	              <p className="text-[color:var(--japan-foreground)]/80 whitespace-pre-line">
+	                {landing.commitment_intro}
+	              </p>
+	            )}
+	            <ul className="mt-4 space-y-3">
+	              {renderBullets(landing.bullet_points, 'commitment')}
+	            </ul>
+	          </motion.div>
+	
+	          <motion.div
+	            className="space-y-4"
+	            initial={prefersReducedMotion ? false : { opacity: 0, x: 16 }}
+	            whileInView={prefersReducedMotion ? undefined : { opacity: 1, x: 0 }}
+	            viewport={{ once: true, amount: 0.3 }}
+	            transition={{ duration: 0.45, ease: 'easeOut', delay: 0.05 }}
+	          >
+	            {landing.preparation_image && (
+	              <div className="mb-4 rounded-2xl overflow-hidden border border-(--japan-primary)/20 bg-white/80">
+	                <img
+	                  src={landing.preparation_image}
+	                  alt="Preparation section illustration"
+	                  className="h-52 w-full object-cover"
+	                />
+	              </div>
+	            )}
+	            <h2 className="text-2xl md:text-3xl font-bold mb-2">{landing.preparation_title}</h2>
+	            {landing.preparation_intro && (
+	              <p className="text-[color:var(--japan-foreground)]/80 whitespace-pre-line">
+	                {landing.preparation_intro}
+	              </p>
+	            )}
+	            <ul className="mt-4 space-y-3">
+	              {renderBullets(landing.bullet_points, 'preparation')}
+	            </ul>
+	          </motion.div>
+	        </div>
+	      </section>
 
-          <div className="space-y-4">
-            <h2 className="text-2xl md:text-3xl font-bold mb-2">{landing.preparation_title}</h2>
-            {landing.preparation_intro && (
-              <p className="text-[color:var(--japan-foreground)]/80 whitespace-pre-line">
-                {landing.preparation_intro}
-              </p>
-            )}
-            <ul className="mt-4 space-y-3">
-              {renderBullets(landing.bullet_points, 'preparation')}
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* Trust & Vision */}
-      <section className="py-16 md:py-20 border-b bg-[color:var(--japan-primary-soft)]/40">
-        <div className="container mx-auto px-4 grid gap-10 md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] items-start">
-          <div>
-            <h2 className="text-2xl md:text-3xl font-bold mb-2">{landing.trust_title}</h2>
-            {landing.trust_intro && (
-              <p className="text-[color:var(--japan-foreground)]/80 whitespace-pre-line mb-4">
-                {landing.trust_intro}
-              </p>
-            )}
-            <ul className="space-y-3">
-              {renderBullets(landing.bullet_points, 'trust')}
-            </ul>
-          </div>
-
-          <div>
-            <Card className="bg-white/80 border-[color:var(--japan-primary)]/20">
-              <CardHeader>
-                <CardTitle className="text-lg">{landing.vision_title}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                {landing.vision_intro && (
-                  <p className="text-sm text-muted-foreground mb-3 whitespace-pre-line">
-                    {landing.vision_intro}
-                  </p>
-                )}
-                <ul className="space-y-2 text-sm">
-                  {renderBullets(landing.bullet_points, 'vision')}
-                </ul>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
+	      {/* Trust & Vision */}
+	      <section className="py-16 md:py-20 border-b bg-[color:var(--japan-primary-soft)]/40">
+	        <div className="container mx-auto px-4 grid gap-10 md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] items-start">
+	          <motion.div
+	            initial={prefersReducedMotion ? false : { opacity: 0, y: 16 }}
+	            whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
+	            viewport={{ once: true, amount: 0.3 }}
+	            transition={{ duration: 0.45, ease: 'easeOut' }}
+	          >
+	            {landing.trust_image && (
+	              <div className="mb-4 rounded-2xl overflow-hidden border border-(--japan-primary)/25 bg-white/80">
+	                <img
+	                  src={landing.trust_image}
+	                  alt="Trust section illustration"
+	                  className="h-52 w-full object-cover"
+	                />
+	              </div>
+	            )}
+	            <h2 className="text-2xl md:text-3xl font-bold mb-2">{landing.trust_title}</h2>
+	            {landing.trust_intro && (
+	              <p className="text-[color:var(--japan-foreground)]/80 whitespace-pre-line mb-4">
+	                {landing.trust_intro}
+	              </p>
+	            )}
+	            <ul className="space-y-3">
+	              {renderBullets(landing.bullet_points, 'trust')}
+	            </ul>
+	          </motion.div>
+	
+	          <motion.div
+	            initial={prefersReducedMotion ? false : { opacity: 0, y: 16 }}
+	            whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
+	            viewport={{ once: true, amount: 0.3 }}
+	            transition={{ duration: 0.45, ease: 'easeOut', delay: 0.05 }}
+	          >
+	            <Card className="bg-white/80 border-(--japan-primary)/20 overflow-hidden">
+	              {landing.vision_image && (
+	                <div className="h-40 w-full overflow-hidden border-b border-(--japan-primary)/15">
+	                  <img
+	                    src={landing.vision_image}
+	                    alt="Vision section illustration"
+	                    className="h-full w-full object-cover"
+	                  />
+	                </div>
+	              )}
+	              <CardHeader>
+	                <CardTitle className="text-lg">{landing.vision_title}</CardTitle>
+	              </CardHeader>
+	              <CardContent>
+	                {landing.vision_intro && (
+	                  <p className="text-sm text-muted-foreground mb-3 whitespace-pre-line">
+	                    {landing.vision_intro}
+	                  </p>
+	                )}
+	                <ul className="space-y-2 text-sm">
+	                  {renderBullets(landing.bullet_points, 'vision')}
+	                </ul>
+	              </CardContent>
+	            </Card>
+	          </motion.div>
+	        </div>
+	      </section>
 
       {/* Team Section */}
       <section className="py-16 md:py-20">

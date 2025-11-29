@@ -4,8 +4,7 @@ import { industryApi, type Industry, type Job, type Client } from '@/api';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, Briefcase, Building2, Globe, Users } from 'lucide-react';
-
+import { ArrowLeft, Briefcase, Building2, Users, MapPin, ExternalLink, Target } from 'lucide-react';
 
 export default function IndustryDetailPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -16,7 +15,7 @@ export default function IndustryDetailPage() {
   if (loading || !industry) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="h-10 w-10 rounded-full border-2 border-primary border-t-transparent animate-spin" />
+        <div className="h-10 w-10 rounded-full border-2 border-primary-600 border-t-transparent animate-spin" />
       </div>
     );
   }
@@ -25,89 +24,127 @@ export default function IndustryDetailPage() {
   const clientList = clients ?? [];
 
   return (
-    <div className="bg-background min-h-screen">
-      <section className="border-b bg-muted/30">
-        <div className="container mx-auto px-4 py-6 flex items-center justify-between gap-4">
-          <Button asChild variant="ghost" size="sm">
-            <Link to="/industries">
-              <ArrowLeft className="h-4 w-4 mr-1" />
-              All industries
+    <div className="min-h-screen bg-linear-to-br from-primary-600/5 via-background to-secondary-600/5">
+      {/* Hero Section */}
+      <div className="relative bg-linear-to-br from-secondary-600 to-[#1d4ed8] text-white overflow-hidden">
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMSIgb3BhY2l0eT0iMC4xIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-20" />
+        <div className="absolute top-10 right-10 w-64 h-64 bg-white/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-10 left-10 w-64 h-64 bg-accent-gold/20 rounded-full blur-3xl" />
+        
+        <div className="container mx-auto px-4 py-12 md:py-16 relative z-10">
+          <Button 
+            variant="ghost" 
+            asChild 
+            className="mb-6 text-white hover:text-white hover:bg-white/10"
+          >
+            <Link to="/industries" className="flex items-center gap-2">
+              <ArrowLeft className="h-4 w-4" />
+              All Industries
             </Link>
           </Button>
-          <div className="text-right max-w-xl">
-            <p className="text-xs uppercase tracking-wide text-muted-foreground mb-1">Industry</p>
-            <h1 className="text-2xl md:text-3xl font-bold flex items-center justify-end gap-2">
-              <span className="text-4xl hidden md:inline">{industry.icon}</span>
-              {industry.name}
-            </h1>
-            <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
+
+          <div className="max-w-4xl">
+            <Badge variant="secondary" className="bg-white/20 text-white border-white/30 mb-4">
+              <Building2 className="h-3 w-3 mr-1" />
+              Industry Sector
+            </Badge>
+
+            <div className="flex items-center gap-4 mb-4">
+              <div className="text-6xl p-4 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20">
+                {industry.icon}
+              </div>
+              <h1 className="text-4xl md:text-5xl font-bold">{industry.name}</h1>
+            </div>
+            
+            <p className="text-xl text-white/90 leading-relaxed max-w-3xl mb-6">
               {industry.description}
             </p>
+
+            <div className="flex flex-wrap gap-4">
+              {industry.job_count != null && (
+                <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20">
+                  <Briefcase className="h-4 w-4" />
+                  <span className="text-sm font-medium">{industry.job_count} open roles</span>
+                </div>
+              )}
+              {industry.client_count != null && (
+                <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-accent-gold/20 backdrop-blur-sm border border-accent-gold/30">
+                  <Users className="h-4 w-4" />
+                  <span className="text-sm font-medium">{industry.client_count} active clients</span>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </section>
+      </div>
 
-      <section className="py-12">
-        <div className="container mx-auto px-4 grid gap-8 lg:grid-cols-3">
-          <div className="lg:col-span-2 space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Overview</CardTitle>
-                <CardDescription>
-                  Key information about manpower demand and opportunities in this sector.
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-3 text-sm leading-relaxed">
-                {industry.overview ? (
-                  <p className="whitespace-pre-line">{industry.overview}</p>
-                ) : (
-                  <p>{industry.description}</p>
-                )}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-                  {industry.job_count != null && (
-                    <div className="flex items-center gap-2 text-muted-foreground">
-                      <Briefcase className="h-4 w-4" />
-                      <span>{industry.job_count} open roles</span>
-                    </div>
-                  )}
-                  {industry.client_count != null && (
-                    <div className="flex items-center gap-2 text-muted-foreground">
-                      <Users className="h-4 w-4" />
-                      <span>{industry.client_count} active clients</span>
-                    </div>
-                  )}
+      {/* Main Content */}
+      <div className="container mx-auto px-4 py-12 max-w-6xl">
+        <div className="grid lg:grid-cols-3 gap-8">
+          {/* Left Column - Overview & Jobs */}
+          <div className="lg:col-span-2 space-y-8">
+            {/* Overview */}
+            <Card className="border-2 hover:border-secondary-600/20 transition-colors">
+              <CardContent className="pt-6">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="p-3 bg-linear-to-br from-secondary-600/10 to-[#1d4ed8]/5 rounded-xl">
+                    <Target className="h-6 w-6 text-secondary-600" />
+                  </div>
+                  <h2 className="text-2xl font-bold">Industry Overview</h2>
+                </div>
+                <div className="relative">
+                  <div className="absolute -left-4 top-0 w-1 h-full bg-linear-to-b from-secondary-600 to-accent-gold rounded-full" />
+                  <div className="pl-6">
+                    <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
+                      {industry.overview || industry.description}
+                    </p>
+                  </div>
                 </div>
               </CardContent>
             </Card>
 
+            {/* Open Jobs */}
             {jobList.length > 0 && (
-              <Card>
+              <Card className="border-2 hover:border-primary-600/20 transition-colors">
                 <CardHeader>
-                  <CardTitle>Open jobs in this industry</CardTitle>
-                  <CardDescription>
-                    Browse current vacancies and apply online.
-                  </CardDescription>
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="p-3 bg-linear-to-br from-primary-600/10 to-primary-700/5 rounded-xl">
+                      <Briefcase className="h-6 w-6 text-primary-600" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-2xl">Open Jobs in This Industry</CardTitle>
+                      <CardDescription>
+                        Browse current vacancies and apply online
+                      </CardDescription>
+                    </div>
+                  </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {jobList.map((job) => (
-                    <div key={job.id} className="border rounded-lg p-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-                      <div>
-                        <h3 className="font-semibold mb-1">{job.title}</h3>
-                        <p className="text-xs text-muted-foreground flex items-center gap-2">
-                          <Globe className="h-3 w-3" />
-                          {job.location}, {job.country}
-                        </p>
+                    <div 
+                      key={job.id} 
+                      className="border-2 rounded-lg p-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4 hover:border-primary-600/30 hover:bg-primary-600/5 transition-all"
+                    >
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-lg mb-2">{job.title}</h3>
+                        <div className="flex flex-wrap gap-3 text-sm text-muted-foreground">
+                          <div className="flex items-center gap-1.5">
+                            <MapPin className="h-4 w-4 text-secondary-600" />
+                            <span>{job.location}, {job.country}</span>
+                          </div>
+                          {job.status_display && (
+                            <Badge variant="outline" className="text-xs">
+                              {job.status_display}
+                            </Badge>
+                          )}
+                        </div>
                       </div>
-                      <div className="flex items-center gap-3">
-                        {job.status_display && (
-                          <Badge variant="outline" className="text-xs uppercase tracking-wide">
-                            {job.status_display}
-                          </Badge>
-                        )}
-                        <Button asChild size="sm">
-                          <Link to={`/jobs/${job.slug}`}>View job</Link>
-                        </Button>
-                      </div>
+                      <Button 
+                        asChild 
+                        className="bg-linear-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-[#991b1b]"
+                      >
+                        <Link to={`/jobs/${job.slug}`}>View Job</Link>
+                      </Button>
                     </div>
                   ))}
                 </CardContent>
@@ -115,41 +152,57 @@ export default function IndustryDetailPage() {
             )}
           </div>
 
-          <div className="space-y-6">
-            {clientList.length > 0 && (
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Building2 className="h-4 w-4" />
-                    Key clients
-                  </CardTitle>
-                  <CardDescription>
-                    Selected employers we support in this sector.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-3 text-sm">
-                  {clientList.map((client) => (
-                    <div key={client.id} className="flex items-center justify-between gap-3">
-                      <span>{client.name}</span>
-                      {client.website && (
-                        <a
-                          href={client.website}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="text-xs text-primary hover:underline"
-                        >
-                          Visit site
-                        </a>
-                      )}
+          {/* Right Column - Clients */}
+          <div className="lg:col-span-1">
+            <div className="sticky top-24">
+              {clientList.length > 0 && (
+                <Card className="border-2 border-accent-gold/20 shadow-lg">
+                  <CardHeader>
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="p-3 bg-linear-to-br from-accent-gold/10 to-[#d97706]/5 rounded-xl">
+                        <Building2 className="h-6 w-6 text-accent-gold" />
+                      </div>
+                      <div>
+                        <CardTitle>Key Clients</CardTitle>
+                        <CardDescription className="text-xs">
+                          Selected employers we support
+                        </CardDescription>
+                      </div>
                     </div>
-                  ))}
-                </CardContent>
-              </Card>
-            )}
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    {clientList.map((client) => (
+                      <div 
+                        key={client.id} 
+                        className="flex items-center justify-between gap-3 p-3 rounded-lg border hover:border-accent-gold/30 hover:bg-accent-gold/5 transition-colors"
+                      >
+                        <span className="font-medium text-sm">{client.name}</span>
+                        {client.website && (
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            asChild
+                            className="h-8 px-2"
+                          >
+                            <a
+                              href={client.website}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="flex items-center gap-1"
+                            >
+                              <ExternalLink className="h-3 w-3" />
+                            </a>
+                          </Button>
+                        )}
+                      </div>
+                    ))}
+                  </CardContent>
+                </Card>
+              )}
+            </div>
           </div>
         </div>
-      </section>
+      </div>
     </div>
   );
 }
-
