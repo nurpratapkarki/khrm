@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { industryApi, type Industry } from '@/api';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Building2, Briefcase, Users, ArrowRight } from 'lucide-react';
 
 export default function IndustriesPage() {

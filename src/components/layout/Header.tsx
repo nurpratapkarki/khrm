@@ -24,23 +24,27 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white/95 shadow-sm backdrop-blur supports-backdrop-filter:bg-white/80">
       <nav className="container mx-auto px-4">
-        <div className="flex h-16 items-center justify-between">
+        <div className="flex h-20 items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center  space-x-2">
             {companyInfo?.logo ? (
-             <div className='flex '>
-               <img
-                src={companyInfo.logo}
-                alt="KHRM logo"
-                className="h-8 w-auto object-contain"
-              />
-              <p className='pr-2 font-bold text-2xl bg-linear-to-r from-primary to-primary/60 bg-clip-text text-transparent'>KHRM</p>
-             </div>
-            
-            ) : (
-              <div className="font-bold text-2xl bg-linear-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-                KHRM
+              <div className='flex '>
+                <img
+                  src={companyInfo.logo}
+                  alt="KHRM logo"
+                  className="h-12 w-auto object-contain"
+                />
+                <p className="pr-2 font-bold text-3xl bg-linear-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+                  KHRM
+                </p>
+
               </div>
+
+            ) : (
+              <p className="pr-2 font-bold text-3xl bg-linear-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+                KHRM
+              </p>
+
             )}
           </Link>
 

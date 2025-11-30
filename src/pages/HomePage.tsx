@@ -122,8 +122,8 @@ export default function HomePage() {
       </section>
 
       {/* Japan-focused section (highlights Japan as key destination) */}
-      {japanLanding && (
-        <section className="py-20 bg-[color:var(--japan-background)] border-b">
+      {/* {japanLanding && (
+        <section className="py-20 bg-(--japan-background) border-b">
           <div className="container mx-auto px-4 grid gap-10 md:grid-cols-2 items-start">
             <motion.div
               className="space-y-4"
@@ -135,21 +135,21 @@ export default function HomePage() {
               <Badge className="w-fit" variant="outline">
                 Japan Focused
               </Badge>
-              <h2 className="text-3xl md:text-4xl font-bold text-[color:var(--japan-foreground)]">
+              <h2 className="text-3xl md:text-4xl font-bold text-(--japan-foreground)">
                 {japanLanding.intro_title}
               </h2>
-              <p className="text-[color:var(--japan-foreground)]/80 whitespace-pre-line">
+              <p className="text-(--japan-foreground)/80 whitespace-pre-line">
                 {japanLanding.intro_description}
               </p>
               {japanLanding.commitment_intro && (
-                <p className="text-sm text-[color:var(--japan-foreground)]/70">
+                <p className="text-sm text-(--japan-foreground)/70">
                   {japanLanding.commitment_intro}
                 </p>
               )}
               <div className="flex flex-wrap gap-3 pt-2">
                 <Button
                   size="lg"
-                  className="bg-[color:var(--japan-primary)] text-white hover:bg-[color:var(--japan-accent)]"
+                  className="bg-(--japan-primary) text-white hover:bg-(--japan-accent)"
                   asChild
                 >
                   <Link to="/japan">Explore Japan Programme</Link>
@@ -161,7 +161,7 @@ export default function HomePage() {
             </motion.div>
 
             <motion.div
-              className="rounded-2xl bg-white shadow-sm border border-[color:var(--japan-primary)]/20 p-6 space-y-4"
+              className="rounded-2xl bg-white shadow-sm border border-(--japan-primary)/20 p-6 space-y-4"
               initial={prefersReducedMotion ? false : { opacity: 0, x: 16 }}
               whileInView={prefersReducedMotion ? undefined : { opacity: 1, x: 0 }}
               viewport={{ once: true, amount: 0.3 }}
@@ -180,7 +180,7 @@ export default function HomePage() {
                   .slice(0, 4)
                   .map((point) => (
                     <li key={point.id} className="flex gap-2">
-                      <CheckCircle2 className="h-4 w-4 text-[color:var(--japan-primary)] mt-0.5" />
+                      <CheckCircle2 className="h-4 w-4 text-(--japan-primary) mt-0.5" />
                       <div>
                         {point.title && (
                           <div className="font-medium leading-snug">{point.title}</div>
@@ -195,7 +195,7 @@ export default function HomePage() {
             </motion.div>
           </div>
         </section>
-      )}
+      )} */}
 
       {/* Trusted Clients Section */}
       <section className="py-24 bg-muted/30">

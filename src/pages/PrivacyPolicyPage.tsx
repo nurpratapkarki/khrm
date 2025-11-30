@@ -1,109 +1,94 @@
 import { useApi } from '@/hooks/useApi';
 import { policyApi, type PrivacyPolicy } from '@/api';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ShieldCheck } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { ShieldCheck, Calendar } from 'lucide-react';
 
 function isPrivacyPolicy(value: unknown): value is PrivacyPolicy {
   return Boolean(value && typeof value === 'object' && 'content' in (value as any));
 }
 
 export default function PrivacyPolicyPage() {
-  const { data } = useApi<PrivacyPolicy | Record<string, never>>(
+  const { data, loading } = useApi<PrivacyPolicy | Record<string, never>>(
     () => policyApi.getPrivacyPolicy(),
     []
   );
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600" />
+      </div>
+    );
+  }
+
   const policy = isPrivacyPolicy(data) ? data : null;
   const updatedLabel = policy?.last_updated
-    ? new Date(policy.last_updated).toLocaleDateString()
+    ? new Date(policy.last_updated).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      })
     : undefined;
 
-  const contentParagraphs = policy?.content
-    ? policy.content.split(/\n\n+/).filter(Boolean)
-    : [];
-
   return (
-    <div className="flex flex-col">
-      <section className="relative bg-linear-to-br from-primary/10 via-background to-primary/5 border-b">
-        <div className="container mx-auto px-4 py-24 max-w-4xl">
-          <Badge variant="secondary" className="mb-4 flex items-center gap-2 w-fit">
+    <div className="flex flex-col min-h-screen bg-linear-to-br from-primary-600/5 via-background to-secondary-600/5">
+      {/* Hero Section */}
+      <section className="relative bg-linear-to-br from-secondary-600 to-[#1d4ed8] text-white overflow-hidden">
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMSIgb3BhY2l0eT0iMC4xIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-20" />
+        <div className="absolute top-10 right-10 w-64 h-64 bg-white/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-10 left-10 w-64 h-64 bg-accent-gold/20 rounded-full blur-3xl" />
+        
+        <div className="container mx-auto px-4 py-16 md:py-20 max-w-4xl relative z-10">
+          <Badge variant="secondary" className="mb-4 flex items-center gap-2 w-fit bg-white/20 text-white border-white/30">
             <ShieldCheck className="h-4 w-4" />
             Privacy & Data Protection
           </Badge>
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             {policy?.title ?? 'Privacy Policy'}
           </h1>
-          <p className="text-lg text-muted-foreground leading-relaxed mb-2">
+          <p className="text-xl text-white/90 leading-relaxed mb-4">
             We are committed to protecting the privacy and personal data of our candidates, clients
             and partners. This page explains what data we collect, how we use it and the rights you have.
           </p>
           {updatedLabel && (
-            <p className="text-xs text-muted-foreground">Last updated: {updatedLabel}</p>
+            <div className="flex items-center gap-2 text-white/80">
+              <Calendar className="h-4 w-4" />
+              <span className="text-sm">Last updated: {updatedLabel}</span>
+            </div>
           )}
         </div>
       </section>
 
+      {/* Content Section */}
       <section className="py-16">
-        <div className="container mx-auto px-4 max-w-4xl space-y-8">
-          {contentParagraphs.length > 0 ? (
-            <Card>
-              <CardContent className="prose max-w-none dark:prose-invert py-6">
-                {contentParagraphs.map((para, idx) => (
-                  <p key={idx}>{para}</p>
-                ))}
-              </CardContent>
-            </Card>
-          ) : (
-            <>
-              <Card>
-                <CardHeader>
-                  <CardTitle>Information we collect</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-2 text-sm text-muted-foreground">
-                  <p>
-                    When you apply for jobs, submit your CV or contact us, we collect personal information such as
-                    your name, contact details, work experience, education history and documents required for
-                    overseas employment processing.
-                  </p>
-                  <p>
-                    For employers, we collect company details, contact information and information about your
-                    manpower requirements.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>How we use your information</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-2 text-sm text-muted-foreground">
-                  <ul className="list-disc pl-6 space-y-1">
-                    <li>To match candidates with suitable job opportunities in Nepal and abroad.</li>
-                    <li>To process documentation, medical and travel arrangements required by law.</li>
-                    <li>To communicate with you about your application, recruitment status or services.</li>
-                    <li>To comply with legal and regulatory requirements in Nepal and destination countries.</li>
-                  </ul>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>Your rights</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-2 text-sm text-muted-foreground">
-                  <p>
-                    You can contact us at any time to request access to your personal data, ask for corrections or
-                    request deletion where applicable. We will respond in line with applicable data protection
-                    regulations.
-                  </p>
-                </CardContent>
-              </Card>
-            </>
-          )}
+        <div className="container mx-auto px-4 max-w-4xl">
+          <Card className="border-2 shadow-xl">
+            <CardContent className="prose prose-lg max-w-none dark:prose-invert py-8 px-6 md:px-10">
+              {policy?.content ? (
+                <div 
+                  className="privacy-content"
+                  dangerouslySetInnerHTML={{ __html: policy.content }}
+                  style={{
+                    lineHeight: '1.8',
+                  }}
+                />
+              ) : (
+                <div className="space-y-6">
+                  <div className="text-center py-8">
+                    <div className="inline-flex p-4 bg-linear-to-br from-secondary-600/10 to-[#1d4ed8]/5 rounded-2xl mb-4">
+                      <ShieldCheck className="h-12 w-12 text-secondary-600" />
+                    </div>
+                    <p className="text-muted-foreground">
+                      Privacy policy content will be available soon.
+                    </p>
+                  </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </div>
       </section>
     </div>
   );
 }
-
