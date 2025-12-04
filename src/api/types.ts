@@ -175,9 +175,9 @@ export interface JobApplication {
   date_of_birth: string;
   nationality: string;
   current_location: string;
-  resume: File | string;
-  passport_copy?: File | string;
-  photo?: File | string;
+  resume: File; 
+  passport_copy?: File; // Optional
+  photo?: File; // Optional
   years_of_experience: number;
   previous_experience?: string;
   skills?: string;
@@ -202,8 +202,8 @@ export interface EmployerInquiry {
   job_description?: string;
   expected_start_date?: string;
   contract_duration?: string;
-  demand_letter?: File | string;
-  additional_documents?: File | string;
+  demand_letter?: File ;
+  additional_documents?: File ;
   status?: 'new' | 'processing' | 'quotation_sent' | 'approved' | 'completed' | 'cancelled';
   status_display?: string;
   notes?: string;

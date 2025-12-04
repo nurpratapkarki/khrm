@@ -1,4 +1,3 @@
-
 import axios from 'axios';
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 
@@ -13,7 +12,8 @@ class ApiService {
       headers: {
         'Content-Type': 'application/json',
       },
-      timeout: 30000,
+      withCredentials: false, // Changed to false since we're not using session auth
+      timeout: 60000, // 60 seconds (reasonable timeout)
     });
 
     // Request interceptor
@@ -73,7 +73,6 @@ class ApiService {
   private setToken(token: string): void {
     localStorage.setItem('access_token', token);
   }
-
 
   private clearTokens(): void {
     localStorage.removeItem('access_token');
@@ -147,6 +146,7 @@ class ApiService {
           'Content-Type': 'multipart/form-data',
           ...config?.headers,
         },
+        timeout: 120000, // 2 minutes for file uploads
       });
       return response.data;
     } catch (error) {
@@ -163,6 +163,7 @@ class ApiService {
           'Content-Type': 'multipart/form-data',
           ...config?.headers,
         },
+        timeout: 120000, // 2 minutes for file uploads
       });
       return response.data;
     } catch (error) {
@@ -179,6 +180,7 @@ class ApiService {
           'Content-Type': 'multipart/form-data',
           ...config?.headers,
         },
+        timeout: 120000, // 2 minutes for file uploads
       });
       return response.data;
     } catch (error) {

@@ -3,10 +3,11 @@ import type { CSRProject, PaginatedResponse } from '@/api/types';
 
 export const csrApi = {
   async getProjects(params?: { page?: number }) {
-    return apiService.getReq<CSRProject[] | PaginatedResponse<CSRProject>>(
-      '/csr-projects/',
-      params ? { params } : undefined,
-    );
+    const url =
+      params && params.page !== undefined
+        ? `/csr-projects/?page=${params.page}`
+        : '/csr-projects/';
+    return apiService.getReq<CSRProject[] | PaginatedResponse<CSRProject>>(url);
   },
 
   async getProject(slug: string) {

@@ -10,9 +10,15 @@ export interface CareerFilters {
 
 export const careersApi = {
   async getCareers(filters?: CareerFilters) {
+    const queryString = filters
+      ? '?' +
+        Object.entries(filters)
+          .filter(([_, v]) => v !== undefined && v !== null && v !== '')
+          .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(String(v))}`)
+          .join('&')
+      : '';
     return apiService.getReq<Career[] | PaginatedResponse<Career>>(
-      '/careers/',
-      filters ? { params: filters } : undefined,
+      `/careers/${queryString}`,
     );
   },
 

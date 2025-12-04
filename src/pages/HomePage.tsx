@@ -1,20 +1,20 @@
 // src/pages/HomePage.tsx
 import { useApi } from '@/hooks/useApi';
-import { homeApi, japanApi, type HomePageData, type JapanLandingPage } from '@/api';
+import { homeApi, type HomePageData,  } from '@/api';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ArrowRight, Building2, Users, Globe, Star, Briefcase, CheckCircle2, TrendingUp } from 'lucide-react';
+import { ArrowRight, Building2, Users, Globe, Star, Briefcase, CheckCircle2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion, useReducedMotion } from 'framer-motion';
 import JapanPage from './JapanLandingPage';
 
 export default function HomePage() {
   const { data, loading, error } = useApi<HomePageData>(() => homeApi.getHomePageData(), []);
-  const { data: japanLandingRaw } = useApi<JapanLandingPage | Record<string, never>>(
-    () => japanApi.getJapanLanding(),
-    [],
-  );
+  // const { data: japanLandingRaw } = useApi<JapanLandingPage | Record<string, never>>(
+  //   () => japanApi.getJapanLanding(),
+  //   [],
+  // );
 
   const prefersReducedMotion = useReducedMotion();
 
@@ -37,9 +37,9 @@ export default function HomePage() {
     );
   }
 
-  const japanLanding = japanLandingRaw && (japanLandingRaw as any).id
-    ? (japanLandingRaw as JapanLandingPage)
-    : null;
+  // const japanLanding = japanLandingRaw && (japanLandingRaw as any).id
+  //   ? (japanLandingRaw as JapanLandingPage)
+  //   : null;
 
   return (
     <div className="flex flex-col">
