@@ -26,15 +26,15 @@ export default function Footer() {
               {companyInfo?.hero_subtext ?? 'Trusted international recruitment partner from Nepal.'}
             </p>
             <div className="flex gap-2">
-              <Button 
-                size="icon" 
-                variant="outline" 
+              <Button
+                size="icon"
+                variant="outline"
                 className="border-neutral-700 hover:bg-primary-600 hover:border-primary-600 hover:text-white transition-colors"
               >
                 <Facebook className="h-4 w-4" />
               </Button>
-              <Button 
-                size="icon" 
+              <Button
+                size="icon"
                 variant="outline"
                 className="border-neutral-700 hover:bg-secondary-600 hover:border-secondary-600 hover:text-white transition-colors"
               >
@@ -121,7 +121,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2">
                 <Phone className="h-4 w-4 text-secondary-600 shrink-0" />
-                <a 
+                <a
                   href={`tel:${headquarters?.phone ?? ''}`}
                   className="text-neutral-400 hover:text-secondary-600 transition-colors"
                 >
@@ -130,7 +130,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2">
                 <Mail className="h-4 w-4 text-accent-gold shrink-0" />
-                <a 
+                <a
                   href={`mailto:${headquarters?.email ?? 'info@khrm.com.np'}`}
                   className="text-neutral-400 hover:text-accent-gold transition-colors"
                 >
@@ -146,10 +146,14 @@ export default function Footer() {
       <div className="border-t border-neutral-800">
         <div className="container mx-auto px-4 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-sm text-neutral-400">
+            <a
+              href="https://nurpratapkarki.com.np/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-neutral-400">
               © {new Date().getFullYear()} KHRM. All rights reserved.
-            </p>
-            
+            </a>
+
             <div className="flex flex-col md:flex-row items-center gap-4 text-sm">
               <div className="flex gap-4">
                 <Link to="/privacy" className="text-neutral-400 hover:text-primary-600 transition-colors">
@@ -159,12 +163,12 @@ export default function Footer() {
                   Terms of Service
                 </Link>
               </div>
-              
+
               <span className="hidden md:block text-neutral-600">|</span>
-              
-              <a 
-                href="https://nurpratapkarki.com.np" 
-                target="_blank" 
+
+              <a
+                href="https://eimagineinfotech.com/"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="text-neutral-400 hover:text-primary-600 transition-colors flex items-center gap-1.5 group"
               >

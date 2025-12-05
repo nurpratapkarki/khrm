@@ -1,5 +1,9 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
+// Phone number validation: 10 digits, starts with 97, 98, 96, or 95
+function isValidNepaliPhone(phone: string): boolean {
+  return /^(97|98|96|95)\d{8}$/.test(phone);
+}
 import { useParams, useNavigate } from 'react-router-dom';
 import { useApi } from '@/hooks/useApi';
 import { jobApi, type Job, type JobApplication } from '@/api';
@@ -62,6 +66,11 @@ export default function JobApplicationPage() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!job) return;
+
+    if (!isValidNepaliPhone(formValues.phone)) {
+      setErrorMessage('Phone number must be 10 digits and start with 97, 98, 96, or 95.');
+      return;
+    }
 
     if (!formValues.resume) {
       setErrorMessage('Please upload your CV / resume.');
@@ -259,6 +268,8 @@ export default function JobApplicationPage() {
                             value={formValues.phone}
                             onChange={(e) => handleChange('phone', e.target.value)}
                             required
+                            // todo add the valiadition
+
                             className="border-2"
                           />
                         </div>

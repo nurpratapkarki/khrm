@@ -7,6 +7,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
+
+// Phone number validation: 10 digits, starts with 97, 98, 96, or 95
+function isValidNepaliPhone(phone: string): boolean {
+  return /^(97|98|96|95)\d{8}$/.test(phone);
+}
 import { Building2, Users, Globe, Upload } from 'lucide-react';
 
  type EmployerInquiryFormValues = {
@@ -63,10 +68,16 @@ export default function EmployerInquiryPage() {
   };
 
   const handleSubmit = async (e: FormEvent) => {
+
     e.preventDefault();
 
     if (!formValues.company_name || !formValues.contact_person || !formValues.email || !formValues.phone) {
       setErrorMessage('Please fill in all required fields.');
+      return;
+    }
+
+    if (!isValidNepaliPhone(formValues.phone)) {
+      setErrorMessage('Phone number must be 10 digits and start with 97, 98, 96, or 95.');
       return;
     }
 

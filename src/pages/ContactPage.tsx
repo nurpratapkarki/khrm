@@ -9,6 +9,12 @@ import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
 import { Mail, Phone, MessageCircle, HelpCircle } from 'lucide-react';
 
+// Phone number validation: 10 digits, starts with 97, 98, 96, or 95
+function isValidNepaliPhone(phone: string): boolean {
+  if (!phone) return true; // allow empty (optional field)
+  return /^(97|98|96|95)\d{8}$/.test(phone);
+}
+
 
 type ContactFormValues = Omit<
   ContactMessage,
@@ -123,6 +129,11 @@ export default function ContactPage() {
                       <FormField
                         control={form.control}
                         name="phone"
+                        rules={{
+                          validate: (value) =>
+                            !value || isValidNepaliPhone(value) ||
+                            'Phone number must be 10 digits and start with 97, 98, 96, or 95.'
+                        }}
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>Phone (optional)</FormLabel>
