@@ -156,3 +156,39 @@
     @apply bg-background text-foreground;
   }
 }
+
+@theme inline {
+  --animate-scroll: scroll var(--animation-duration, 40s) var(--animation-direction, forwards) linear infinite;
+ 
+  @keyframes scroll {
+    to {
+      transform: translate3d(calc(-50% - 0.5rem), 0, 0);
+    }
+  }
+}
+
+@layer utilities {
+  @keyframes scroll {
+    to {
+      transform: translate3d(calc(-50% - 0.5rem), 0, 0);
+    }
+  }
+
+  .animate-scroll {
+    animation: var(--animate-scroll);
+    will-change: transform;
+  }
+}
+
+@layer utilities {
+  @keyframes scroll {
+      to {
+          transform: translate3d(calc(-50% - 0.5rem), 0, 0);
+      }
+  }
+
+  .animate-scroll {
+      animation: scroll var(--animation-duration, 40s) var(--animation-direction, forwards) linear infinite;
+      will-change: transform;
+  }
+}
