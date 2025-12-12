@@ -4,11 +4,23 @@ import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { useApi } from '@/hooks/useApi';
 import { companyApi } from '@/api';
-import type { CompanyInfo } from '@/api';
+import type { CompanyInfo, Office } from '@/api';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { data: companyInfo } = useApi<CompanyInfo>(() => companyApi.getCompanyInfo(), []);
+  const { data: offices } = useApi<Office[] | { results: Office[] }>(() => companyApi.getOffices(), []);
+
+  const officeList = Array.isArray(offices)
+    ? offices
+    : Array.isArray((offices as { results?: Office[] })?.results)
+      ? (offices as { results: Office[] }).results
+      : [];
+
+  const whatsappNumber = officeList.find((office) => office.is_active && office.whatsapp)?.whatsapp;
+  const whatsappLink = whatsappNumber
+    ? `https://wa.me/${whatsappNumber.replace(/\D/g, '')}`
+    : undefined;
 
   const navigation = [
     { name: 'Home', href: '/' },
@@ -64,10 +76,12 @@ export default function Header() {
           {/* CTA Buttons */}
           <div className="hidden md:flex items-center gap-3">
             <Button variant="outline" size="sm" asChild>
-              <Link to="/employer-inquiry">Hire Workers</Link>
+              <Link to="/jobs">Get Started</Link>
             </Button>
             <Button size="sm" asChild>
-              <Link to="/jobs">Find Jobs</Link>
+              <a href={whatsappLink} target="_blank" rel="noreferrer">
+                Whatsapp Us
+              </a>
             </Button>
           </div>
 
@@ -99,7 +113,9 @@ export default function Header() {
                   <Link to="/employer-inquiry">Hire Workers</Link>
                 </Button>
                 <Button size="sm" asChild>
-                  <Link to="/jobs">Find Jobs</Link>
+                  <a href={whatsappLink} target="_blank" rel="noreferrer">
+                    Whatsapp Us
+                  </a>
                 </Button>
               </div>
             </div>
