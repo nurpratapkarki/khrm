@@ -79,6 +79,7 @@ export default function HomePage() {
         <div className="flex flex-col">
             {/* Hero Section (global) */}
             <section className="relative bg-linear-to-br from-primary/10 h-[70vh] via-background to-primary/5 border-b">
+                {/* Background Image Carousel */}
                 <div className="absolute inset-0 z-0">
                     {[
                         data?.company_info.hero_image,
@@ -90,7 +91,7 @@ export default function HomePage() {
                         .map((image, index) => (
                             <div
                                 key={index}
-                                className={`absolute inset-0 transition-opacity duration-1000 ${index === currentImageIndex ? 'opacity-30' : 'opacity-0'
+                                className={`absolute inset-0 transition-opacity duration-1000 ${index === currentImageIndex ? 'opacity-50' : 'opacity-0'
                                     }`}
                             >
                                 <img
@@ -100,7 +101,10 @@ export default function HomePage() {
                                 />
                             </div>
                         ))}
-                    <div className="absolute inset-0 bg-linear-to-b from-background/80 via-background/60 to-background/80" />
+                    {/* Gradient overlay for text readability - stronger at top and bottom */}
+                    <div className="absolute inset-0 bg-linear-to-b from-background/95 via-background/70 to-background/95" />
+                    {/* Additional center fade for better image visibility */}
+                    <div className="absolute inset-0 bg-radial-gradient from-transparent via-background/40 to-background/80" />
                 </div>
 
                 <div className="container mx-auto px-4 py-24 md:py-32 relative z-10">
@@ -110,17 +114,19 @@ export default function HomePage() {
                         animate={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
                         transition={{ duration: 0.4, ease: "easeOut" }}
                     >
-                        <Badge variant="secondary" className="mb-6 text-sm px-4 py-1">
+                        <Badge variant="secondary" className="mb-6 text-sm px-4 py-1 bg-background/80 backdrop-blur-sm">
                             Since {data?.company_info?.establishment_year}
                         </Badge>
-                        <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">
+                        <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6 text-foreground drop-shadow-lg">
                             {data?.company_info?.hero_headline}
                         </h1>
-                        <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+                        <p className="text-xl text-foreground/90 mb-8 max-w-2xl mx-auto drop-shadow-md">
                             {data?.company_info?.hero_subtext}
                         </p>
                     </motion.div>
                 </div>
+
+                
 
 
                 {/* Floating Stats */}
