@@ -195,33 +195,7 @@ export default function JobDetailPage() {
           <div className="lg:col-span-1">
             <div className="sticky top-24 space-y-6">
               {/* Apply Card */}
-              <Card className="border-2 border-primary-600/20 shadow-lg">
-                <CardContent className="pt-6">
-                  <div className="text-center mb-6">
-                    <div className="inline-flex p-4 bg-linear-to-br from-primary-600/10 to-primary-700/5 rounded-2xl mb-4">
-                      <Briefcase className="h-10 w-10 text-primary-600" />
-                    </div>
-                    <h3 className="text-xl font-bold mb-2">Interested in this role?</h3>
-                    <p className="text-sm text-muted-foreground">
-                      Apply now and join our team
-                    </p>
-                  </div>
-
-                  <Button 
-                    asChild 
-                    size="lg"
-                    className="w-full bg-linear-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-[#991b1b]"
-                  >
-                    <Link to={`/jobs/${job.slug}/apply`}>
-                      Apply Now
-                    </Link>
-                  </Button>
-
-                  <p className="text-xs text-muted-foreground text-center mt-4">
-                    By applying, you agree to our terms and conditions
-                  </p>
-                </CardContent>
-              </Card>
+              
 
               {/* Job Details */}
               <Card className="border-2">

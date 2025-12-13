@@ -56,6 +56,9 @@ export interface CompanyInfo {
   values_image?: string;
   about_background_image?: string;
   hero_image?: string;
+  hero_image1?: string;
+  hero_image2?: string;
+  hero_image3?: string;
   hero_headline: string;
   hero_subtext: string;
 }
@@ -423,8 +426,9 @@ export interface JapanLandingPage {
 // ==================== HOME PAGE DATA TYPE ====================
 
 export interface HomePageData {
-  company_info: CompanyInfo | null;
+  company_info: CompanyInfo ;
   featured_clients: Client[];
+  client: Client;
   industries: Industry[];
   testimonials: Testimonial[];
   featured_jobs: Job[];

@@ -369,7 +369,7 @@ export default function JobsPage() {
                                 size="sm" 
                                 className="bg-linear-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-[#991b1b]"
                               >
-                                Apply Now
+                                View Details
                               </Button>
                             </div>
                           </CardContent>

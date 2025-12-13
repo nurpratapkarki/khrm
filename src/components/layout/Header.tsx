@@ -17,7 +17,7 @@ export default function Header() {
       ? (offices as { results: Office[] }).results
       : [];
 
-  const whatsappNumber = officeList.find((office) => office.is_active && office.whatsapp)?.whatsapp;
+  const whatsappNumber = officeList.find((office) => office.is_active && office.phone)?.phone;
   const whatsappLink = whatsappNumber
     ? `https://wa.me/${whatsappNumber.replace(/\D/g, '')}`
     : undefined;

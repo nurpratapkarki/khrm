@@ -91,18 +91,7 @@ export default function JapanPage() {
 	            <p className="text-lg md:text-xl text-[color:var(--japan-foreground)]/80 mb-8">
 	              {landing.intro_description}
 	            </p>
-	            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-	              <Button
-	                size="lg"
-	                className="bg-(--japan-primary) text-white hover:bg-[color:var(--japan-accent)]"
-	                asChild
-	              >
-	                <Link to="/employer-inquiry">Hire from Nepal for Japan</Link>
-	              </Button>
-	              <Button size="lg" variant="outline" asChild>
-	                <Link to="/training">Explore Japan-focused training</Link>
-	              </Button>
-	            </div>
+	            
 	          </motion.div>
 	        </div>
 	      </section>
@@ -144,7 +133,18 @@ export default function JapanPage() {
 	            viewport={{ once: true, amount: 0.3 }}
 	            transition={{ duration: 0.45, ease: 'easeOut', delay: 0.05 }}
 	          >
-	            {landing.preparation_image && (
+	            
+	            <h2 className="text-2xl md:text-3xl font-bold mb-2">{landing.preparation_title}</h2>
+	            {landing.preparation_intro && (
+	              <p className="text-[color:var(--japan-foreground)]/80 whitespace-pre-line">
+	                {landing.preparation_intro}
+	              </p>
+	            )}
+				
+	            <ul className="mt-4 space-y-3">
+	              {renderBullets(landing.bullet_points, 'preparation')}
+	            </ul>
+				{landing.preparation_image && (
 	              <div className="mb-4 rounded-2xl overflow-hidden border border-(--japan-primary)/20 bg-white/80">
 	                <img
 	                  src={landing.preparation_image}
@@ -153,15 +153,6 @@ export default function JapanPage() {
 	                />
 	              </div>
 	            )}
-	            <h2 className="text-2xl md:text-3xl font-bold mb-2">{landing.preparation_title}</h2>
-	            {landing.preparation_intro && (
-	              <p className="text-[color:var(--japan-foreground)]/80 whitespace-pre-line">
-	                {landing.preparation_intro}
-	              </p>
-	            )}
-	            <ul className="mt-4 space-y-3">
-	              {renderBullets(landing.bullet_points, 'preparation')}
-	            </ul>
 	          </motion.div>
 	        </div>
 	      </section>
@@ -175,15 +166,7 @@ export default function JapanPage() {
 	            viewport={{ once: true, amount: 0.3 }}
 	            transition={{ duration: 0.45, ease: 'easeOut' }}
 	          >
-	            {landing.trust_image && (
-	              <div className="mb-4 rounded-2xl overflow-hidden border border-(--japan-primary)/25 bg-white/80">
-	                <img
-	                  src={landing.trust_image}
-	                  alt="Trust section illustration"
-	                  className="h-52 w-full object-cover"
-	                />
-	              </div>
-	            )}
+	            
 	            <h2 className="text-2xl md:text-3xl font-bold mb-2">{landing.trust_title}</h2>
 	            {landing.trust_intro && (
 	              <p className="text-[color:var(--japan-foreground)]/80 whitespace-pre-line mb-4">
@@ -193,6 +176,15 @@ export default function JapanPage() {
 	            <ul className="space-y-3">
 	              {renderBullets(landing.bullet_points, 'trust')}
 	            </ul>
+				{landing.trust_image && (
+	              <div className="mb-4 rounded-2xl overflow-hidden border border-(--japan-primary)/25 bg-white/80">
+	                <img
+	                  src={landing.trust_image}
+	                  alt="Trust section illustration"
+	                  className="h-72 w-full object-cover"
+	                />
+	              </div>
+	            )}
 	          </motion.div>
 	
 	          <motion.div

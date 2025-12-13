@@ -15,22 +15,37 @@ import {
     ArrowRight,
     Users,
     Globe,
-    Briefcase,
     CheckCircle2,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion, useReducedMotion } from "framer-motion";
 import JapanPage from "./JapanLandingPage";
+import { useEffect, useState } from "react";
 
 export default function HomePage() {
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
     const { data, loading, error } = useApi<HomePageData>(
         () => apiService.getReq<HomePageData>("/home/"),
         [],
     );
-    // const { data: japanLandingRaw } = useApi<JapanLandingPage | Record<string, never>>(
-    //   () => japanApi.getJapanLanding(),
-    //   [],
-    // );
+
+    useEffect(() => {
+        const images = [
+            data?.company_info.hero_image,
+            data?.company_info.hero_image1,
+            data?.company_info.hero_image2,
+            data?.company_info.hero_image3,
+        ].filter(Boolean);
+
+        if (images.length === 0) return;
+
+        const interval = setInterval(() => {
+            setCurrentImageIndex((prev) => (prev + 1) % images.length);
+        }, 5000);
+
+        return () => clearInterval(interval);
+    }, [data?.company_info]);
 
     const prefersReducedMotion = useReducedMotion();
 
@@ -55,6 +70,7 @@ export default function HomePage() {
         );
     }
 
+
     // const japanLanding = japanLandingRaw && (japanLandingRaw as any).id
     //   ? (japanLandingRaw as JapanLandingPage)
     //   : null;
@@ -62,24 +78,39 @@ export default function HomePage() {
     return (
         <div className="flex flex-col">
             {/* Hero Section (global) */}
-            <section className="relative bg-linear-to-br from-primary/10 via-background to-primary/5 border-b">
-                <div className="container mx-auto px-4 py-24 md:py-32">
+            <section className="relative bg-linear-to-br from-primary/10 h-[70vh] via-background to-primary/5 border-b">
+                <div className="absolute inset-0 z-0">
+                    {[
+                        data?.company_info.hero_image,
+                        data?.company_info.hero_image1,
+                        data?.company_info.hero_image2,
+                        data?.company_info.hero_image3,
+                    ]
+                        .filter(Boolean)
+                        .map((image, index) => (
+                            <div
+                                key={index}
+                                className={`absolute inset-0 transition-opacity duration-1000 ${index === currentImageIndex ? 'opacity-30' : 'opacity-0'
+                                    }`}
+                            >
+                                <img
+                                    src={image}
+                                    alt=""
+                                    className="w-full h-full object-cover"
+                                />
+                            </div>
+                        ))}
+                    <div className="absolute inset-0 bg-linear-to-b from-background/80 via-background/60 to-background/80" />
+                </div>
+
+                <div className="container mx-auto px-4 py-24 md:py-32 relative z-10">
                     <motion.div
                         className="max-w-4xl mx-auto text-center"
-                        initial={
-                            prefersReducedMotion ? false : { opacity: 0, y: 16 }
-                        }
-                        animate={
-                            prefersReducedMotion
-                                ? undefined
-                                : { opacity: 1, y: 0 }
-                        }
+                        initial={prefersReducedMotion ? false : { opacity: 0, y: 16 }}
+                        animate={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
                         transition={{ duration: 0.4, ease: "easeOut" }}
                     >
-                        <Badge
-                            variant="secondary"
-                            className="mb-6 text-sm px-4 py-1"
-                        >
+                        <Badge variant="secondary" className="mb-6 text-sm px-4 py-1">
                             Since {data?.company_info?.establishment_year}
                         </Badge>
                         <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">
@@ -88,90 +119,12 @@ export default function HomePage() {
                         <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
                             {data?.company_info?.hero_subtext}
                         </p>
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                            <Button size="lg" className="text-lg px-8" asChild>
-                                <Link to="/employer-inquiry">
-                                    Hire From Nepal
-                                    <ArrowRight className="ml-2 h-5 w-5" />
-                                </Link>
-                            </Button>
-                            <Button
-                                size="lg"
-                                variant="outline"
-                                className="text-lg px-8"
-                                asChild
-                            >
-                                <Link to="/jobs">
-                                    View Job Openings
-                                    <Briefcase className="ml-2 h-5 w-5" />
-                                </Link>
-                            </Button>
-                        </div>
                     </motion.div>
                 </div>
 
+
                 {/* Floating Stats */}
-                <div className="container mx-auto px-4 -mb-16 relative z-10">
-                    <motion.div
-                        className="bg-card border shadow-xl rounded-2xl p-8"
-                        initial={
-                            prefersReducedMotion ? false : { opacity: 0, y: 24 }
-                        }
-                        animate={
-                            prefersReducedMotion
-                                ? undefined
-                                : { opacity: 1, y: 0 }
-                        }
-                        transition={{
-                            duration: 0.45,
-                            ease: "easeOut",
-                            delay: 0.1,
-                        }}
-                    >
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-                            <div className="space-y-2">
-                                <div className="flex justify-center mb-3">
-                                    <div className="p-3 bg-primary/10 rounded-full">
-                                        <Users className="h-8 w-8 text-primary" />
-                                    </div>
-                                </div>
-                                <div className="text-4xl font-bold text-primary">
-                                    {data?.company_info?.total_deployments.toLocaleString()}
-                                    +
-                                </div>
-                                <div className="text-muted-foreground font-medium">
-                                    Workers Deployed
-                                </div>
-                            </div>
-                            <div className="space-y-2">
-                                <div className="flex justify-center mb-3">
-                                    <div className="p-3 bg-primary/10 rounded-full">
-                                        <CheckCircle2 className="h-8 w-8 text-primary" />
-                                    </div>
-                                </div>
-                                <div className="text-4xl font-bold text-primary">
-                                    Licensed
-                                </div>
-                                <div className="text-muted-foreground font-medium">
-                                    Government Approved
-                                </div>
-                            </div>
-                            <div className="space-y-2">
-                                <div className="flex justify-center mb-3">
-                                    <div className="p-3 bg-primary/10 rounded-full">
-                                        <Globe className="h-8 w-8 text-primary" />
-                                    </div>
-                                </div>
-                                <div className="text-4xl font-bold text-primary">
-                                    {data?.offices.length}
-                                </div>
-                                <div className="text-muted-foreground font-medium">
-                                    Global Offices
-                                </div>
-                            </div>
-                        </div>
-                    </motion.div>
-                </div>
+
             </section>
 
             {/* Japan-focused section (highlights Japan as key destination) */}
@@ -249,8 +202,69 @@ export default function HomePage() {
           </div>
         </section>
       )} */}
-      <div>
+            <div>
                 <JapanPage />
+            </div>
+            <div className="container mx-auto px-4 -mb-16 relative z-10">
+                <motion.div
+                    className="bg-card border shadow-xl rounded-2xl p-8"
+                    initial={
+                        prefersReducedMotion ? false : { opacity: 0, y: 24 }
+                    }
+                    animate={
+                        prefersReducedMotion
+                            ? undefined
+                            : { opacity: 1, y: 0 }
+                    }
+                    transition={{
+                        duration: 0.45,
+                        ease: "easeOut",
+                        delay: 0.1,
+                    }}
+                >
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                        <div className="space-y-2">
+                            <div className="flex justify-center mb-3">
+                                <div className="p-3 bg-primary/10 rounded-full">
+                                    <Users className="h-8 w-8 text-primary" />
+                                </div>
+                            </div>
+                            <div className="text-4xl font-bold text-primary">
+                                {data?.company_info?.total_deployments.toLocaleString()}
+                                +
+                            </div>
+                            <div className="text-muted-foreground font-medium">
+                                Workers Deployed
+                            </div>
+                        </div>
+                        <div className="space-y-2">
+                            <div className="flex justify-center mb-3">
+                                <div className="p-3 bg-primary/10 rounded-full">
+                                    <CheckCircle2 className="h-8 w-8 text-primary" />
+                                </div>
+                            </div>
+                            <div className="text-4xl font-bold text-primary">
+                                Licensed
+                            </div>
+                            <div className="text-muted-foreground font-medium">
+                                Government Approved
+                            </div>
+                        </div>
+                        <div className="space-y-2">
+                            <div className="flex justify-center mb-3">
+                                <div className="p-3 bg-primary/10 rounded-full">
+                                    <Globe className="h-8 w-8 text-primary" />
+                                </div>
+                            </div>
+                            <div className="text-4xl font-bold text-primary">
+                                {data?.offices.length}
+                            </div>
+                            <div className="text-muted-foreground font-medium">
+                                Global Offices
+                            </div>
+                        </div>
+                    </div>
+                </motion.div>
             </div>
 
             {/* Trusted Clients Section */}
@@ -258,14 +272,8 @@ export default function HomePage() {
                 <div className="container mx-auto px-4">
                     <motion.div
                         className="text-center mb-16"
-                        initial={
-                            prefersReducedMotion ? false : { opacity: 0, y: 16 }
-                        }
-                        whileInView={
-                            prefersReducedMotion
-                                ? undefined
-                                : { opacity: 1, y: 0 }
-                        }
+                        initial={prefersReducedMotion ? false : { opacity: 0, y: 16 }}
+                        whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
                         viewport={{ once: true, amount: 0.4 }}
                         transition={{ duration: 0.35, ease: "easeOut" }}
                     >
@@ -273,42 +281,40 @@ export default function HomePage() {
                             Trusted By Leading Companies
                         </h2>
                         <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-                            We've successfully placed thousands of workers with
-                            top companies across the Middle East
+                            We've successfully placed thousands of workers with top companies across the Middle East
                         </p>
                     </motion.div>
 
-                    {/* Client Logos Carousel */}
+                    {/* Infinite Carousel */}
                     <div className="relative overflow-hidden">
-                        <div className="flex gap-8 items-center justify-center flex-wrap">
-                            {data?.featured_clients.map((client, index) => (
-                                <motion.div
-                                    key={client.id}
-                                    className="shrink-0 w-32 h-20 md:w-40 md:h-24 bg-white rounded-lg border p-4 flex items-center justify-center hover:shadow-lg transition-shadow"
-                                    initial={
-                                        prefersReducedMotion
-                                            ? false
-                                            : { opacity: 0, y: 8 }
-                                    }
-                                    whileInView={
-                                        prefersReducedMotion
-                                            ? undefined
-                                            : { opacity: 1, y: 0 }
-                                    }
-                                    viewport={{ once: true, amount: 0.3 }}
-                                    transition={{
-                                        duration: 0.3,
-                                        delay: prefersReducedMotion
-                                            ? 0
-                                            : index * 0.03,
-                                    }}
+                        <div className="flex animate-scroll">
+                            {/* Duplicate the array twice for seamless loop */}
+                            {[...(data?.featured_clients || []), ...(data?.featured_clients || [])].map((client, index) => (
+                                <div
+                                    key={`${client.id}-${index}`}
+                                    className="shrink-0 w-40 h-24 mx-4 bg-white rounded-lg border p-4 flex items-center justify-center hover:shadow-lg transition-shadow"
                                 >
-                                    <img
-                                        src={client.logo}
-                                        alt={client.name}
-                                        className="max-w-full max-h-full object-contain grayscale hover:grayscale-0 transition-all"
-                                    />
-                                </motion.div>
+                                    {client.website ? (
+                                        <a
+                                            href={client.website}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="w-full h-full flex items-center justify-center"
+                                        >
+                                            <img
+                                                src={client.logo}
+                                                alt={client.name}
+                                                className="max-w-full max-h-full object-contain grayscale hover:grayscale-0 transition-all"
+                                            />
+                                        </a>
+                                    ) : (
+                                        <img
+                                            src={client.logo}
+                                            alt={client.name}
+                                            className="max-w-full max-h-full object-contain grayscale hover:grayscale-0 transition-all"
+                                        />
+                                    )}
+                                </div>
                             ))}
                         </div>
                     </div>
