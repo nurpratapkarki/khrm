@@ -178,7 +178,7 @@ export interface JobApplication {
   date_of_birth: string;
   nationality: string;
   current_location: string;
-  resume: File; 
+  resume: File;
   passport_copy?: File; // Optional
   photo?: File; // Optional
   years_of_experience: number;
@@ -205,8 +205,8 @@ export interface EmployerInquiry {
   job_description?: string;
   expected_start_date?: string;
   contract_duration?: string;
-  demand_letter?: File ;
-  additional_documents?: File ;
+  demand_letter?: File;
+  additional_documents?: File;
   status?: 'new' | 'processing' | 'quotation_sent' | 'approved' | 'completed' | 'cancelled';
   status_display?: string;
   notes?: string;
@@ -307,13 +307,13 @@ export interface Document {
   id: number;
   title: string;
   document_type:
-    | 'employer_form'
-    | 'candidate_form'
-    | 'demand_letter'
-    | 'power_of_attorney'
-    | 'medical_checklist'
-    | 'policy'
-    | 'other';
+  | 'employer_form'
+  | 'candidate_form'
+  | 'demand_letter'
+  | 'power_of_attorney'
+  | 'medical_checklist'
+  | 'policy'
+  | 'other';
   document_type_display: string;
   description?: string;
   file: string;
@@ -423,10 +423,34 @@ export interface JapanLandingPage {
   team_members: JapanTeamMember[];
 }
 
+export interface JapanProgramTrainingPoint {
+  id: number;
+  point: string;
+  order: number;
+}
+
+export interface JapanProgramType {
+  id: number;
+  program_type: string;
+  program_type_display: string;
+  subtitle: string;
+  overview: string;
+  language_training_title: string;
+  training_duration?: string;
+  target_level: string;
+  objective: string;
+  image?: string;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+  training_points: JapanProgramTrainingPoint[];
+}
+
+
 // ==================== HOME PAGE DATA TYPE ====================
 
 export interface HomePageData {
-  company_info: CompanyInfo ;
+  company_info: CompanyInfo;
   featured_clients: Client[];
   client: Client;
   industries: Industry[];
