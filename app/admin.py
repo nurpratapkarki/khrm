@@ -75,7 +75,7 @@ class OfficeAdmin(admin.ModelAdmin):
     search_fields = ["name", "city", "address"]
     fieldsets = (
         ("Basic Information", {"fields": ("name", "country", "city", "address")}),
-        ("Contact Details", {"fields": ("phone", "email", "whatsapp")}),
+        ("Contact Details", {"fields": ("phone", "email", "whatsapp", "facebook")}),
         ("Location", {"fields": ("latitude", "longitude")}),
         (
             "Settings",

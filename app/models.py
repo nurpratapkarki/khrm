@@ -23,6 +23,7 @@ class Office(models.Model):
     phone = models.CharField(max_length=50)
     email = models.EmailField()
     whatsapp = models.CharField(max_length=50, blank=True)
+    facebook = models.URLField()
     latitude = models.DecimalField(
         max_digits=9, decimal_places=6, null=True, blank=True
     )
