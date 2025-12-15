@@ -1,493 +1,663 @@
+from types import MethodType
+
 from django.contrib import admin
 from django.utils.html import format_html
-from types import MethodType
 
 from .models import *
 
-
 # ==================== INLINE ADMINS ====================
+
 
 class MediaPhotoInline(admin.TabularInline):
     model = MediaPhoto
     extra = 1
-    fields = ['image', 'caption', 'display_order']
+    fields = ["image", "caption", "display_order"]
 
 
 class TestimonialInline(admin.TabularInline):
     model = Testimonial
     extra = 0
-    fields = ['person_name', 'person_position', 'rating', 'is_featured']
+    fields = ["person_name", "person_position", "rating", "is_featured"]
+
 
 # Make sure these inline classes are defined BEFORE the JapanLandingPageAdmin
 class JapanBulletPointInline(admin.StackedInline):
     """Inline for structured bullet points on the Japan landing page."""
+
     model = JapanBulletPoint
-    fk_name = 'page'
+    fk_name = "page"
     extra = 1
-    fields = ['section', 'title', 'description', 'order']
-    ordering = ['section', 'order']
+    fields = ["section", "title", "description", "order"]
+    ordering = ["section", "order"]
     verbose_name = "Bullet Point"
     verbose_name_plural = "Japan Bullet Points"
 
 
 class JapanTeamMemberInline(admin.StackedInline):
     """Inline for the team behind Japan recruitment."""
+
     model = JapanTeamMember
-    fk_name = 'page'
+    fk_name = "page"
     extra = 1
-    fields = ['name', 'role', 'bio', 'photo', 'order']
-    ordering = ['order']
+    fields = ["name", "role", "bio", "photo", "order"]
+    ordering = ["order"]
     verbose_name = "Team Member"
     verbose_name_plural = "Japan Team Members"
 
+
 @admin.register(JapanBulletPoint)
 class JapanBulletPointAdmin(admin.ModelAdmin):
-	"""Fallback admin so bullet points can be edited directly if needed."""
+    """Fallback admin so bullet points can be edited directly if needed."""
 
-	list_display = ['page', 'section', 'title', 'order']
-	list_filter = ['section', 'page']
-	search_fields = ['title', 'description']
-	ordering = ['page', 'section', 'order']
+    list_display = ["page", "section", "title", "order"]
+    list_filter = ["section", "page"]
+    search_fields = ["title", "description"]
+    ordering = ["page", "section", "order"]
 
 
 @admin.register(JapanTeamMember)
 class JapanTeamMemberAdmin(admin.ModelAdmin):
-	"""Fallback admin for managing Japan team members directly."""
+    """Fallback admin for managing Japan team members directly."""
 
-	list_display = ['name', 'role', 'page', 'order']
-	list_filter = ['page']
-	search_fields = ['name', 'role', 'bio']
-	ordering = ['page', 'order']
+    list_display = ["name", "role", "page", "order"]
+    list_filter = ["page"]
+    search_fields = ["name", "role", "bio"]
+    ordering = ["page", "order"]
 
 
 # ==================== CORE COMPANY ADMINS ====================
 
+
 @admin.register(Office)
 class OfficeAdmin(admin.ModelAdmin):
-    list_display = ['name', 'country', 'city', 'phone', 'is_headquarters', 'is_active']
-    list_filter = ['country', 'is_headquarters', 'is_active']
-    search_fields = ['name', 'city', 'address']
+    list_display = ["name", "country", "city", "phone", "is_headquarters", "is_active"]
+    list_filter = ["country", "is_headquarters", "is_active"]
+    search_fields = ["name", "city", "address"]
     fieldsets = (
-        ('Basic Information', {
-            'fields': ('name', 'country', 'city', 'address')
-        }),
-        ('Contact Details', {
-            'fields': ('phone', 'email', 'whatsapp')
-        }),
-        ('Location', {
-            'fields': ('latitude', 'longitude')
-        }),
-        ('Settings', {
-            'fields': ('is_headquarters', 'is_active', 'display_order', 'office_image')
-        }),
+        ("Basic Information", {"fields": ("name", "country", "city", "address")}),
+        ("Contact Details", {"fields": ("phone", "email", "whatsapp")}),
+        ("Location", {"fields": ("latitude", "longitude")}),
+        (
+            "Settings",
+            {
+                "fields": (
+                    "is_headquarters",
+                    "is_active",
+                    "display_order",
+                    "office_image",
+                )
+            },
+        ),
     )
 
 
 @admin.register(CompanyInfo)
 class CompanyInfoAdmin(admin.ModelAdmin):
     fieldsets = (
-        ('Company Details', {
-            'fields': ('establishment_year', 'license_number', 'total_deployments', 'logo')
-        }),
-        ('About Section', {
-            'fields': ('about_text', 'about_image', 'about_background_image')
-        }),
-        ('Mission, Vision & Values', {
-            'fields': ('mission', 'vision', 'values', 'mission_image', 'vision_image', 'values_image')
-        }),
-        ('Hero Banner', {
-            'fields': ('hero_headline', 'hero_subtext', 'hero_image', 'hero_image1', 'hero_image2', 'hero_image3')
-        }),
+        (
+            "Company Details",
+            {
+                "fields": (
+                    "establishment_year",
+                    "license_number",
+                    "total_deployments",
+                    "logo",
+                )
+            },
+        ),
+        (
+            "About Section",
+            {"fields": ("about_text", "about_image", "about_background_image")},
+        ),
+        (
+            "Mission, Vision & Values",
+            {
+                "fields": (
+                    "mission",
+                    "vision",
+                    "values",
+                    "mission_image",
+                    "vision_image",
+                    "values_image",
+                )
+            },
+        ),
+        (
+            "Hero Banner",
+            {
+                "fields": (
+                    "hero_headline",
+                    "hero_subtext",
+                    "hero_image",
+                    "hero_image1",
+                    "hero_image2",
+                    "hero_image3",
+                )
+            },
+        ),
     )
-    
+
     def has_add_permission(self, request):
         # Only allow one instance
         return not CompanyInfo.objects.exists()
-    
+
     def has_delete_permission(self, request, obj=None):
         return False
 
 
 @admin.register(Leadership)
 class LeadershipAdmin(admin.ModelAdmin):
-    list_display = ['name', 'position', 'display_order', 'is_active']
-    list_filter = ['is_active']
-    search_fields = ['name', 'position']
-    list_editable = ['display_order', 'is_active']
+    list_display = ["name", "position", "display_order", "is_active"]
+    list_filter = ["is_active"]
+    search_fields = ["name", "position"]
+    list_editable = ["display_order", "is_active"]
 
 
 @admin.register(Certification)
 class CertificationAdmin(admin.ModelAdmin):
-    list_display = ['name', 'issuing_authority', 'certificate_number', 'issue_date', 'expiry_date']
-    list_filter = ['issuing_authority']
-    search_fields = ['name', 'certificate_number']
+    list_display = [
+        "name",
+        "issuing_authority",
+        "certificate_number",
+        "issue_date",
+        "expiry_date",
+    ]
+    list_filter = ["issuing_authority"]
+    search_fields = ["name", "certificate_number"]
 
 
 # ==================== INDUSTRY & CLIENT ADMINS ====================
 
+
 @admin.register(Industry)
 class IndustryAdmin(admin.ModelAdmin):
-    list_display = ['name', 'slug', 'icon', 'is_featured', 'display_order']
-    list_filter = ['is_featured']
-    search_fields = ['name', 'description']
-    prepopulated_fields = {'slug': ('name',)}
-    list_editable = ['display_order', 'is_featured']
+    list_display = ["name", "slug", "icon", "is_featured", "display_order"]
+    list_filter = ["is_featured"]
+    search_fields = ["name", "description"]
+    prepopulated_fields = {"slug": ("name",)}
+    list_editable = ["display_order", "is_featured"]
 
 
 @admin.register(Client)
 class ClientAdmin(admin.ModelAdmin):
-    list_display = ['name', 'industry', 'country', 'is_featured', 'display_order']
-    list_filter = ['industry', 'country', 'is_featured']
-    search_fields = ['name']
-    list_editable = ['display_order', 'is_featured']
+    list_display = ["name", "industry", "country", "is_featured", "display_order"]
+    list_filter = ["industry", "country", "is_featured"]
+    search_fields = ["name"]
+    list_editable = ["display_order", "is_featured"]
     inlines = [TestimonialInline]
-    
+
     def logo_preview(self, obj):
         if obj.logo:
             return format_html('<img src="{}" width="100" />', obj.logo.url)
-        return '-'
-    logo_preview.short_description = 'Logo Preview'
+        return "-"
+
+    logo_preview.short_description = "Logo Preview"
 
 
 @admin.register(Testimonial)
 class TestimonialAdmin(admin.ModelAdmin):
-    list_display = ['person_name', 'company_name', 'rating', 'is_featured', 'created_at']
-    list_filter = ['rating', 'is_featured', 'created_at']
-    search_fields = ['person_name', 'company_name', 'testimonial_text']
-    list_editable = ['is_featured']
+    list_display = [
+        "person_name",
+        "company_name",
+        "rating",
+        "is_featured",
+        "created_at",
+    ]
+    list_filter = ["rating", "is_featured", "created_at"]
+    search_fields = ["person_name", "company_name", "testimonial_text"]
+    list_editable = ["is_featured"]
 
 
 # ==================== JOB & RECRUITMENT ADMINS ====================
 
+
 @admin.register(JobCategory)
 class JobCategoryAdmin(admin.ModelAdmin):
-    list_display = ['name', 'skill_level', 'industry']
-    list_filter = ['skill_level', 'industry']
-    search_fields = ['name']
+    list_display = ["name", "skill_level", "industry"]
+    list_filter = ["skill_level", "industry"]
+    search_fields = ["name"]
 
 
 @admin.register(Job)
 class JobAdmin(admin.ModelAdmin):
-    list_display = ['title', 'category', 'country', 'vacancies', 'status', 'is_featured', 'created_at']
-    list_filter = ['status', 'is_featured', 'industry', 'country', 'created_at']
-    search_fields = ['title', 'description']
-    prepopulated_fields = {'slug': ('title',)}
-    list_editable = ['status', 'is_featured']
-    date_hierarchy = 'created_at'
-    
+    list_display = [
+        "title",
+        "category",
+        "country",
+        "vacancies",
+        "status",
+        "is_featured",
+        "created_at",
+    ]
+    list_filter = ["status", "is_featured", "industry", "country", "created_at"]
+    search_fields = ["title", "description"]
+    prepopulated_fields = {"slug": ("title",)}
+    list_editable = ["status", "is_featured"]
+    date_hierarchy = "created_at"
+
     fieldsets = (
-        ('Basic Information', {
-            'fields': ('title', 'slug', 'category', 'industry', 'client')
-        }),
-        ('Location', {
-            'fields': ('country', 'location')
-        }),
-        ('Job Details', {
-            'fields': ('description', 'requirements', 'responsibilities', 'salary_range', 'contract_duration')
-        }),
-        ('Status', {
-            'fields': ('vacancies', 'status', 'is_featured', 'application_deadline')
-        }),
+        (
+            "Basic Information",
+            {"fields": ("title", "slug", "category", "industry", "client")},
+        ),
+        ("Location", {"fields": ("country", "location")}),
+        (
+            "Job Details",
+            {
+                "fields": (
+                    "description",
+                    "requirements",
+                    "responsibilities",
+                    "salary_range",
+                    "contract_duration",
+                )
+            },
+        ),
+        (
+            "Status",
+            {"fields": ("vacancies", "status", "is_featured", "application_deadline")},
+        ),
     )
 
 
 @admin.register(JobApplication)
 class JobApplicationAdmin(admin.ModelAdmin):
-    list_display = ['full_name', 'job', 'email', 'phone', 'status', 'created_at']
-    list_filter = ['status', 'nationality', 'created_at']
-    search_fields = ['first_name', 'last_name', 'email', 'phone']
-    date_hierarchy = 'created_at'
-    readonly_fields = ['created_at', 'updated_at']
-    
+    list_display = ["full_name", "job", "email", "phone", "status", "created_at"]
+    list_filter = ["status", "nationality", "created_at"]
+    search_fields = ["first_name", "last_name", "email", "phone"]
+    date_hierarchy = "created_at"
+    readonly_fields = ["created_at", "updated_at"]
+
     fieldsets = (
-        ('Job Information', {
-            'fields': ('job', 'status', 'notes')
-        }),
-        ('Personal Information', {
-            'fields': ('first_name', 'last_name', 'email', 'phone', 'date_of_birth', 'nationality', 'current_location')
-        }),
-        ('Documents', {
-            'fields': ('resume', 'passport_copy', 'photo')
-        }),
-        ('Experience', {
-            'fields': ('years_of_experience', 'previous_experience', 'skills')
-        }),
-        ('Timestamps', {
-            'fields': ('created_at', 'updated_at'),
-            'classes': ('collapse',)
-        }),
+        ("Job Information", {"fields": ("job", "status", "notes")}),
+        (
+            "Personal Information",
+            {
+                "fields": (
+                    "first_name",
+                    "last_name",
+                    "email",
+                    "phone",
+                    "date_of_birth",
+                    "nationality",
+                    "current_location",
+                )
+            },
+        ),
+        ("Documents", {"fields": ("resume", "passport_copy", "photo")}),
+        (
+            "Experience",
+            {"fields": ("years_of_experience", "previous_experience", "skills")},
+        ),
+        (
+            "Timestamps",
+            {"fields": ("created_at", "updated_at"), "classes": ("collapse",)},
+        ),
     )
-    
+
     def full_name(self, obj):
         return f"{obj.first_name} {obj.last_name}"
-    full_name.short_description = 'Name'
-    
-    actions = ['mark_as_screening', 'mark_as_interview', 'mark_as_selected', 'mark_as_rejected']
-    
+
+    full_name.short_description = "Name"
+
+    actions = [
+        "mark_as_screening",
+        "mark_as_interview",
+        "mark_as_selected",
+        "mark_as_rejected",
+    ]
+
     def mark_as_screening(self, request, queryset):
-        queryset.update(status='screening')
+        queryset.update(status="screening")
+
     mark_as_screening.short_description = "Mark as Screening"
-    
+
     def mark_as_interview(self, request, queryset):
-        queryset.update(status='interview')
+        queryset.update(status="interview")
+
     mark_as_interview.short_description = "Mark as Interview"
-    
+
     def mark_as_selected(self, request, queryset):
-        queryset.update(status='selected')
+        queryset.update(status="selected")
+
     mark_as_selected.short_description = "Mark as Selected"
-    
+
     def mark_as_rejected(self, request, queryset):
-        queryset.update(status='rejected')
+        queryset.update(status="rejected")
+
     mark_as_rejected.short_description = "Mark as Rejected"
 
 
 @admin.register(EmployerInquiry)
 class EmployerInquiryAdmin(admin.ModelAdmin):
-    list_display = ['company_name', 'contact_person', 'number_of_workers', 'status', 'created_at']
-    list_filter = ['status', 'industry', 'country', 'created_at']
-    search_fields = ['company_name', 'contact_person', 'email']
-    date_hierarchy = 'created_at'
-    readonly_fields = ['created_at', 'updated_at']
-    
+    list_display = [
+        "company_name",
+        "contact_person",
+        "number_of_workers",
+        "status",
+        "created_at",
+    ]
+    list_filter = ["status", "industry", "country", "created_at"]
+    search_fields = ["company_name", "contact_person", "email"]
+    date_hierarchy = "created_at"
+    readonly_fields = ["created_at", "updated_at"]
+
     fieldsets = (
-        ('Company Information', {
-            'fields': ('company_name', 'contact_person', 'email', 'phone', 'country')
-        }),
-        ('Manpower Requirements', {
-            'fields': ('industry', 'required_positions', 'number_of_workers', 'job_description')
-        }),
-        ('Timeline', {
-            'fields': ('expected_start_date', 'contract_duration')
-        }),
-        ('Documents', {
-            'fields': ('demand_letter', 'additional_documents')
-        }),
-        ('Status & Notes', {
-            'fields': ('status', 'notes')
-        }),
-        ('Timestamps', {
-            'fields': ('created_at', 'updated_at'),
-            'classes': ('collapse',)
-        }),
+        (
+            "Company Information",
+            {"fields": ("company_name", "contact_person", "email", "phone", "country")},
+        ),
+        (
+            "Manpower Requirements",
+            {
+                "fields": (
+                    "industry",
+                    "required_positions",
+                    "number_of_workers",
+                    "job_description",
+                )
+            },
+        ),
+        ("Timeline", {"fields": ("expected_start_date", "contract_duration")}),
+        ("Documents", {"fields": ("demand_letter", "additional_documents")}),
+        ("Status & Notes", {"fields": ("status", "notes")}),
+        (
+            "Timestamps",
+            {"fields": ("created_at", "updated_at"), "classes": ("collapse",)},
+        ),
     )
-    
-    actions = ['mark_as_processing', 'mark_as_approved', 'mark_as_completed']
-    
+
+    actions = ["mark_as_processing", "mark_as_approved", "mark_as_completed"]
+
     def mark_as_processing(self, request, queryset):
-        queryset.update(status='processing')
+        queryset.update(status="processing")
+
     mark_as_processing.short_description = "Mark as Processing"
-    
+
     def mark_as_approved(self, request, queryset):
-        queryset.update(status='approved')
+        queryset.update(status="approved")
+
     mark_as_approved.short_description = "Mark as Approved"
-    
+
     def mark_as_completed(self, request, queryset):
-        queryset.update(status='completed')
+        queryset.update(status="completed")
+
     mark_as_completed.short_description = "Mark as Completed"
 
 
 # ==================== TRAINING ADMINS ====================
 
+
 @admin.register(TrainingCourse)
 class TrainingCourseAdmin(admin.ModelAdmin):
-    list_display = ['name', 'course_type', 'duration', 'certification_provided', 'is_active', 'display_order']
-    list_filter = ['course_type', 'certification_provided', 'is_active']
-    search_fields = ['name', 'description']
-    prepopulated_fields = {'slug': ('name',)}
-    list_editable = ['display_order', 'is_active']
+    list_display = [
+        "name",
+        "course_type",
+        "duration",
+        "certification_provided",
+        "is_active",
+        "display_order",
+    ]
+    list_filter = ["course_type", "certification_provided", "is_active"]
+    search_fields = ["name", "description"]
+    prepopulated_fields = {"slug": ("name",)}
+    list_editable = ["display_order", "is_active"]
 
 
 @admin.register(TrainingFacility)
 class TrainingFacilityAdmin(admin.ModelAdmin):
-    list_display = ['name', 'capacity', 'display_order']
-    search_fields = ['name', 'description']
-    list_editable = ['display_order']
+    list_display = ["name", "capacity", "display_order"]
+    search_fields = ["name", "description"]
+    list_editable = ["display_order"]
 
 
 # ==================== MEDIA & CONTENT ADMINS ====================
 
+
 @admin.register(MediaAlbum)
 class MediaAlbumAdmin(admin.ModelAdmin):
-    list_display = ['title', 'album_type', 'date', 'photo_count', 'display_order']
-    list_filter = ['album_type', 'date']
-    search_fields = ['title', 'description']
-    prepopulated_fields = {'slug': ('title',)}
-    date_hierarchy = 'date'
+    list_display = ["title", "album_type", "date", "photo_count", "display_order"]
+    list_filter = ["album_type", "date"]
+    search_fields = ["title", "description"]
+    prepopulated_fields = {"slug": ("title",)}
+    date_hierarchy = "date"
     inlines = [MediaPhotoInline]
-    
+
     def photo_count(self, obj):
         return obj.photos.count()
-    photo_count.short_description = 'Photos'
+
+    photo_count.short_description = "Photos"
 
 
 @admin.register(MediaPhoto)
 class MediaPhotoAdmin(admin.ModelAdmin):
-    list_display = ['album', 'caption', 'display_order', 'uploaded_at']
-    list_filter = ['album', 'uploaded_at']
-    search_fields = ['caption']
-    
+    list_display = ["album", "caption", "display_order", "uploaded_at"]
+    list_filter = ["album", "uploaded_at"]
+    search_fields = ["caption"]
+
     def image_preview(self, obj):
         if obj.image:
             return format_html('<img src="{}" width="100" />', obj.image.url)
-        return '-'
-    image_preview.short_description = 'Preview'
+        return "-"
+
+    image_preview.short_description = "Preview"
 
 
 @admin.register(NewsPost)
 class NewsPostAdmin(admin.ModelAdmin):
-    list_display = ['title', 'post_type', 'author', 'is_published', 'is_featured', 'published_date']
-    list_filter = ['post_type', 'is_published', 'is_featured', 'published_date']
-    search_fields = ['title', 'content']
-    prepopulated_fields = {'slug': ('title',)}
-    date_hierarchy = 'published_date'
-    readonly_fields = ['created_at', 'updated_at']
-    list_editable = ['is_published', 'is_featured']
-    
+    list_display = [
+        "title",
+        "post_type",
+        "author",
+        "is_published",
+        "is_featured",
+        "published_date",
+    ]
+    list_filter = ["post_type", "is_published", "is_featured", "published_date"]
+    search_fields = ["title", "content"]
+    prepopulated_fields = {"slug": ("title",)}
+    date_hierarchy = "published_date"
+    readonly_fields = ["created_at", "updated_at"]
+    list_editable = ["is_published", "is_featured"]
+
     fieldsets = (
-        ('Content', {
-            'fields': ('title', 'slug', 'post_type', 'featured_image', 'summary', 'content')
-        }),
-        ('Publishing', {
-            'fields': ('author', 'is_published', 'is_featured', 'published_date')
-        }),
-        ('Timestamps', {
-            'fields': ('created_at', 'updated_at'),
-            'classes': ('collapse',)
-        }),
+        (
+            "Content",
+            {
+                "fields": (
+                    "title",
+                    "slug",
+                    "post_type",
+                    "featured_image",
+                    "summary",
+                    "content",
+                )
+            },
+        ),
+        (
+            "Publishing",
+            {"fields": ("author", "is_published", "is_featured", "published_date")},
+        ),
+        (
+            "Timestamps",
+            {"fields": ("created_at", "updated_at"), "classes": ("collapse",)},
+        ),
     )
 
 
 # ==================== DOCUMENT ADMINS ====================
 
+
 @admin.register(Document)
 class DocumentAdmin(admin.ModelAdmin):
-    list_display = ['title', 'document_type', 'file_size', 'download_count', 'is_active', 'uploaded_at']
-    list_filter = ['document_type', 'is_active', 'uploaded_at']
-    search_fields = ['title', 'description']
-    readonly_fields = ['download_count', 'uploaded_at']
-    list_editable = ['is_active']
+    list_display = [
+        "title",
+        "document_type",
+        "file_size",
+        "download_count",
+        "is_active",
+        "uploaded_at",
+    ]
+    list_filter = ["document_type", "is_active", "uploaded_at"]
+    search_fields = ["title", "description"]
+    readonly_fields = ["download_count", "uploaded_at"]
+    list_editable = ["is_active"]
 
 
 # ==================== FAQ & CONTACT ADMINS ====================
 
+
 @admin.register(FAQ)
 class FAQAdmin(admin.ModelAdmin):
-    list_display = ['question', 'category', 'display_order', 'is_active']
-    list_filter = ['category', 'is_active']
-    search_fields = ['question', 'answer']
-    list_editable = ['display_order', 'is_active']
+    list_display = ["question", "category", "display_order", "is_active"]
+    list_filter = ["category", "is_active"]
+    search_fields = ["question", "answer"]
+    list_editable = ["display_order", "is_active"]
 
 
 @admin.register(ContactMessage)
 class ContactMessageAdmin(admin.ModelAdmin):
-    list_display = ['name', 'email', 'inquiry_type', 'is_read', 'replied', 'created_at']
-    list_filter = ['inquiry_type', 'is_read', 'replied', 'created_at']
-    search_fields = ['name', 'email', 'company', 'message']
-    date_hierarchy = 'created_at'
-    readonly_fields = ['created_at']
-    list_editable = ['is_read', 'replied']
-    
-    actions = ['mark_as_read', 'mark_as_replied']
-    
+    list_display = ["name", "email", "inquiry_type", "is_read", "replied", "created_at"]
+    list_filter = ["inquiry_type", "is_read", "replied", "created_at"]
+    search_fields = ["name", "email", "company", "message"]
+    date_hierarchy = "created_at"
+    readonly_fields = ["created_at"]
+    list_editable = ["is_read", "replied"]
+
+    actions = ["mark_as_read", "mark_as_replied"]
+
     def mark_as_read(self, request, queryset):
         queryset.update(is_read=True)
+
     mark_as_read.short_description = "Mark as Read"
-    
+
     def mark_as_replied(self, request, queryset):
         queryset.update(replied=True)
+
     mark_as_replied.short_description = "Mark as Replied"
 
 
 # ==================== CSR ADMIN ====================
 
+
 @admin.register(CSRProject)
 class CSRProjectAdmin(admin.ModelAdmin):
-    list_display = ['title', 'location', 'date', 'is_active']
-    list_filter = ['is_active', 'date']
-    search_fields = ['title', 'description', 'location']
-    prepopulated_fields = {'slug': ('title',)}
-    date_hierarchy = 'date'
+    list_display = ["title", "location", "date", "is_active"]
+    list_filter = ["is_active", "date"]
+    search_fields = ["title", "description", "location"]
+    prepopulated_fields = {"slug": ("title",)}
+    date_hierarchy = "date"
+
 
 # ==================== LEGAL ADMIN ====================
 
+
 @admin.register(PrivacyPolicy)
 class PrivacyPolicyAdmin(admin.ModelAdmin):
-    list_display = ['title', 'last_updated', 'is_active']
-    list_filter = ['is_active', 'last_updated']
-    search_fields = ['title', 'content']
-    readonly_fields = ['last_updated']
-    list_editable = ['is_active']
+    list_display = ["title", "last_updated", "is_active"]
+    list_filter = ["is_active", "last_updated"]
+    search_fields = ["title", "content"]
+    readonly_fields = ["last_updated"]
+    list_editable = ["is_active"]
 
 
 @admin.register(TermsOfService)
 class TermsOfServiceAdmin(admin.ModelAdmin):
-    list_display = ['title', 'last_updated', 'is_active']
-    list_filter = ['is_active', 'last_updated']
-    search_fields = ['title', 'content']
-    readonly_fields = ['last_updated']
-    list_editable = ['is_active']
-    
+    list_display = ["title", "last_updated", "is_active"]
+    list_filter = ["is_active", "last_updated"]
+    search_fields = ["title", "content"]
+    readonly_fields = ["last_updated"]
+    list_editable = ["is_active"]
+
+
 # ==================== CAREER ADMIN ====================4
+
 
 @admin.register(Career)
 class CareerAdmin(admin.ModelAdmin):
-    list_display = ['title', 'department', 'location', 'employment_type', 'is_active', 'priority', 'posted_at']
-    list_filter = ['is_active', 'department', 'location', 'employment_type']
-    search_fields = ['title', 'summary', 'responsibilities', 'requirements']
-    prepopulated_fields = {'slug': ('title',)}
-    date_hierarchy = 'posted_at'
-    list_editable = ['is_active', 'priority']
-    readonly_fields = ['posted_at', 'updated_at']
-    ordering = ['priority', '-posted_at']
+    list_display = [
+        "title",
+        "department",
+        "location",
+        "employment_type",
+        "is_active",
+        "priority",
+        "posted_at",
+    ]
+    list_filter = ["is_active", "department", "location", "employment_type"]
+    search_fields = ["title", "summary", "responsibilities", "requirements"]
+    prepopulated_fields = {"slug": ("title",)}
+    date_hierarchy = "posted_at"
+    list_editable = ["is_active", "priority"]
+    readonly_fields = ["posted_at", "updated_at"]
+    ordering = ["priority", "-posted_at"]
     fieldsets = (
-        ('Basic Information', {
-            'fields': ('title', 'slug', 'department', 'location', 'employment_type')
-        }),
-        ('Job Details', {
-            'fields': ('summary', 'responsibilities', 'requirements')
-        }),
-        ('Application', {
-            'fields': ('application_email', 'apply_url')
-        }),
-        ('Status', {
-            'fields': ('is_active', 'priority')
-        }),
-        ('Timestamps', {
-            'fields': ('posted_at', 'updated_at'),
-            'classes': ('collapse',)
-        }),
+        (
+            "Basic Information",
+            {"fields": ("title", "slug", "department", "location", "employment_type")},
+        ),
+        ("Job Details", {"fields": ("summary", "responsibilities", "requirements")}),
+        ("Application", {"fields": ("application_email", "apply_url")}),
+        ("Status", {"fields": ("is_active", "priority")}),
+        (
+            "Timestamps",
+            {"fields": ("posted_at", "updated_at"), "classes": ("collapse",)},
+        ),
     )
+
 
 # ==================== JAPAN LANDING ADMIN ====================
 @admin.register(JapanLandingPage)
 class JapanLandingPageAdmin(admin.ModelAdmin):
-    list_display = ['intro_title', 'created_at', 'updated_at']
-    list_filter = ['created_at', 'updated_at']
-    readonly_fields = ['created_at', 'updated_at']
-    
+    list_display = ["intro_title", "created_at", "updated_at"]
+    list_filter = ["created_at", "updated_at"]
+    readonly_fields = ["created_at", "updated_at"]
+
     # The inlines will appear as sections below the main form
     inlines = [JapanBulletPointInline, JapanTeamMemberInline]
 
     fieldsets = (
-        ('Intro', {
-            'fields': ('intro_title', 'intro_description'),
-        }),
-        ('Commitment Section', {
-            'fields': ('commitment_title', 'commitment_intro', 'commitment_image'),
-        }),
-        ('Preparation System', {
-            'fields': ('preparation_title', 'preparation_intro', 'preparation_image'),
-        }),
-        ('Why Japan Trusts KHRM', {
-            'fields': ('trust_title', 'trust_intro', 'trust_image'),
-        }),
-        ('Vision', {
-            'fields': ('vision_title', 'vision_intro', 'vision_image'),
-        }),
-        ('Timestamps', {
-            'fields': ('created_at', 'updated_at'),
-            'classes': ('collapse',),
-        }),
+        (
+            "Intro",
+            {
+                "fields": ("intro_title", "intro_description"),
+            },
+        ),
+        (
+            "Commitment Section",
+            {
+                "fields": ("commitment_title", "commitment_intro", "commitment_image"),
+            },
+        ),
+        (
+            "Preparation System",
+            {
+                "fields": (
+                    "preparation_title",
+                    "preparation_intro",
+                    "preparation_image",
+                ),
+            },
+        ),
+        (
+            "Why Japan Trusts KHRM",
+            {
+                "fields": ("trust_title", "trust_intro", "trust_image"),
+            },
+        ),
+        (
+            "Vision",
+            {
+                "fields": ("vision_title", "vision_intro", "vision_image"),
+            },
+        ),
+        (
+            "Timestamps",
+            {
+                "fields": ("created_at", "updated_at"),
+                "classes": ("collapse",),
+            },
+        ),
     )
 
     def has_add_permission(self, request):
@@ -499,76 +669,134 @@ class JapanLandingPageAdmin(admin.ModelAdmin):
         return False
 
 
+class JapanProgramTrainingPointInline(admin.TabularInline):
+    model = JapanProgramTrainingPoint
+    extra = 1
+    ordering = ["order"]
+
+
+@admin.register(JapanProgram)
+class JapanProgramAdmin(admin.ModelAdmin):
+    inlines = [JapanProgramTrainingPointInline]
+    list_display = (
+        "program_type",
+        "target_level",
+        "is_active",
+        "created_at",
+    )
+
+    list_filter = (
+        "program_type",
+        "is_active",
+    )
+
+    search_fields = (
+        "program_type",
+        "overview",
+        "training_content",
+    )
+
+    fieldsets = (
+        (
+            "Program Information",
+            {
+                "fields": (
+                    "program_type",
+                    "subtitle",
+                    "overview",
+                    "image",
+                    "is_active",
+                )
+            },
+        ),
+        (
+            "Language Training Details",
+            {
+                "fields": (
+                    "language_training_title",
+                    "training_duration",
+                    "target_level",
+                    "objective",
+                )
+            },
+        ),
+        (
+            "Timestamps",
+            {
+                "fields": (
+                    "created_at",
+                    "updated_at",
+                )
+            },
+        ),
+    )
+
+    readonly_fields = ("created_at", "updated_at")
+
+
 # ==================== CUSTOM ADMIN GROUPING ====================
 
 ADMIN_SIDEBAR_GROUP_ORDER = [
-    'Homepage',
-    'Study',
-    'Services',
-    'Success',
-    'Content Hub',
-    'Team',
-    'Communications',
-    'Media',
-    'Legal',
-    'Careers',
-    'System',  # fallback bucket for everything else
+    "Homepage",
+    "Study",
+    "Services",
+    "Success",
+    "Content Hub",
+    "Team",
+    "Communications",
+    "Media",
+    "Legal",
+    "Careers",
+    "System",  # fallback bucket for everything else
 ]
 
 
 MODEL_TO_GROUP = {
     # Homepage
-    'CompanyInfo': 'Homepage',
-    'Office': 'Homepage',
-    'JapanLandingPage': 'Homepage',
-    'Certification': 'Homepage',
-
+    "CompanyInfo": "Homepage",
+    "Office": "Homepage",
+    "JapanLandingPage": "Homepage",
+    "Certification": "Homepage",
     # Study (training / learning)
-    'TrainingCourse': 'Study',
-    'TrainingFacility': 'Study',
-
+    "JapanProgram": "Study",
+    "TrainingCourse": "Study",
+    "TrainingFacility": "Study",
     # Services (core manpower / recruitment flows)
-    'Industry': 'Services',
-    'JobCategory': 'Services',
-    'Job': 'Services',
-    'JobApplication': 'Services',
-    'EmployerInquiry': 'Services',
-
+    "Industry": "Services",
+    "JobCategory": "Services",
+    "Job": "Services",
+    "JobApplication": "Services",
+    "EmployerInquiry": "Services",
     # Success (clients, testimonials, CSR)
-    'Client': 'Success',
-    'Testimonial': 'Success',
-    'CSRProject': 'Success',
-
+    "Client": "Success",
+    "Testimonial": "Success",
+    "CSRProject": "Success",
     # Content Hub (knowledge / documents / articles)
-    'Document': 'Content Hub',
-    'FAQ': 'Content Hub',
-    'NewsPost': 'Content Hub',
-
+    "Document": "Content Hub",
+    "FAQ": "Content Hub",
+    "NewsPost": "Content Hub",
     # Team
-    'Leadership': 'Team',
-
+    "Leadership": "Team",
     # Communications (inbound messages & enquiries)
-    'ContactMessage': 'Communications',
-
+    "ContactMessage": "Communications",
     # Media (albums, photos)
-    'MediaAlbum': 'Media',
-    'MediaPhoto': 'Media',
+    "MediaAlbum": "Media",
+    "MediaPhoto": "Media",
     # Legal (privacy, terms, etc.)
-    'PrivacyPolicy': 'Legal',
-    'TermsOfService': 'Legal',
-
+    "PrivacyPolicy": "Legal",
+    "TermsOfService": "Legal",
     # Careers (Japan landing page)
-    'Career': 'Careers',
+    "Career": "Careers",
 }
 
 
 APP_TO_GROUP = {
     # Core Django / framework apps live under System
-    'auth': 'System',
-    'contenttypes': 'System',
-    'sessions': 'System',
-    'admin': 'System',
-    'sites': 'System',
+    "auth": "System",
+    "contenttypes": "System",
+    "sessions": "System",
+    "admin": "System",
+    "sites": "System",
 }
 
 
@@ -587,7 +815,7 @@ def _get_group_name_for_model(app_label: str, model_name: str) -> str:
         return APP_TO_GROUP[app_label]
 
     # Default bucket for anything we have not explicitly mapped
-    return 'System'
+    return "System"
 
 
 def _build_grouped_app_list(original_app_list):
@@ -600,57 +828,60 @@ def _build_grouped_app_list(original_app_list):
     # Flatten the default app/model structure for easier regrouping
     flat_models = []
     for app in original_app_list:
-        app_label = app.get('app_label')
-        for model in app.get('models', []):
-            flat_models.append({
-                'app': app,
-                'model': model,
-                'app_label': app_label,
-                'model_name': model.get('object_name'),
-            })
+        app_label = app.get("app_label")
+        for model in app.get("models", []):
+            flat_models.append(
+                {
+                    "app": app,
+                    "model": model,
+                    "app_label": app_label,
+                    "model_name": model.get("object_name"),
+                }
+            )
 
     # Bucket models into our custom groups
     grouped = {}
     for entry in flat_models:
-        group_name = _get_group_name_for_model(entry['app_label'], entry['model_name'])
+        group_name = _get_group_name_for_model(entry["app_label"], entry["model_name"])
 
         if group_name not in grouped:
             grouped[group_name] = {
-                'name': group_name,
+                "name": group_name,
                 # Synthetic label just for CSS/hooks; underscore keeps it tidy
-                'app_label': group_name.lower().replace(' ', '_'),
-                'app_url': '',
-                'has_module_perms': False,
-                'models': [],
+                "app_label": group_name.lower().replace(" ", "_"),
+                "app_url": "",
+                "has_module_perms": False,
+                "models": [],
             }
 
-        grouped[group_name]['models'].append(entry['model'])
+        grouped[group_name]["models"].append(entry["model"])
 
         # If any underlying app has perms, surface that on the group
-        if entry['app'].get('has_module_perms'):
-            grouped[group_name]['has_module_perms'] = True
+        if entry["app"].get("has_module_perms"):
+            grouped[group_name]["has_module_perms"] = True
 
         # Reuse the first available app_url so the group heading can still link somewhere
-        if not grouped[group_name]['app_url'] and entry['app'].get('app_url'):
-            grouped[group_name]['app_url'] = entry['app']['app_url']
+        if not grouped[group_name]["app_url"] and entry["app"].get("app_url"):
+            grouped[group_name]["app_url"] = entry["app"]["app_url"]
 
     # Sort models within each group by their display name
     for group in grouped.values():
-        group['models'].sort(key=lambda m: m['name'].lower())
+        group["models"].sort(key=lambda m: m["name"].lower())
 
     # Build the final ordered list of groups
     ordered_app_list = []
     for name in ADMIN_SIDEBAR_GROUP_ORDER:
         group = grouped.get(name)
-        if group and group['models'] and group['has_module_perms']:
+        if group and group["models"] and group["has_module_perms"]:
             ordered_app_list.append(group)
 
     # Append any additional, unexpected groups at the end (sorted by name)
     extra_groups = [
-        g for n, g in grouped.items()
-        if n not in ADMIN_SIDEBAR_GROUP_ORDER and g['models'] and g['has_module_perms']
+        g
+        for n, g in grouped.items()
+        if n not in ADMIN_SIDEBAR_GROUP_ORDER and g["models"] and g["has_module_perms"]
     ]
-    extra_groups.sort(key=lambda g: g['name'].lower())
+    extra_groups.sort(key=lambda g: g["name"].lower())
     ordered_app_list.extend(extra_groups)
 
     return ordered_app_list
@@ -669,4 +900,3 @@ def _custom_get_app_list(self, request):
 # Attach the custom method to the existing AdminSite instance so that we
 # don't lose any of the built-in model registrations.
 admin.site.get_app_list = MethodType(_custom_get_app_list, admin.site)
-
