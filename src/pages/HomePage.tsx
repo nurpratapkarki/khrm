@@ -130,7 +130,7 @@ export default function HomePage() {
                     {heroImages.map((image, index) => (
                         <div
                             key={index}
-                            className={`absolute inset-0 transition-opacity duration-1000 ${index === currentImageIndex ? 'opacity-50' : 'opacity-0'
+                            className={`absolute inset-0 transition-opacity duration-1000 ${index === currentImageIndex ? 'opacity-70' : 'opacity-0'
                                 }`}
                         >
                             <img
@@ -173,13 +173,10 @@ export default function HomePage() {
                         animate={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
                         transition={{ duration: 0.4, ease: "easeOut" }}
                     >
-                        <Badge variant="secondary" className="mb-6 text-sm px-4 py-1 bg-background/90 backdrop-blur-md shadow-lg">
-                            Since {data?.company_info?.establishment_year}
-                        </Badge>
-                        <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6 text-foreground drop-shadow-2xl [text-shadow:_0_2px_10px_rgb(0_0_0_/_40%)]">
+                        <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6 text-foreground  [text-shadow:_0_2px_10px_rgb(0_0_0_/_40%)]">
                             {data?.company_info?.hero_headline}
                         </h1>
-                        <p className="text-xl text-foreground/95 mb-8 max-w-2xl mx-auto drop-shadow-xl [text-shadow:_0_2px_8px_rgb(0_0_0_/_30%)] bg-background/60 backdrop-blur-sm px-6 py-3 rounded-lg">
+                        <p className="text-xl text-foreground/95 mb-8 max-w-2xl mx-auto  [text-shadow:_0_2px_8px_rgb(0_0_0_/_30%)] bg-background/60 backdrop-blur-sm px-6 py-3 rounded-lg">
                             {data?.company_info?.hero_subtext}
                         </p>
                         <Button size="lg" className="text-lg px-8" asChild>
