@@ -117,6 +117,7 @@ class JobListSerializer(serializers.ModelSerializer):
             "id",
             "title",
             "slug",
+            "image",
             "category_name",
             "industry_name",
             "client_name",
@@ -360,6 +361,7 @@ class CareerListSerializer(serializers.ModelSerializer):
             "id",
             "title",
             "slug",
+            "image",
             "department",
             "location",
             "employment_type",
@@ -429,11 +431,22 @@ class JapanProgramTrainingPointSerializer(serializers.ModelSerializer):
         )
 
 
+class WhyChooseJapanProgramSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WhyChooseJapanProgram
+        fields = (
+            "id",
+            "why_choose",
+            "order",
+        )
+
+
 class JapanProgramSerializer(serializers.ModelSerializer):
     program_type_display = serializers.CharField(
         source="get_program_type_display", read_only=True
     )
     training_points = JapanProgramTrainingPointSerializer(many=True, read_only=True)
+    why_choose_points = WhyChooseJapanProgramSerializer(many=True, read_only=True)
 
     class Meta:
         model = JapanProgram
@@ -450,6 +463,7 @@ class JapanProgramSerializer(serializers.ModelSerializer):
             "image",
             "is_active",
             "training_points",
+            "why_choose_points",
             "created_at",
             "updated_at",
         )

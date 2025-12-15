@@ -229,6 +229,7 @@ class Job(models.Model):
 
     title = models.CharField(max_length=200)
     slug = models.SlugField(unique=True, blank=True)
+    image = models.ImageField(upload_to="jobs/", blank=True)
     category = models.ForeignKey(
         JobCategory, on_delete=models.CASCADE, related_name="jobs"
     )
@@ -690,6 +691,7 @@ class Career(models.Model):
 
     title = models.CharField(max_length=200)
     slug = models.SlugField(unique=True, blank=True)
+    image = models.ImageField(upload_to="career")
     department = models.CharField(max_length=100, blank=True)
     location = models.CharField(max_length=200)
     employment_type = models.CharField(max_length=100, blank=True)
@@ -870,3 +872,19 @@ class JapanProgramTrainingPoint(models.Model):
 
     def __str__(self):
         return self.point
+
+
+class WhyChooseJapanProgram(models.Model):
+    program = models.ForeignKey(
+        JapanProgram, related_name="why_choose_points", on_delete=models.CASCADE
+    )
+    why_choose = models.CharField(max_length=255)
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["order"]
+        verbose_name = "Why Choose Japan Program"
+        verbose_name_plural = "Why Choose Japan Programs"
+
+    def __str__(self):
+        return self.why_choose

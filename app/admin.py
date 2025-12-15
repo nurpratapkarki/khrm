@@ -594,7 +594,16 @@ class CareerAdmin(admin.ModelAdmin):
     fieldsets = (
         (
             "Basic Information",
-            {"fields": ("title", "slug", "department", "location", "employment_type")},
+            {
+                "fields": (
+                    "title",
+                    "slug",
+                    "image",
+                    "department",
+                    "location",
+                    "employment_type",
+                )
+            },
         ),
         ("Job Details", {"fields": ("summary", "responsibilities", "requirements")}),
         ("Application", {"fields": ("application_email", "apply_url")}),
@@ -675,9 +684,15 @@ class JapanProgramTrainingPointInline(admin.TabularInline):
     ordering = ["order"]
 
 
+class WhyChooseJapanProgramInline(admin.TabularInline):
+    model = WhyChooseJapanProgram
+    extra = 1
+    ordering = ["order"]
+
+
 @admin.register(JapanProgram)
 class JapanProgramAdmin(admin.ModelAdmin):
-    inlines = [JapanProgramTrainingPointInline]
+    inlines = [JapanProgramTrainingPointInline, WhyChooseJapanProgramInline]
     list_display = (
         "program_type",
         "target_level",
