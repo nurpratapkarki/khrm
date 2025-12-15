@@ -5,6 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, Clock, CheckCircle2, BookOpen, Award, Target, Languages } from 'lucide-react';
+import { getImageUrl } from '@/lib/utils';
 
 export default function JapanProgramDetailPage() {
     const { id } = useParams<{ id: string }>();
