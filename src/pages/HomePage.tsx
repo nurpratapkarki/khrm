@@ -179,12 +179,6 @@ export default function HomePage() {
                         <p className="text-xl text-foreground/95 mb-8 max-w-2xl mx-auto  [text-shadow:_0_2px_8px_rgb(0_0_0_/_30%)] bg-background/60 backdrop-blur-sm px-6 py-3 rounded-lg">
                             {data?.company_info?.hero_subtext}
                         </p>
-                        <Button size="lg" className="text-lg px-8" asChild>
-                            <Link to="/jobs">
-                                Get Started
-                                <ArrowRight className="ml-2 h-5 w-5" />
-                            </Link>
-                        </Button>
                     </motion.div>
                 </div>
             </section>
@@ -214,15 +208,6 @@ export default function HomePage() {
                                     {japanLanding.commitment_intro}
                                 </p>
                             )}
-                            <div className="flex flex-wrap gap-3 pt-2">
-                                <Button
-                                    size="lg"
-                                    className="bg-(--japan-primary) text-white hover:bg-(--japan-accent)"
-                                    asChild
-                                >
-                                    <Link to="/japan">Explore Japan Programme</Link>
-                                </Button>
-                            </div>
                         </motion.div>
 
                         <motion.div
@@ -368,6 +353,7 @@ export default function HomePage() {
                             whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
                             viewport={{ once: true, amount: 0.3 }}
                             transition={{ duration: 0.45, ease: 'easeOut', delay: 0.05 }}
+                            className="space-y-4"
                         >
                             <Card className="bg-white/80 border-(--japan-primary)/20 overflow-hidden">
                                 {japanLanding.vision_image && (
@@ -393,8 +379,17 @@ export default function HomePage() {
                                     </ul>
                                 </CardContent>
                             </Card>
+
+                            <Button
+                                size="lg"
+                                className="bg-[var(--japan-primary)] text-white hover:bg-[var(--japan-accent)] w-full"
+                                asChild
+                            >
+                                <Link to="/japan">Explore Japan Programme</Link>
+                            </Button>
                         </motion.div>
                     </div>
+
                 </section>
             )}
 
@@ -606,7 +601,7 @@ export default function HomePage() {
             </section>
 
             {/* CTA Section */}
-            <section className="py-24 bg-white text-primary-foreground">
+            <section className="py-24 bg-red-500 text-primary-foreground">
                 <div className="container mx-auto px-4">
                     <div className="text-center mb-12">
                         <h2 className="text-3xl md:text-5xl font-bold mb-6">
