@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom';
 import { useApi } from '@/hooks/useApi';
-import { japanApi, type JapanLandingPage, type JapanBulletPoint } from '@/api';
+import { japanApi, japanprogramApi, type JapanLandingPage, type JapanBulletPoint, type JapanProgramType } from '@/api';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle2, ChevronDown, ChevronUp } from 'lucide-react';
+import { CheckCircle2, ChevronDown, ChevronUp, ArrowRight } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { useState } from 'react';
 
@@ -63,9 +63,8 @@ function TeamMemberCard({ member }: { member: any }) {
         {member.bio && (
           <div className="space-y-3">
             <p
-              className={`text-sm text-muted-foreground whitespace-pre-line leading-relaxed ${
-                !isExpanded && shouldTruncate ? 'line-clamp-3' : ''
-              }`}
+              className={`text-sm text-muted-foreground whitespace-pre-line leading-relaxed ${!isExpanded && shouldTruncate ? 'line-clamp-3' : ''
+                }`}
             >
               {member.bio}
             </p>
@@ -95,9 +94,68 @@ function TeamMemberCard({ member }: { member: any }) {
   );
 }
 
+function ProgramCard({ program }: { program: JapanProgramType }) {
+  const overviewLength = program.overview?.length || 0;
+  const truncatedOverview = overviewLength > 200
+    ? program.overview.substring(0, 200) + '...'
+    : program.overview;
+
+  return (
+    <Card className="h-full flex flex-col overflow-hidden hover:shadow-lg transition-shadow border-2 hover:border-(--japan-primary)/30">
+      {/* Image Section */}
+      {program.image && (
+        <div className="relative h-48 w-full overflow-hidden bg-linear-to-br from-(--japan-primary-soft)/20 to-(--japan-primary-soft)/10">
+          <img
+            src={program.image}
+            alt={program.program_type_display}
+            className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
+          />
+          <div className="absolute inset-0 bg-linear-to-t from-black/40 to-transparent" />
+          <Badge className="absolute top-4 left-4 bg-(--japan-primary) text-white border-none">
+            {program.program_type_display}
+          </Badge>
+        </div>
+      )}
+
+      {/* Content Section */}
+      <CardHeader className="space-y-2">
+        <CardTitle className="text-xl font-bold text-(--japan-foreground)">
+          {program.program_type_display}
+        </CardTitle>
+        {program.subtitle && (
+          <p className="text-sm font-medium text-(--japan-primary)">
+            {program.subtitle}
+          </p>
+        )}
+      </CardHeader>
+
+      <CardContent className="flex-1 flex flex-col">
+        <p className="text-sm text-muted-foreground leading-relaxed mb-4 flex-1">
+          {truncatedOverview}
+        </p>
+
+        <Button
+          asChild
+          className="w-full bg-(--japan-primary) hover:bg-(--japan-accent) text-white"
+        >
+          <Link to={`/japan/programs/${program.id}`} className="flex items-center justify-center gap-2">
+            Read More <ArrowRight className="h-4 w-4" />
+          </Link>
+        </Button>
+      </CardContent>
+    </Card>
+  );
+}
+
+
 export default function JapanPage() {
   const { data, loading, error } = useApi<JapanLandingPage | Record<string, never>>(
     () => japanApi.getJapanLanding(),
+    [],
+  );
+
+  const { data: programs, loading: programsLoading } = useApi<JapanProgramType[]>(
+    () => japanprogramApi.getJapanPrograms(),
     [],
   );
 
@@ -287,6 +345,40 @@ export default function JapanPage() {
           </motion.div>
         </div>
       </section>
+
+      {/* Programs Section */}
+      {Array.isArray(programs) && programs.length > 0 && (
+        <section className="py-16 md:py-20 border-b bg-white">
+          <div className="container mx-auto px-4">
+            {/* Header */}
+            <div className="max-w-3xl mb-12 space-y-3">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-(--japan-primary)/10 border border-(--japan-primary)/20">
+                <div className="h-2 w-2 rounded-full bg-(--japan-primary) animate-pulse" />
+                <span className="text-xs font-medium text-(--japan-primary)">Our Programs</span>
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold text-(--japan-foreground)">
+                Japan Employment Programs
+              </h2>
+              <p className="text-lg text-(--japan-foreground)/70 leading-relaxed">
+                Explore our comprehensive programs designed to prepare you for successful employment in Japan.
+              </p>
+            </div>
+
+            {/* Programs Grid */}
+            {programsLoading ? (
+              <div className="flex items-center justify-center py-12">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-(--japan-primary)" />
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {programs.map((program) => (
+                  <ProgramCard key={program.id} program={program} />
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+      )}
 
       {/* Team Section */}
       <section className="py-16 md:py-20 bg-linear-to-b from-(--japan-background) to-white">

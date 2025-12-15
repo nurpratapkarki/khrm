@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Facebook, Linkedin, Mail, MapPin, Phone, ExternalLink } from 'lucide-react';
+import { Facebook, Mail, MapPin, Phone, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useApi } from '@/hooks/useApi';
 import { companyApi, type CompanyInfo, type Office } from '@/api';
@@ -25,22 +25,9 @@ export default function Footer() {
             <p className="text-sm text-neutral-400 leading-relaxed">
               {companyInfo?.hero_subtext ?? 'Trusted international recruitment partner from Nepal.'}
             </p>
-            <div className="flex gap-2">
-              <Button
-                size="icon"
-                variant="outline"
-                className="border-neutral-700 hover:bg-primary-600 hover:border-primary-600 hover:text-white transition-colors"
-              >
-                <Facebook className="h-4 w-4" />
-              </Button>
-              <Button
-                size="icon"
-                variant="outline"
-                className="border-neutral-700 hover:bg-secondary-600 hover:border-secondary-600 hover:text-white transition-colors"
-              >
-                <Linkedin className="h-4 w-4" />
-              </Button>
-            </div>
+            <p className="text-sm text-neutral-400 leading-relaxed mt-4">
+              KHRM (Kanchan Human Resource Management) has been a leading recruitment agency since 2003
+            </p>
           </div>
 
           {/* Quick Links */}
@@ -138,6 +125,28 @@ export default function Footer() {
                 </a>
               </li>
             </ul>
+
+            {/* Follow Us */}
+            <div className="mt-6">
+              <h4 className="font-semibold mb-4 text-white">Follow Us</h4>
+              <div className="flex gap-2">
+                {headquarters?.facebook && (
+                  <a
+                    href={headquarters.facebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Button
+                      size="icon"
+                      variant="outline"
+                      className="bg-[#1877F2] border-[#1877F2] text-white hover:bg-[#1877F2]/90 hover:border-[#1877F2]/90 transition-colors"
+                    >
+                      <Facebook className="h-4 w-4" />
+                    </Button>
+                  </a>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -146,13 +155,25 @@ export default function Footer() {
       <div className="border-t border-neutral-800">
         <div className="container mx-auto px-4 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <a
-              href="https://nurpratapkarki.com.np/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm text-neutral-400">
-              © {new Date().getFullYear()} KHRM. All rights reserved.
-            </a>
+            <div className="text-sm text-neutral-400">
+              ©{' '}
+              <a
+                href="https://sankalptharu.com.np/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-primary-600 transition-colors"
+              >
+                {new Date().getFullYear()}
+              </a>{' '}
+              <a
+                href="https://nurpratapkarki.com.np/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-primary-600 transition-colors"
+              >
+                KHRM. All rights reserved.
+              </a>
+            </div>
 
             <div className="flex flex-col md:flex-row items-center gap-4 text-sm">
               <div className="flex gap-4">

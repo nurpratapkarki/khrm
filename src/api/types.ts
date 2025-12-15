@@ -32,6 +32,7 @@ export interface Office {
   phone: string;
   email: string;
   whatsapp?: string;
+  facebook?: string;
   latitude?: string;
   longitude?: string;
   is_headquarters: boolean;
@@ -144,6 +145,7 @@ export interface Job {
   id: number;
   title: string;
   slug: string;
+  image?: string;
   category: number | JobCategory;
   category_name?: string;
   industry: number | Industry;
@@ -379,6 +381,7 @@ export interface Career {
   priority: number;
   posted_at: string;
   updated_at: string;
+  image?: string;
 }
 
 // ==================== Japan Landing Page ====================
@@ -429,6 +432,12 @@ export interface JapanProgramTrainingPoint {
   order: number;
 }
 
+export interface WhyChooseJapanProgam {
+  id: number;
+  why_choose: string;
+  order: number;
+}
+
 export interface JapanProgramType {
   id: number;
   program_type: string;
@@ -444,6 +453,7 @@ export interface JapanProgramType {
   created_at: string;
   updated_at: string;
   training_points: JapanProgramTrainingPoint[];
+  why_choose_japan_programs: WhyChooseJapanProgam[];
 }
 
 

@@ -426,7 +426,10 @@ export default function HomePage() {
                                 Workers Deployed
                             </div>
                         </div>
-                        <div className="space-y-2">
+                        <div
+                            className="space-y-2 cursor-pointer hover:scale-105 transition-transform duration-200"
+                            onClick={() => navigate('/license')}
+                        >
                             <div className="flex justify-center mb-3">
                                 <div className="p-3 bg-primary/10 rounded-full">
                                     <CheckCircle2 className="h-8 w-8 text-primary" />
@@ -446,7 +449,7 @@ export default function HomePage() {
                                 </div>
                             </div>
                             <div className="text-4xl font-bold text-primary">
-                                {data?.offices.length}
+                                {data?.offices?.length || 0}
                             </div>
                             <div className="text-muted-foreground font-medium">
                                 Global Offices
@@ -524,7 +527,7 @@ export default function HomePage() {
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {data?.industries.map((industry) => (
+                        {(data?.industries || []).map((industry) => (
                             <Link
                                 key={industry.id}
                                 to={`/industries/${industry.slug}`}
@@ -593,7 +596,7 @@ export default function HomePage() {
                             }
                             pauseOnHover
                             speed="slow"
-                            direction="right"
+                            direction="left"
                             className="mx-auto [mask-none]"
                         />
                     </div>
@@ -601,82 +604,105 @@ export default function HomePage() {
             </section>
 
             {/* CTA Section */}
-            <section className="py-24 bg-red-500 text-primary-foreground">
-                <div className="container mx-auto px-4">
-                    <div className="text-center mb-12">
-                        <h2 className="text-3xl md:text-5xl font-bold mb-6">
-                            Ready to Build Your Team?
+            <section className="relative py-24 overflow-hidden">
+                {/* Background with Gradient and Pattern */}
+                <div className="absolute inset-0 bg-linear-to-br from-primary via-primary/90 to-primary/80" />
+                <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMSIgb3BhY2l0eT0iMC4wNSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-20" />
+
+                {/* Decorative Shapes */}
+                <div className="absolute top-0 right-0 -mt-20 -mr-20 w-96 h-96 bg-white/10 rounded-full blur-3xl animate-pulse" />
+                <div className="absolute bottom-0 left-0 -mb-20 -ml-20 w-80 h-80 bg-accent-gold/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+
+                <div className="container mx-auto px-4 relative z-10">
+                    <div className="text-center mb-16">
+                        <Badge variant="secondary" className="mb-6 bg-white/10 text-white border-white/20 hover:bg-white/20">
+                            Get in Touch
+                        </Badge>
+                        <h2 className="text-3xl md:text-5xl font-bold mb-6 text-white">
+                            Ready to Build Your Team with {headquarters?.name?.split(' ')[0] || 'Us'}?
                         </h2>
-                        <p className="text-xl text-primary-foreground/90 mb-8 max-w-2xl mx-auto">
-                            Connect with skilled professionals from Nepal. Let us
-                            help you find the perfect candidates for your
-                            organization.
+                        <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto leading-relaxed">
+                            {data?.company_info.mission || "Connect with skilled professionals from Nepal. Let us help you find the perfect candidates for your organization."}
                         </p>
                     </div>
 
                     {/* Contact Information Cards */}
-                    <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-8 items-start">
-                        <div className="space-y-4">
+                    <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-8 items-stretch">
+                        <div className="space-y-4 flex flex-col justify-center">
                             {/* Address Card */}
                             {headquarters && (
-                                <div className="bg-black/40 backdrop-blur-sm border border-white/10 rounded-lg p-4 flex items-start gap-4 hover:bg-black/50 transition-colors">
-                                    <div className="bg-primary/20 p-3 rounded-lg shrink-0">
-                                        <Globe className="h-5 w-5 text-primary-foreground" />
+                                <motion.div
+                                    className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-5 flex items-start gap-5 hover:bg-white/15 transition-all duration-300 group"
+                                    whileHover={{ x: 5 }}
+                                >
+                                    <div className="bg-white/20 p-3 rounded-lg shrink-0 group-hover:scale-110 transition-transform duration-300">
+                                        <Globe className="h-6 w-6 text-white" />
                                     </div>
                                     <div className="flex-1">
-                                        <div className="text-sm font-medium text-primary-foreground/80 mb-1">
-                                            Address
+                                        <div className="text-sm font-medium text-white/70 mb-1 uppercase tracking-wider">
+                                            Headquarters
                                         </div>
-                                        <div className="text-primary-foreground">
+                                        <div className="text-lg font-medium text-white">
                                             {headquarters.address}, {headquarters.city}
                                         </div>
                                     </div>
-                                </div>
+                                </motion.div>
                             )}
                             {/* Phone Card */}
-                            <div className="bg-black/40 backdrop-blur-sm border border-white/10 rounded-lg p-4 flex items-start gap-4 hover:bg-black/50 transition-colors">
-                                <div className="bg-primary/20 p-3 rounded-lg shrink-0">
-                                    <Phone className="h-5 w-5 text-primary-foreground" />
+                            <motion.div
+                                className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-5 flex items-start gap-5 hover:bg-white/15 transition-all duration-300 group"
+                                whileHover={{ x: 5 }}
+                            >
+                                <div className="bg-white/20 p-3 rounded-lg shrink-0 group-hover:scale-110 transition-transform duration-300">
+                                    <Phone className="h-6 w-6 text-white" />
                                 </div>
                                 <div className="flex-1">
-                                    <div className="text-sm font-medium text-primary-foreground/80 mb-1">
+                                    <div className="text-sm font-medium text-white/70 mb-1 uppercase tracking-wider">
                                         Call Us
                                     </div>
-                                    <div className="text-primary-foreground">
+                                    <div className="text-lg font-medium text-white">
                                         {headquarters?.phone ?? '+977-1-0000000'}
                                     </div>
                                 </div>
-                            </div>
+                            </motion.div>
 
                             {/* Email Card */}
-                            <div className="bg-black/40 backdrop-blur-sm border border-white/10 rounded-lg p-4 flex items-start gap-4 hover:bg-black/50 transition-colors">
-                                <div className="bg-primary/20 p-3 rounded-lg shrink-0">
-                                    <Mail className="h-5 w-5 text-primary-foreground" />
+                            <motion.div
+                                className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-5 flex items-start gap-5 hover:bg-white/15 transition-all duration-300 group"
+                                whileHover={{ x: 5 }}
+                            >
+                                <div className="bg-white/20 p-3 rounded-lg shrink-0 group-hover:scale-110 transition-transform duration-300">
+                                    <Mail className="h-6 w-6 text-white" />
                                 </div>
                                 <div className="flex-1">
-                                    <div className="text-sm font-medium text-primary-foreground/80 mb-1">
+                                    <div className="text-sm font-medium text-white/70 mb-1 uppercase tracking-wider">
                                         Email Us
                                     </div>
-                                    <div className="text-primary-foreground">
+                                    <div className="text-lg font-medium text-white">
                                         {headquarters?.email ?? 'info@khrm.com.np'}
                                     </div>
                                 </div>
-                            </div>
+                            </motion.div>
                         </div>
 
                         {/* Map */}
                         {headquarters && headquarters.latitude && headquarters.longitude && (
-                            <div className="bg-black/40 backdrop-blur-sm border border-white/10 rounded-lg p-2 overflow-hidden h-full min-h-[300px]">
+                            <motion.div
+                                className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-2 overflow-hidden h-full min-h-[350px] shadow-2xl"
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                whileInView={{ opacity: 1, scale: 1 }}
+                                transition={{ duration: 0.5 }}
+                            >
                                 <iframe
                                     title="Office Location"
                                     src={`https://maps.google.com/maps?q=${headquarters.latitude},${headquarters.longitude}&z=15&output=embed`}
-                                    className="w-full h-full min-h-[280px] rounded-lg"
+                                    className="w-full h-full rounded-xl grayscale-[20%] hover:grayscale-0 transition-all duration-500"
                                     style={{ border: 0 }}
                                     allowFullScreen
                                     loading="lazy"
                                     referrerPolicy="no-referrer-when-downgrade"
                                 />
-                            </div>
+                            </motion.div>
                         )}
                     </div>
                 </div>

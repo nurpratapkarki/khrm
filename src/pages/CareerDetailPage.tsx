@@ -1,10 +1,10 @@
 import { useParams, Link } from 'react-router-dom';
 import { useApi } from '@/hooks/useApi';
-import { careersApi, type Career } from '@/api';
+import { careersApi, companyApi, type Career, type Office } from '@/api';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import { MapPin, Briefcase, Building2, Mail, ExternalLink, CheckCircle2, GraduationCap, ArrowLeft } from 'lucide-react';
+import { MapPin, Briefcase, Building2, Mail, ExternalLink, CheckCircle2, GraduationCap, ArrowLeft, MessageCircle, BookOpen } from 'lucide-react';
 
 export default function CareerDetailPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -13,6 +13,19 @@ export default function CareerDetailPage() {
     () => (slug ? careersApi.getCareer(slug) : Promise.resolve(null)),
     [slug],
   );
+
+  const { data: offices } = useApi<Office[] | { results: Office[] }>(() => companyApi.getOffices(), []);
+
+  const officeList = Array.isArray(offices)
+    ? offices
+    : Array.isArray((offices as { results?: Office[] })?.results)
+      ? (offices as { results: Office[] }).results
+      : [];
+
+  const whatsappNumber = officeList.find((office) => office.is_active && office.phone)?.phone;
+  const whatsappLink = whatsappNumber
+    ? `https://wa.me/${whatsappNumber.replace(/\D/g, '')}`
+    : undefined;
 
   if (!slug) {
     return null;
@@ -63,11 +76,11 @@ export default function CareerDetailPage() {
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMSIgb3BhY2l0eT0iMC4xIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-20" />
         <div className="absolute top-10 right-10 w-64 h-64 bg-white/5 rounded-full blur-3xl" />
         <div className="absolute bottom-10 left-10 w-64 h-64 bg-accent-gold/20 rounded-full blur-3xl" />
-        
+
         <div className="container mx-auto px-4 py-12 md:py-16 relative z-10">
-          <Button 
-            variant="ghost" 
-            asChild 
+          <Button
+            variant="ghost"
+            asChild
             className="mb-6 text-white hover:text-white hover:bg-white/10"
           >
             <Link to="/careers" className="flex items-center gap-2">
@@ -76,33 +89,48 @@ export default function CareerDetailPage() {
             </Link>
           </Button>
 
-          <div className="max-w-4xl">
-            <div className="flex flex-wrap gap-2 mb-4">
-              {career.department && (
-                <Badge variant="secondary" className="bg-white/20 text-white border-white/30">
-                  <Building2 className="h-3 w-3 mr-1" />
-                  {career.department}
-                </Badge>
-              )}
-              {career.employment_type && (
-                <Badge variant="secondary" className="bg-white/20 text-white border-white/30">
-                  <Briefcase className="h-3 w-3 mr-1" />
-                  {career.employment_type}
-                </Badge>
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="space-y-6">
+              <div className="flex flex-wrap gap-2">
+                {career.department && (
+                  <Badge variant="secondary" className="bg-white/20 text-white border-white/30">
+                    <Building2 className="h-3 w-3 mr-1" />
+                    {career.department}
+                  </Badge>
+                )}
+                {career.employment_type && (
+                  <Badge variant="secondary" className="bg-white/20 text-white border-white/30">
+                    <Briefcase className="h-3 w-3 mr-1" />
+                    {career.employment_type}
+                  </Badge>
+                )}
+              </div>
+
+              <h1 className="text-4xl md:text-5xl font-bold">{career.title}</h1>
+
+              <div className="flex items-center gap-2 text-white/90">
+                <MapPin className="h-5 w-5" />
+                <span className="text-lg">{career.location}</span>
+              </div>
+
+              {career.summary && (
+                <p className="text-xl text-white/90 leading-relaxed">
+                  {career.summary}
+                </p>
               )}
             </div>
 
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">{career.title}</h1>
-            
-            <div className="flex items-center gap-2 text-white/90 mb-6">
-              <MapPin className="h-5 w-5" />
-              <span className="text-lg">{career.location}</span>
-            </div>
-
-            {career.summary && (
-              <p className="text-xl text-white/90 leading-relaxed max-w-3xl">
-                {career.summary}
-              </p>
+            {career.image && (
+              <div className="relative hidden lg:block">
+                <div className="relative rounded-2xl overflow-hidden border-4 border-white/20 shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-500">
+                  <img
+                    src={career.image}
+                    alt={career.title}
+                    className="w-full h-full object-cover aspect-video"
+                  />
+                </div>
+                <div className="absolute -inset-4 bg-white/5 rounded-3xl -z-10 rotate-6 blur-sm" />
+              </div>
             )}
           </div>
         </div>
@@ -125,7 +153,7 @@ export default function CareerDetailPage() {
                   <div className="relative">
                     <div className="absolute -left-4 top-0 w-1 h-full bg-linear-to-b from-primary-600 to-accent-gold rounded-full" />
                     <div className="pl-6 space-y-3">
-                      {career.responsibilities.split('\n').map((line, idx) => 
+                      {career.responsibilities.split('\n').map((line, idx) =>
                         line.trim() && (
                           <div key={idx} className="flex items-start gap-3">
                             <div className="mt-1.5 w-2 h-2 rounded-full bg-primary-600 shrink-0" />
@@ -151,7 +179,7 @@ export default function CareerDetailPage() {
                   <div className="relative">
                     <div className="absolute -left-4 top-0 w-1 h-full bg-linear-to-b from-secondary-600 to-accent-gold rounded-full" />
                     <div className="pl-6 space-y-3">
-                      {career.requirements.split('\n').map((line, idx) => 
+                      {career.requirements.split('\n').map((line, idx) =>
                         line.trim() && (
                           <div key={idx} className="flex items-start gap-3">
                             <div className="mt-1.5 w-2 h-2 rounded-full bg-secondary-600 shrink-0" />
@@ -160,6 +188,45 @@ export default function CareerDetailPage() {
                         )
                       )}
                     </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {!career.responsibilities && !career.requirements && (
+              <Card className="border-2 border-accent-gold/20 bg-linear-to-br from-accent-gold/5 to-transparent">
+                <CardContent className="pt-8 pb-8">
+                  <div className="text-center space-y-4">
+                    <div className="inline-flex p-4 bg-white rounded-full shadow-sm mb-2">
+                      <BookOpen className="h-8 w-8 text-accent-gold" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold mb-2">Details Available on Request</h3>
+                      <p className="text-muted-foreground max-w-md mx-auto">
+                        Detailed job description and requirements will be shared during the application process.
+                      </p>
+                    </div>
+                    {whatsappLink ? (
+                      <Button
+                        asChild
+                        className="mt-4 bg-[#25D366] hover:bg-[#128C7E] text-white border-none"
+                      >
+                        <a href={whatsappLink} target="_blank" rel="noreferrer" className="flex items-center gap-2">
+                          <MessageCircle className="h-4 w-4" />
+                          WhatsApp Us
+                        </a>
+                      </Button>
+                    ) : (
+                      <Button
+                        asChild
+                        variant="outline"
+                        className="mt-4 border-accent-gold text-accent-gold hover:bg-accent-gold hover:text-white"
+                      >
+                        <Link to="/contact">
+                          Contact Us
+                        </Link>
+                      </Button>
+                    )}
                   </div>
                 </CardContent>
               </Card>
@@ -183,8 +250,8 @@ export default function CareerDetailPage() {
 
                   <div className="space-y-3">
                     {canApplyByEmail && (
-                      <Button 
-                        asChild 
+                      <Button
+                        asChild
                         className="w-full bg-linear-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-[#991b1b]"
                       >
                         <a href={`mailto:${career.application_email}?subject=${encodeURIComponent(career.title)}`}>
@@ -194,11 +261,11 @@ export default function CareerDetailPage() {
                       </Button>
                     )}
                     {canApplyByUrl && (
-                      <Button 
+                      <Button
                         variant={canApplyByEmail ? 'outline' : 'default'}
-                        asChild 
-                        className={canApplyByEmail 
-                          ? 'w-full border-2 border-primary-600/20 hover:bg-primary-600/5' 
+                        asChild
+                        className={canApplyByEmail
+                          ? 'w-full border-2 border-primary-600/20 hover:bg-primary-600/5'
                           : 'w-full bg-linear-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-[#991b1b]'
                         }
                       >

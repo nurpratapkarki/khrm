@@ -1,10 +1,10 @@
 import { useParams, Link } from 'react-router-dom';
 import { useApi } from '@/hooks/useApi';
-import { csrApi, type CSRProject } from '@/api';
+import { csrApi, companyApi, type CSRProject, type Office } from '@/api';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, MapPin, Calendar, Heart, Target, Sparkles } from 'lucide-react';
+import { ArrowLeft, MapPin, Calendar, Heart, Target, Sparkles, MessageCircle, BookOpen } from 'lucide-react';
 
 export default function CSRDetailPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -12,6 +12,19 @@ export default function CSRDetailPage() {
     () => (slug ? csrApi.getProject(slug) : Promise.resolve(null)),
     [slug],
   );
+
+  const { data: offices } = useApi<Office[] | { results: Office[] }>(() => companyApi.getOffices(), []);
+
+  const officeList = Array.isArray(offices)
+    ? offices
+    : Array.isArray((offices as { results?: Office[] })?.results)
+      ? (offices as { results: Office[] }).results
+      : [];
+
+  const whatsappNumber = officeList.find((office) => office.is_active && office.phone)?.phone;
+  const whatsappLink = whatsappNumber
+    ? `https://wa.me/${whatsappNumber.replace(/\D/g, '')}`
+    : undefined;
 
   if (!slug) {
     return null;
@@ -59,11 +72,11 @@ export default function CSRDetailPage() {
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMSIgb3BhY2l0eT0iMC4xIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-20" />
         <div className="absolute top-10 right-10 w-64 h-64 bg-white/5 rounded-full blur-3xl" />
         <div className="absolute bottom-10 left-10 w-64 h-64 bg-primary-600/20 rounded-full blur-3xl" />
-        
+
         <div className="container mx-auto px-4 py-12 md:py-16 relative z-10">
-          <Button 
-            variant="ghost" 
-            asChild 
+          <Button
+            variant="ghost"
+            asChild
             className="mb-6 text-white hover:text-white hover:bg-white/10"
           >
             <Link to="/csr" className="flex items-center gap-2">
@@ -72,24 +85,39 @@ export default function CSRDetailPage() {
             </Link>
           </Button>
 
-          <div className="max-w-4xl">
-            <Badge variant="secondary" className="bg-white/20 text-white border-white/30 mb-4">
-              <Heart className="h-3 w-3 mr-1" />
-              CSR & Impact
-            </Badge>
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="space-y-6">
+              <Badge variant="secondary" className="bg-white/20 text-white border-white/30">
+                <Heart className="h-3 w-3 mr-1" />
+                CSR & Impact
+              </Badge>
 
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">{project.title}</h1>
-            
-            <div className="flex flex-wrap gap-4 text-white/90">
-              <div className="flex items-center gap-2">
-                <Calendar className="h-5 w-5" />
-                <span>{new Date(project.date).toLocaleDateString()}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <MapPin className="h-5 w-5" />
-                <span>{project.location}</span>
+              <h1 className="text-4xl md:text-5xl font-bold">{project.title}</h1>
+
+              <div className="flex flex-wrap gap-4 text-white/90">
+                <div className="flex items-center gap-2">
+                  <Calendar className="h-5 w-5" />
+                  <span>{new Date(project.date).toLocaleDateString()}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <MapPin className="h-5 w-5" />
+                  <span>{project.location}</span>
+                </div>
               </div>
             </div>
+
+            {project.featured_image && (
+              <div className="relative hidden lg:block">
+                <div className="relative rounded-2xl overflow-hidden border-4 border-white/20 shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-500">
+                  <img
+                    src={project.featured_image}
+                    alt={project.title}
+                    className="w-full h-full object-cover aspect-video"
+                  />
+                </div>
+                <div className="absolute -inset-4 bg-white/5 rounded-3xl -z-10 rotate-6 blur-sm" />
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -99,19 +127,6 @@ export default function CSRDetailPage() {
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Left Column - Story Content */}
           <div className="lg:col-span-2 space-y-8">
-            {/* Featured Image */}
-            {project.featured_image && (
-              <div className="relative rounded-3xl overflow-hidden border-2 border-transparent bg-linear-to-br from-accent-gold to-[#d97706] p-0.5 shadow-2xl">
-                <div className="rounded-3xl overflow-hidden bg-background">
-                  <img
-                    src={project.featured_image}
-                    alt={project.title}
-                    className="w-full h-72 md:h-96 object-cover"
-                  />
-                </div>
-              </div>
-            )}
-
             {/* Impact Statement */}
             <Card className="border-2 hover:border-accent-gold/20 transition-colors">
               <CardContent className="pt-6">
@@ -151,6 +166,45 @@ export default function CSRDetailPage() {
                 </div>
               </CardContent>
             </Card>
+
+            {!project.impact_statement && !project.description && (
+              <Card className="border-2 border-accent-gold/20 bg-linear-to-br from-accent-gold/5 to-transparent">
+                <CardContent className="pt-8 pb-8">
+                  <div className="text-center space-y-4">
+                    <div className="inline-flex p-4 bg-white rounded-full shadow-sm mb-2">
+                      <BookOpen className="h-8 w-8 text-accent-gold" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold mb-2">Details Available on Request</h3>
+                      <p className="text-muted-foreground max-w-md mx-auto">
+                        Detailed project information will be shared upon request.
+                      </p>
+                    </div>
+                    {whatsappLink ? (
+                      <Button
+                        asChild
+                        className="mt-4 bg-[#25D366] hover:bg-[#128C7E] text-white border-none"
+                      >
+                        <a href={whatsappLink} target="_blank" rel="noreferrer" className="flex items-center gap-2">
+                          <MessageCircle className="h-4 w-4" />
+                          WhatsApp Us
+                        </a>
+                      </Button>
+                    ) : (
+                      <Button
+                        asChild
+                        variant="outline"
+                        className="mt-4 border-accent-gold text-accent-gold hover:bg-accent-gold hover:text-white"
+                      >
+                        <Link to="/contact">
+                          Contact Us
+                        </Link>
+                      </Button>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
           </div>
 
           {/* Right Column - Info Card */}
@@ -176,10 +230,10 @@ export default function CSRDetailPage() {
                         <span className="font-semibold text-sm">Date</span>
                       </div>
                       <p className="text-muted-foreground text-sm pl-8">
-                        {new Date(project.date).toLocaleDateString('en-US', { 
-                          year: 'numeric', 
-                          month: 'long', 
-                          day: 'numeric' 
+                        {new Date(project.date).toLocaleDateString('en-US', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric'
                         })}
                       </p>
                     </div>
@@ -194,8 +248,8 @@ export default function CSRDetailPage() {
                   </div>
 
                   <div className="mt-6 pt-6 border-t">
-                    <Button 
-                      asChild 
+                    <Button
+                      asChild
                       className="w-full bg-linear-to-r from-accent-gold to-[#d97706] hover:from-[#d97706] hover:to-[#b45309]"
                     >
                       <Link to="/csr">

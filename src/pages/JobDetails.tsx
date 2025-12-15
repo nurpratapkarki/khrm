@@ -12,7 +12,7 @@ export default function JobDetailPage() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const { data: job, loading } = useApi<Job>(() => jobApi.getJob(slug!), [slug]);
-  
+
   const { data: relatedJobs } = useApi<Job[]>(
     () =>
       jobApi.getJobs({
@@ -46,10 +46,10 @@ export default function JobDetailPage() {
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMSIgb3BhY2l0eT0iMC4xIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-20" />
         <div className="absolute top-10 right-10 w-64 h-64 bg-white/5 rounded-full blur-3xl" />
         <div className="absolute bottom-10 left-10 w-64 h-64 bg-accent-gold/20 rounded-full blur-3xl" />
-        
+
         <div className="container mx-auto px-4 py-12 md:py-16 relative z-10">
-          <Button 
-            variant="ghost" 
+          <Button
+            variant="ghost"
             onClick={() => navigate('/jobs')}
             className="mb-6 text-white hover:text-white hover:bg-white/10"
           >
@@ -57,58 +57,73 @@ export default function JobDetailPage() {
             Back to Jobs
           </Button>
 
-          <div className="max-w-4xl">
-            <div className="flex flex-wrap gap-2 mb-4">
-              <Badge variant="secondary" className="bg-white/20 text-white border-white/30">
-                {job.category_name}
-              </Badge>
-              <Badge variant="secondary" className={job.status === 'open' ? 'bg-accent-gold/30 text-white border-accent-gold/50' : 'bg-white/20 text-white border-white/30'}>
-                {job.status_display}
-              </Badge>
-              {job.is_featured && (
-                <Badge variant="secondary" className="bg-accent-gold/30 text-white border-accent-gold/50">
-                  <Star className="h-3 w-3 mr-1" />
-                  Featured
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="space-y-6">
+              <div className="flex flex-wrap gap-2">
+                <Badge variant="secondary" className="bg-white/20 text-white border-white/30">
+                  {job.category_name}
                 </Badge>
-              )}
+                <Badge variant="secondary" className={job.status === 'open' ? 'bg-accent-gold/30 text-white border-accent-gold/50' : 'bg-white/20 text-white border-white/30'}>
+                  {job.status_display}
+                </Badge>
+                {job.is_featured && (
+                  <Badge variant="secondary" className="bg-accent-gold/30 text-white border-accent-gold/50">
+                    <Star className="h-3 w-3 mr-1" />
+                    Featured
+                  </Badge>
+                )}
+              </div>
+
+              <h1 className="text-4xl md:text-5xl font-bold">{job.title}</h1>
+
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center gap-2 text-white/90">
+                  <Building2 className="h-5 w-5" />
+                  <span className="text-lg">
+                    {job.industry_name}
+                    {typeof job.client === 'object' && job.client && (
+                      <span className="text-white/70"> • {job.client.name}</span>
+                    )}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 text-white/90">
+                  <MapPin className="h-5 w-5" />
+                  <span className="text-lg">{job.location}, {job.country}</span>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap gap-4">
+                {job.salary_range && (
+                  <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20">
+                    <DollarSign className="h-4 w-4" />
+                    <span className="text-sm font-medium">{job.salary_range}</span>
+                  </div>
+                )}
+                <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20">
+                  <Users className="h-4 w-4" />
+                  <span className="text-sm font-medium">{job.vacancies} {job.vacancies === 1 ? 'position' : 'positions'}</span>
+                </div>
+                {job.contract_duration && (
+                  <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20">
+                    <Clock className="h-4 w-4" />
+                    <span className="text-sm font-medium">{job.contract_duration}</span>
+                  </div>
+                )}
+              </div>
             </div>
 
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">{job.title}</h1>
-            
-            <div className="flex flex-col gap-2 mb-6">
-              <div className="flex items-center gap-2 text-white/90">
-                <Building2 className="h-5 w-5" />
-                <span className="text-lg">
-                  {job.industry_name}
-                  {typeof job.client === 'object' && job.client && (
-                    <span className="text-white/70"> • {job.client.name}</span>
-                  )}
-                </span>
-              </div>
-              <div className="flex items-center gap-2 text-white/90">
-                <MapPin className="h-5 w-5" />
-                <span className="text-lg">{job.location}, {job.country}</span>
-              </div>
-            </div>
-
-            <div className="flex flex-wrap gap-4">
-              {job.salary_range && (
-                <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20">
-                  <DollarSign className="h-4 w-4" />
-                  <span className="text-sm font-medium">{job.salary_range}</span>
+            {job.image && (
+              <div className="relative hidden lg:block">
+                <div className="relative rounded-2xl overflow-hidden border-4 border-white/20 shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-500">
+                  <img
+                    src={job.image}
+                    alt={job.title}
+                    className="w-full h-full object-cover aspect-video"
+                  />
                 </div>
-              )}
-              <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20">
-                <Users className="h-4 w-4" />
-                <span className="text-sm font-medium">{job.vacancies} {job.vacancies === 1 ? 'position' : 'positions'}</span>
+                <div className="absolute -inset-4 bg-white/5 rounded-3xl -z-10 rotate-6 blur-sm" />
               </div>
-              {job.contract_duration && (
-                <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20">
-                  <Clock className="h-4 w-4" />
-                  <span className="text-sm font-medium">{job.contract_duration}</span>
-                </div>
-              )}
-            </div>
+            )}
           </div>
         </div>
       </div>
@@ -150,7 +165,7 @@ export default function JobDetailPage() {
                 <div className="relative">
                   <div className="absolute -left-4 top-0 w-1 h-full bg-linear-to-b from-secondary-600 to-accent-gold rounded-full" />
                   <div className="pl-6 space-y-3">
-                    {job.requirements.split('\n').map((line, idx) => 
+                    {job.requirements.split('\n').map((line, idx) =>
                       line.trim() && (
                         <div key={idx} className="flex items-start gap-3">
                           <div className="mt-1.5 w-2 h-2 rounded-full bg-secondary-600 shrink-0" />
@@ -176,7 +191,7 @@ export default function JobDetailPage() {
                   <div className="relative">
                     <div className="absolute -left-4 top-0 w-1 h-full bg-linear-to-b from-accent-gold to-primary-600 rounded-full" />
                     <div className="pl-6 space-y-3">
-                      {job.responsibilities.split('\n').map((line, idx) => 
+                      {job.responsibilities.split('\n').map((line, idx) =>
                         line.trim() && (
                           <div key={idx} className="flex items-start gap-3">
                             <div className="mt-1.5 w-2 h-2 rounded-full bg-accent-gold shrink-0" />
@@ -195,7 +210,7 @@ export default function JobDetailPage() {
           <div className="lg:col-span-1">
             <div className="sticky top-24 space-y-6">
               {/* Apply Card */}
-              
+
 
               {/* Job Details */}
               <Card className="border-2">

@@ -7,7 +7,7 @@ import { Star } from "lucide-react";
 export const InfiniteMovingCards = ({
   items,
   direction = "left",
-  speed = "fast",
+  speed = "slow",
   pauseOnHover = true,
   className,
 }: {
@@ -103,14 +103,14 @@ export const InfiniteMovingCards = ({
                   Math.min(5, Math.round(Number(item.rating ?? 5))),
                 );
                 return ratingValue ? (
-                <div className="relative z-20 mb-3 flex items-center gap-1 text-yellow-500">
-                  {Array.from({ length: ratingValue }).map((_, starIdx) => (
-                    <Star
-                      key={starIdx}
-                      className="h-4 w-4 fill-yellow-400 text-yellow-400"
-                    />
-                  ))}
-                </div>
+                  <div className="relative z-20 mb-3 flex items-center gap-1 text-yellow-500">
+                    {Array.from({ length: ratingValue }).map((_, starIdx) => (
+                      <Star
+                        key={starIdx}
+                        className="h-4 w-4 fill-yellow-400 text-yellow-400"
+                      />
+                    ))}
+                  </div>
                 ) : null;
               })()}
               <span className="relative z-20 text-sm leading-[1.6] font-normal text-neutral-800 dark:text-gray-100">

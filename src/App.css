@@ -64,40 +64,56 @@
 
   /* Light theme mapped to KHRM design system */
   /* Neutrals */
-  --background: #f9fafb; /* neutral-50 */
-  --foreground: #111827; /* neutral-900 */
+  --background: #f9fafb;
+  /* neutral-50 */
+  --foreground: #111827;
+  /* neutral-900 */
   --card: #ffffff;
   --card-foreground: #111827;
   --popover: #ffffff;
   --popover-foreground: #111827;
 
   /* Brand colors */
-  --primary: #dc2626; /* primary-600 main red */
+  --primary: #dc2626;
+  /* primary-600 main red */
   --primary-foreground: #ffffff;
-  --secondary: #2563eb; /* secondary-600 main blue */
+  --secondary: #2563eb;
+  /* secondary-600 main blue */
   --secondary-foreground: #ffffff;
 
   /* Supporting tones */
-  --muted: #f3f4f6; /* light gray section backgrounds */
-  --muted-foreground: #4b5563; /* neutral-600 */
-  --accent: #f59e0b; /* gold accent */
+  --muted: #f3f4f6;
+  /* light gray section backgrounds */
+  --muted-foreground: #4b5563;
+  /* neutral-600 */
+  --accent: #f59e0b;
+  /* gold accent */
   --accent-foreground: #111827;
-  --destructive: #b91c1c; /* darker red for destructive actions */
+  --destructive: #b91c1c;
+  /* darker red for destructive actions */
 
   /* Borders & focus */
-  --border: #e5e7eb; /* neutral-200 */
+  --border: #e5e7eb;
+  /* neutral-200 */
   --input: #e5e7eb;
-  --ring: #dc2626; /* focus ring in brand red */
+  --ring: #dc2626;
+  /* focus ring in brand red */
 
   /* Charts (approximate mapping to brand palette) */
-  --chart-1: #dc2626; /* primary red */
-  --chart-2: #2563eb; /* secondary blue */
-  --chart-3: #10b981; /* success */
-  --chart-4: #f59e0b; /* gold */
-  --chart-5: #f97316; /* warning */
+  --chart-1: #dc2626;
+  /* primary red */
+  --chart-2: #2563eb;
+  /* secondary blue */
+  --chart-3: #10b981;
+  /* success */
+  --chart-4: #f59e0b;
+  /* gold */
+  --chart-5: #f97316;
+  /* warning */
 
   /* Sidebar/secondary surfaces (not heavily used but aligned to brand) */
-  --sidebar: #111827; /* dark neutral */
+  --sidebar: #111827;
+  /* dark neutral */
   --sidebar-foreground: #f9fafb;
   --sidebar-primary: #dc2626;
   --sidebar-primary-foreground: #ffffff;
@@ -152,6 +168,7 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -159,7 +176,7 @@
 
 @theme inline {
   --animate-scroll: scroll var(--animation-duration, 40s) var(--animation-direction, forwards) linear infinite;
- 
+
   @keyframes scroll {
     to {
       transform: translate3d(calc(-50% - 0.5rem), 0, 0);
@@ -182,30 +199,13 @@
 
 @layer utilities {
   @keyframes scroll {
-      to {
-          transform: translate3d(calc(-50% - 0.5rem), 0, 0);
-      }
+    to {
+      transform: translate3d(calc(-50% - 0.5rem), 0, 0);
+    }
   }
 
   .animate-scroll {
-      animation: scroll var(--animation-duration, 40s) var(--animation-direction, forwards) linear infinite;
-      will-change: transform;
+    animation: scroll var(--animation-duration, 40s) var(--animation-direction, forwards) linear infinite;
+    will-change: transform;
   }
-}
-
-@keyframes scroll-left {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
-}
-
-.animate-scroll {
-  animation: scroll-left 30s linear infinite;
-}
-
-.animate-scroll:hover {
-  animation-play-state: paused;
 }
