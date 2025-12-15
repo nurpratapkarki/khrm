@@ -89,47 +89,47 @@ export default function CareerDetailPage() {
             </Link>
           </Button>
 
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-6">
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+            <div className="space-y-6 max-w-full">
               <div className="flex flex-wrap gap-2">
                 {career.department && (
-                  <Badge variant="secondary" className="bg-white/20 text-white border-white/30">
-                    <Building2 className="h-3 w-3 mr-1" />
-                    {career.department}
+                  <Badge variant="secondary" className="bg-white/20 text-white border-white/30 whitespace-normal text-left h-auto py-1">
+                    <Building2 className="h-3 w-3 mr-1 shrink-0 inline" />
+                    <span className="inline">{career.department}</span>
                   </Badge>
                 )}
                 {career.employment_type && (
-                  <Badge variant="secondary" className="bg-white/20 text-white border-white/30">
-                    <Briefcase className="h-3 w-3 mr-1" />
-                    {career.employment_type}
+                  <Badge variant="secondary" className="bg-white/20 text-white border-white/30 whitespace-normal text-left h-auto py-1">
+                    <Briefcase className="h-3 w-3 mr-1 shrink-0 inline" />
+                    <span className="inline">{career.employment_type}</span>
                   </Badge>
                 )}
               </div>
 
-              <h1 className="text-4xl md:text-5xl font-bold">{career.title}</h1>
+              <h1 className="text-3xl md:text-5xl font-bold break-words hyphens-auto">{career.title}</h1>
 
               <div className="flex items-center gap-2 text-white/90">
-                <MapPin className="h-5 w-5" />
-                <span className="text-lg">{career.location}</span>
+                <MapPin className="h-5 w-5 shrink-0" />
+                <span className="text-lg break-words">{career.location}</span>
               </div>
 
               {career.summary && (
-                <p className="text-xl text-white/90 leading-relaxed">
+                <p className="text-lg md:text-xl text-white/90 leading-relaxed break-words">
                   {career.summary}
                 </p>
               )}
             </div>
 
             {career.image && (
-              <div className="relative hidden lg:block">
-                <div className="relative rounded-2xl overflow-hidden border-4 border-white/20 shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-500">
+              <div className="relative mt-8 lg:mt-0 w-full">
+                <div className="relative rounded-2xl overflow-hidden border-4 border-white/20 shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-500 max-w-[90vw] mx-auto lg:max-w-full">
                   <img
                     src={career.image}
                     alt={career.title}
-                    className="w-full h-full object-cover aspect-video"
+                    className="w-full h-auto object-cover aspect-video"
                   />
                 </div>
-                <div className="absolute -inset-4 bg-white/5 rounded-3xl -z-10 rotate-6 blur-sm" />
+                <div className="absolute -inset-4 bg-white/5 rounded-3xl -z-10 rotate-6 blur-sm max-w-[90vw] mx-auto lg:max-w-full" />
               </div>
             )}
           </div>

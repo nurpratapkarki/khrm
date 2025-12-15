@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { CheckCircle2, ChevronDown, ChevronUp, ArrowRight } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { useState } from 'react';
+import { getImageUrl } from '@/lib/utils';
 
 function renderBullets(points: JapanBulletPoint[], section: JapanBulletPoint['section']) {
   return points
@@ -36,7 +37,7 @@ function TeamMemberCard({ member }: { member: any }) {
       {member.photo && (
         <div className="relative h-56 w-full overflow-hidden bg-linear-to-br from-gray-100 to-gray-200">
           <img
-            src={member.photo}
+            src={getImageUrl(member.photo)}
             alt={member.name}
             className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
           />
@@ -106,7 +107,7 @@ function ProgramCard({ program }: { program: JapanProgramType }) {
       {program.image && (
         <div className="relative h-48 w-full overflow-hidden bg-linear-to-br from-(--japan-primary-soft)/20 to-(--japan-primary-soft)/10">
           <img
-            src={program.image}
+            src={getImageUrl(program.image)}
             alt={program.program_type_display}
             className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
           />
@@ -237,7 +238,7 @@ export default function JapanPage() {
             {landing.commitment_image && (
               <div className="mb-4 rounded-2xl overflow-hidden border border-(--japan-primary)/20 bg-white/80">
                 <img
-                  src={landing.commitment_image}
+                  src={getImageUrl(landing.commitment_image)}
                   alt="Commitment section illustration"
                   className="h-52 w-full object-cover"
                 />
@@ -273,7 +274,7 @@ export default function JapanPage() {
             {landing.preparation_image && (
               <div className="mb-4 rounded-2xl overflow-hidden border border-(--japan-primary)/20 bg-white/80">
                 <img
-                  src={landing.preparation_image}
+                  src={getImageUrl(landing.preparation_image)}
                   alt="Preparation section illustration"
                   className="h-52 w-full object-cover"
                 />
@@ -304,7 +305,7 @@ export default function JapanPage() {
             {landing.trust_image && (
               <div className="mt-4 rounded-2xl overflow-hidden border border-(--japan-primary)/25 bg-white/80">
                 <img
-                  src={landing.trust_image}
+                  src={getImageUrl(landing.trust_image)}
                   alt="Trust section illustration"
                   className="h-72 w-full object-cover"
                 />
@@ -322,7 +323,7 @@ export default function JapanPage() {
               {landing.vision_image && (
                 <div className="h-40 w-full overflow-hidden border-b border-(--japan-primary)/15">
                   <img
-                    src={landing.vision_image}
+                    src={getImageUrl(landing.vision_image)}
                     alt="Vision section illustration"
                     className="h-full w-full object-cover"
                   />

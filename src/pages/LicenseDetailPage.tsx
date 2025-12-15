@@ -62,14 +62,14 @@ export default function LicenseDetailPage() {
                     </div>
 
                     <div className="max-w-4xl">
-                        <Badge variant="secondary" className="mb-4 flex items-center gap-2 w-fit bg-white/20 text-white border-white/30">
-                            <ShieldCheck className="h-4 w-4" />
-                            Official Accreditations
+                        <Badge variant="secondary" className="mb-4 flex items-center gap-2 w-fit bg-white/20 text-white border-white/30 whitespace-normal text-left h-auto py-1">
+                            <ShieldCheck className="h-4 w-4 shrink-0" />
+                            <span className="inline">Official Accreditations</span>
                         </Badge>
-                        <h1 className="text-4xl md:text-5xl font-bold mb-4">
+                        <h1 className="text-3xl md:text-5xl font-bold mb-4 break-words hyphens-auto">
                             Licenses & Certifications
                         </h1>
-                        <p className="text-xl text-white/90 leading-relaxed max-w-2xl">
+                        <p className="text-lg md:text-xl text-white/90 leading-relaxed max-w-2xl break-words">
                             We are fully licensed and accredited by the Government of Nepal and international bodies, ensuring full compliance and trust.
                         </p>
                     </div>
@@ -92,10 +92,10 @@ export default function LicenseDetailPage() {
                                         <div className="p-6 md:p-8 flex flex-col justify-center">
                                             <div className="flex items-start justify-between mb-4">
                                                 <div>
-                                                    <Badge variant="outline" className="mb-3">
+                                                    <Badge variant="outline" className="mb-3 whitespace-normal text-left h-auto py-1">
                                                         {cert.issuing_authority}
                                                     </Badge>
-                                                    <CardTitle className="text-2xl md:text-3xl mb-2">
+                                                    <CardTitle className="text-2xl md:text-3xl mb-2 break-words hyphens-auto">
                                                         {cert.name}
                                                     </CardTitle>
                                                 </div>

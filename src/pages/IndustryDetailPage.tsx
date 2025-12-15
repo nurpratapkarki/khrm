@@ -55,50 +55,50 @@ export default function IndustryDetailPage() {
             </Link>
           </Button>
 
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-6">
-              <Badge variant="secondary" className="bg-white/20 text-white border-white/30">
-                <Building2 className="h-3 w-3 mr-1" />
-                Industry Sector
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+            <div className="space-y-6 max-w-full">
+              <Badge variant="secondary" className="bg-white/20 text-white border-white/30 whitespace-normal text-left h-auto py-1">
+                <Building2 className="h-3 w-3 mr-1 shrink-0 inline" />
+                <span className="inline">Industry Sector</span>
               </Badge>
 
               <div className="flex items-center gap-4">
-                <div className="text-6xl p-4 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20">
+                <div className="text-6xl p-4 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 shrink-0">
                   {industry.icon}
                 </div>
-                <h1 className="text-4xl md:text-5xl font-bold">{industry.name}</h1>
+                <h1 className="text-3xl md:text-5xl font-bold break-words hyphens-auto">{industry.name}</h1>
               </div>
 
-              <p className="text-xl text-white/90 leading-relaxed">
+              <p className="text-lg md:text-xl text-white/90 leading-relaxed break-words">
                 {industry.description}
               </p>
 
               <div className="flex flex-wrap gap-4">
                 {industry.job_count != null && (
-                  <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20">
-                    <Briefcase className="h-4 w-4" />
-                    <span className="text-sm font-medium">{industry.job_count} open roles</span>
+                  <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 max-w-full">
+                    <Briefcase className="h-4 w-4 shrink-0" />
+                    <span className="text-sm font-medium break-words whitespace-normal">{industry.job_count} open roles</span>
                   </div>
                 )}
                 {industry.client_count != null && (
-                  <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-accent-gold/20 backdrop-blur-sm border border-accent-gold/30">
-                    <Users className="h-4 w-4" />
-                    <span className="text-sm font-medium">{industry.client_count} active clients</span>
+                  <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-accent-gold/20 backdrop-blur-sm border border-accent-gold/30 max-w-full">
+                    <Users className="h-4 w-4 shrink-0" />
+                    <span className="text-sm font-medium break-words whitespace-normal">{industry.client_count} active clients</span>
                   </div>
                 )}
               </div>
             </div>
 
             {industry.image && (
-              <div className="relative hidden lg:block">
-                <div className="relative rounded-2xl overflow-hidden border-4 border-white/20 shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-500">
+              <div className="relative mt-8 lg:mt-0 w-full">
+                <div className="relative rounded-2xl overflow-hidden border-4 border-white/20 shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-500 max-w-[90vw] mx-auto lg:max-w-full">
                   <img
                     src={industry.image}
                     alt={industry.name}
-                    className="w-full h-full object-cover aspect-video"
+                    className="w-full h-auto object-cover aspect-video"
                   />
                 </div>
-                <div className="absolute -inset-4 bg-white/5 rounded-3xl -z-10 rotate-6 blur-sm" />
+                <div className="absolute -inset-4 bg-white/5 rounded-3xl -z-10 rotate-6 blur-sm max-w-[90vw] mx-auto lg:max-w-full" />
               </div>
             )}
           </div>

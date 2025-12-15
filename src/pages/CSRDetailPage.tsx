@@ -85,37 +85,37 @@ export default function CSRDetailPage() {
             </Link>
           </Button>
 
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-6">
-              <Badge variant="secondary" className="bg-white/20 text-white border-white/30">
-                <Heart className="h-3 w-3 mr-1" />
-                CSR & Impact
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+            <div className="space-y-6 max-w-full">
+              <Badge variant="secondary" className="bg-white/20 text-white border-white/30 whitespace-normal text-left h-auto py-1">
+                <Heart className="h-3 w-3 mr-1 shrink-0 inline" />
+                <span className="inline">CSR & Impact</span>
               </Badge>
 
-              <h1 className="text-4xl md:text-5xl font-bold">{project.title}</h1>
+              <h1 className="text-3xl md:text-5xl font-bold break-words hyphens-auto">{project.title}</h1>
 
               <div className="flex flex-wrap gap-4 text-white/90">
                 <div className="flex items-center gap-2">
-                  <Calendar className="h-5 w-5" />
+                  <Calendar className="h-5 w-5 shrink-0" />
                   <span>{new Date(project.date).toLocaleDateString()}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <MapPin className="h-5 w-5" />
-                  <span>{project.location}</span>
+                  <MapPin className="h-5 w-5 shrink-0" />
+                  <span className="break-words">{project.location}</span>
                 </div>
               </div>
             </div>
 
             {project.featured_image && (
-              <div className="relative hidden lg:block">
-                <div className="relative rounded-2xl overflow-hidden border-4 border-white/20 shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-500">
+              <div className="relative mt-8 lg:mt-0 w-full">
+                <div className="relative rounded-2xl overflow-hidden border-4 border-white/20 shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-500 max-w-[90vw] mx-auto lg:max-w-full">
                   <img
                     src={project.featured_image}
                     alt={project.title}
-                    className="w-full h-full object-cover aspect-video"
+                    className="w-full h-auto object-cover aspect-video"
                   />
                 </div>
-                <div className="absolute -inset-4 bg-white/5 rounded-3xl -z-10 rotate-6 blur-sm" />
+                <div className="absolute -inset-4 bg-white/5 rounded-3xl -z-10 rotate-6 blur-sm max-w-[90vw] mx-auto lg:max-w-full" />
               </div>
             )}
           </div>
