@@ -23,7 +23,7 @@ import {
     Phone,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
 
 export default function HomePage() {
@@ -128,23 +128,27 @@ export default function HomePage() {
             <section className="relative bg-linear-to-br from-primary/10 h-[70vh] via-background to-primary/5 border-b">
                 {/* Background Image Carousel */}
                 <div className="absolute inset-0 z-0">
-                    {heroImages.map((image, index) => (
-                        <div
-                            key={index}
-                            className={`absolute inset-0 transition-opacity duration-1000 ${index === currentImageIndex ? 'opacity-100' : 'opacity-0'
-                                }`}
-                        >
-                            <img
-                                src={image}
-                                alt=""
-                                className="w-full h-full object-cover"
-                            />
-                        </div>
-                    ))}
-                    {/* Gradient overlay for text readability - lighter to show more image */}
-                    <div className="absolute inset-0 bg-linear-to-b from-background/85 via-background/50 to-background/85" />
-                    {/* Additional center fade for better image visibility */}
-                    <div className="absolute inset-0 bg-radial-gradient from-transparent via-background/30 to-background/70" />
+                    <AnimatePresence mode="popLayout">
+                        {heroImages.length > 0 && (
+                            <motion.div
+                                key={currentImageIndex}
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 1.5 }}
+                                className="absolute inset-0"
+                            >
+                                <img
+                                    src={heroImages[currentImageIndex]}
+                                    alt=""
+                                    className="w-full h-full object-cover"
+                                />
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                    {/* Gradient overlay */}
+                    {/* <div className="absolute inset-0 bg-linear-to-b from-background/60 via-background/20 to-background/60" /> */}
+                    {/* <div className="absolute inset-0 bg-radial-gradient from-transparent via-background/10 to-background/40" /> */}
                     {heroImages.length > 1 && (
                         <div className="absolute inset-y-0 left-0 right-0 flex items-center justify-between px-4 md:px-8 z-20 pointer-events-none">
                             <button
