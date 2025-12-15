@@ -134,10 +134,10 @@ export default function HomePage() {
                             />
                         </div>
                     ))}
-                    {/* Gradient overlay for text readability - stronger at top and bottom */}
-                    <div className="absolute inset-0 bg-linear-to-b from-background/95 via-background/70 to-background/95" />
+                    {/* Gradient overlay for text readability - lighter to show more image */}
+                    <div className="absolute inset-0 bg-linear-to-b from-background/85 via-background/50 to-background/85" />
                     {/* Additional center fade for better image visibility */}
-                    <div className="absolute inset-0 bg-radial-gradient from-transparent via-background/40 to-background/80" />
+                    <div className="absolute inset-0 bg-radial-gradient from-transparent via-background/30 to-background/70" />
                     {heroImages.length > 1 && (
                         <div className="absolute inset-y-0 left-0 right-0 flex items-center justify-between px-4 md:px-8 z-20 pointer-events-none">
                             <button
@@ -167,13 +167,13 @@ export default function HomePage() {
                         animate={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
                         transition={{ duration: 0.4, ease: "easeOut" }}
                     >
-                        <Badge variant="secondary" className="mb-6 text-sm px-4 py-1 bg-background/80 backdrop-blur-sm">
+                        <Badge variant="secondary" className="mb-6 text-sm px-4 py-1 bg-background/90 backdrop-blur-md shadow-lg">
                             Since {data?.company_info?.establishment_year}
                         </Badge>
-                        <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6 text-foreground drop-shadow-lg">
+                        <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6 text-foreground drop-shadow-2xl [text-shadow:_0_2px_10px_rgb(0_0_0_/_40%)]">
                             {data?.company_info?.hero_headline}
                         </h1>
-                        <p className="text-xl text-foreground/90 mb-8 max-w-2xl mx-auto drop-shadow-md">
+                        <p className="text-xl text-foreground/95 mb-8 max-w-2xl mx-auto drop-shadow-xl [text-shadow:_0_2px_8px_rgb(0_0_0_/_30%)] bg-background/60 backdrop-blur-sm px-6 py-3 rounded-lg">
                             {data?.company_info?.hero_subtext}
                         </p>
                         <Button size="lg" className="text-lg px-8" asChild>
