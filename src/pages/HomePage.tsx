@@ -1,6 +1,6 @@
 // src/pages/HomePage.tsx
 import { useApi } from "@/hooks/useApi";
-import { apiService, type HomePageData } from "@/api";
+import { apiService, japanApi, type HomePageData, type JapanBulletPoint, type JapanLandingPage } from "@/api";
 import { Button } from "@/components/ui/button";
 import {
     Card,
@@ -17,18 +17,43 @@ import {
     Globe,
     CheckCircle2,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion, useReducedMotion } from "framer-motion";
-import JapanPage from "./JapanLandingPage";
 import { useEffect, useState } from "react";
 
 export default function HomePage() {
+    const navigate = useNavigate();
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
+    
     const { data, loading, error } = useApi<HomePageData>(
         () => apiService.getReq<HomePageData>("/home/"),
         [],
     );
+    const { data: japanLandingRaw } = useApi<JapanLandingPage | Record<string, never>>(
+        () => japanApi.getJapanLanding(),
+        [],
+    );
+
+    function renderBullets(points: JapanBulletPoint[], section: JapanBulletPoint['section']) {
+        return points
+            .filter((p) => p.section === section)
+            .sort((a, b) => a.order - b.order)
+            .map((point) => (
+                <li 
+                    key={point.id} 
+                    className="flex gap-3 cursor-pointer hover:bg-(--japan-primary)/5 -mx-2 px-2 py-1 rounded-lg transition-colors"
+                    onClick={() => navigate('/japan')}
+                >
+                    <CheckCircle2 className="h-5 w-5 text-(--japan-primary) mt-0.5 hrink-0" />
+                    <div>
+                        {point.title && <div className="font-medium mb-0.5">{point.title}</div>}
+                        <p className="text-sm text-(--japan-foreground)/80 whitespace-pre-line">
+                            {point.description}
+                        </p>
+                    </div>
+                </li>
+            ));
+    }
 
     useEffect(() => {
         const images = [
@@ -70,10 +95,9 @@ export default function HomePage() {
         );
     }
 
-
-    // const japanLanding = japanLandingRaw && (japanLandingRaw as any).id
-    //   ? (japanLandingRaw as JapanLandingPage)
-    //   : null;
+    const japanLanding = japanLandingRaw && (japanLandingRaw as any).id
+        ? (japanLandingRaw as JapanLandingPage)
+        : null;
 
     return (
         <div className="flex flex-col">
@@ -91,8 +115,9 @@ export default function HomePage() {
                         .map((image, index) => (
                             <div
                                 key={index}
-                                className={`absolute inset-0 transition-opacity duration-1000 ${index === currentImageIndex ? 'opacity-50' : 'opacity-0'
-                                    }`}
+                                className={`absolute inset-0 transition-opacity duration-1000 ${
+                                    index === currentImageIndex ? 'opacity-50' : 'opacity-0'
+                                }`}
                             >
                                 <img
                                     src={image}
@@ -125,92 +150,218 @@ export default function HomePage() {
                         </p>
                     </motion.div>
                 </div>
-
-                
-
-
-                {/* Floating Stats */}
-
             </section>
 
-            {/* Japan-focused section (highlights Japan as key destination) */}
-            {/* {japanLanding && (
-        <section className="py-20 bg-(--japan-background) border-b">
-          <div className="container mx-auto px-4 grid gap-10 md:grid-cols-2 items-start">
-            <motion.div
-              className="space-y-4"
-              initial={prefersReducedMotion ? false : { opacity: 0, x: -16 }}
-              whileInView={prefersReducedMotion ? undefined : { opacity: 1, x: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 0.45, ease: 'easeOut' }}
-            >
-              <Badge className="w-fit" variant="outline">
-                Japan Focused
-              </Badge>
-              <h2 className="text-3xl md:text-4xl font-bold text-(--japan-foreground)">
-                {japanLanding.intro_title}
-              </h2>
-              <p className="text-(--japan-foreground)/80 whitespace-pre-line">
-                {japanLanding.intro_description}
-              </p>
-              {japanLanding.commitment_intro && (
-                <p className="text-sm text-(--japan-foreground)/70">
-                  {japanLanding.commitment_intro}
-                </p>
-              )}
-              <div className="flex flex-wrap gap-3 pt-2">
-                <Button
-                  size="lg"
-                  className="bg-(--japan-primary) text-white hover:bg-(--japan-accent)"
-                  asChild
-                >
-                  <Link to="/japan">Explore Japan Programme</Link>
-                </Button>
-                <Button size="lg" variant="outline" asChild>
-                  <Link to="/employer-inquiry">Request Japan manpower</Link>
-                </Button>
-              </div>
-            </motion.div>
+            {/* Japan-focused Intro section */}
+            {japanLanding && (
+                <section className="py-20 bg-(--japan-background) border-b">
+                    <div className="container mx-auto px-4 grid gap-10 md:grid-cols-2 items-start">
+                        <motion.div
+                            className="space-y-4"
+                            initial={prefersReducedMotion ? false : { opacity: 0, x: -16 }}
+                            whileInView={prefersReducedMotion ? undefined : { opacity: 1, x: 0 }}
+                            viewport={{ once: true, amount: 0.3 }}
+                            transition={{ duration: 0.45, ease: 'easeOut' }}
+                        >
+                            <Badge className="w-fit" variant="outline">
+                                Japan Focused
+                            </Badge>
+                            <h2 className="text-3xl md:text-4xl font-bold text-(--japan-foreground)">
+                                {japanLanding.intro_title}
+                            </h2>
+                            <p className="text-(--japan-foreground)/80 whitespace-pre-line">
+                                {japanLanding.intro_description}
+                            </p>
+                            {japanLanding.commitment_intro && (
+                                <p className="text-sm text-(--japan-foreground)/70">
+                                    {japanLanding.commitment_intro}
+                                </p>
+                            )}
+                            <div className="flex flex-wrap gap-3 pt-2">
+                                <Button
+                                    size="lg"
+                                    className="bg-(--japan-primary) text-white hover:bg-(--japan-accent)"
+                                    asChild
+                                >
+                                    <Link to="/japan">Explore Japan Programme</Link>
+                                </Button>
+                            </div>
+                        </motion.div>
 
-            <motion.div
-              className="rounded-2xl bg-white shadow-sm border border-(--japan-primary)/20 p-6 space-y-4"
-              initial={prefersReducedMotion ? false : { opacity: 0, x: 16 }}
-              whileInView={prefersReducedMotion ? undefined : { opacity: 1, x: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 0.45, ease: 'easeOut', delay: 0.05 }}
-            >
-              <h3 className="text-xl font-semibold mb-1">{japanLanding.preparation_title}</h3>
-              {japanLanding.preparation_intro && (
-                <p className="text-sm text-muted-foreground whitespace-pre-line">
-                  {japanLanding.preparation_intro}
-                </p>
-              )}
-              <ul className="space-y-2 text-sm">
-                {japanLanding.bullet_points
-                  .filter((p) => p.section === 'preparation')
-                  .sort((a, b) => a.order - b.order)
-                  .slice(0, 4)
-                  .map((point) => (
-                    <li key={point.id} className="flex gap-2">
-                      <CheckCircle2 className="h-4 w-4 text-(--japan-primary) mt-0.5" />
-                      <div>
-                        {point.title && (
-                          <div className="font-medium leading-snug">{point.title}</div>
-                        )}
-                        <p className="text-muted-foreground whitespace-pre-line">
-                          {point.description}
-                        </p>
-                      </div>
-                    </li>
-                  ))}
-              </ul>
-            </motion.div>
-          </div>
-        </section>
-      )} */}
-            <div>
-                <JapanPage />
-            </div>
+                        <motion.div
+                            className="rounded-2xl bg-white shadow-sm border border-(--japan-primary)/20 p-6 space-y-4"
+                            initial={prefersReducedMotion ? false : { opacity: 0, x: 16 }}
+                            whileInView={prefersReducedMotion ? undefined : { opacity: 1, x: 0 }}
+                            viewport={{ once: true, amount: 0.3 }}
+                            transition={{ duration: 0.45, ease: 'easeOut', delay: 0.05 }}
+                        >
+                            <h3 className="text-xl font-semibold mb-1">{japanLanding.preparation_title}</h3>
+                            {japanLanding.preparation_intro && (
+                                <p className="text-sm text-muted-foreground whitespace-pre-line">
+                                    {japanLanding.preparation_intro}
+                                </p>
+                            )}
+                            <ul className="space-y-2 text-sm">
+                                {japanLanding.bullet_points
+                                    .filter((p) => p.section === 'preparation')
+                                    .sort((a, b) => a.order - b.order)
+                                    .slice(0, 4)
+                                    .map((point) => (
+                                        <li 
+                                            key={point.id} 
+                                            className="flex gap-2 cursor-pointer hover:bg-(--japan-primary)/5 -mx-2 px-2 py-1 rounded-lg transition-colors"
+                                            onClick={() => navigate('/japan')}
+                                        >
+                                            <CheckCircle2 className="h-4 w-4 text-(--japan-primary) mt-0.5 shrink-0" />
+                                            <div>
+                                                {point.title && (
+                                                    <div className="font-medium leading-snug">{point.title}</div>
+                                                )}
+                                                <p className="text-muted-foreground whitespace-pre-line">
+                                                    {point.description}
+                                                </p>
+                                            </div>
+                                        </li>
+                                    ))}
+                            </ul>
+                        </motion.div>
+                    </div>
+                </section>
+            )}
+
+            {/* Japan Commitment & Preparation Section */}
+            {japanLanding && (
+                <section className="py-16 md:py-20 border-b bg-(--japan-background)">
+                    <div className="container mx-auto px-4 grid gap-10 md:grid-cols-2 items-start">
+                        <motion.div
+                            className="space-y-4"
+                            initial={prefersReducedMotion ? false : { opacity: 0, x: -16 }}
+                            whileInView={prefersReducedMotion ? undefined : { opacity: 1, x: 0 }}
+                            viewport={{ once: true, amount: 0.3 }}
+                            transition={{ duration: 0.45, ease: 'easeOut' }}
+                        >
+                            {japanLanding.commitment_image && (
+                                <div className="mb-4 rounded-2xl overflow-hidden border border-(--japan-primary)/20 bg-white/80">
+                                    <img
+                                        src={japanLanding.commitment_image}
+                                        alt="Commitment section illustration"
+                                        className="h-52 w-full object-cover"
+                                    />
+                                </div>
+                            )}
+                            <h2 className="text-2xl md:text-3xl font-bold mb-2 text-(--japan-foreground)">
+                                {japanLanding.commitment_title}
+                            </h2>
+                            {japanLanding.commitment_intro && (
+                                <p className="text-(--japan-foreground)/80 whitespace-pre-line">
+                                    {japanLanding.commitment_intro}
+                                </p>
+                            )}
+                            <ul className="mt-4 space-y-3">
+                                {renderBullets(japanLanding.bullet_points, 'commitment')}
+                            </ul>
+                        </motion.div>
+
+                        <motion.div
+                            className="space-y-4"
+                            initial={prefersReducedMotion ? false : { opacity: 0, x: 16 }}
+                            whileInView={prefersReducedMotion ? undefined : { opacity: 1, x: 0 }}
+                            viewport={{ once: true, amount: 0.3 }}
+                            transition={{ duration: 0.45, ease: 'easeOut', delay: 0.05 }}
+                        >
+                            <h2 className="text-2xl md:text-3xl font-bold mb-2 text-(--japan-foreground)">
+                                {japanLanding.preparation_title}
+                            </h2>
+                            {japanLanding.preparation_intro && (
+                                <p className="text-(--japan-foreground)/80 whitespace-pre-line">
+                                    {japanLanding.preparation_intro}
+                                </p>
+                            )}
+                            <ul className="mt-4 space-y-3">
+                                {renderBullets(japanLanding.bullet_points, 'preparation')}
+                            </ul>
+                            {japanLanding.preparation_image && (
+                                <div className="mb-4 rounded-2xl overflow-hidden border border-(--japan-primary)/20 bg-white/80">
+                                    <img
+                                        src={japanLanding.preparation_image}
+                                        alt="Preparation section illustration"
+                                        className="h-52 w-full object-cover"
+                                    />
+                                </div>
+                            )}
+                        </motion.div>
+                    </div>
+                </section>
+            )}
+
+            {/* Japan Trust & Vision Section */}
+            {japanLanding && (
+                <section className="py-16 md:py-20 border-b bg-(--japan-primary-soft)/40">
+                    <div className="container mx-auto px-4 grid gap-10 md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] items-start">
+                        <motion.div
+                            initial={prefersReducedMotion ? false : { opacity: 0, y: 16 }}
+                            whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
+                            viewport={{ once: true, amount: 0.3 }}
+                            transition={{ duration: 0.45, ease: 'easeOut' }}
+                        >
+                            <h2 className="text-2xl md:text-3xl font-bold mb-2 text-(--japan-foreground)">
+                                {japanLanding.trust_title}
+                            </h2>
+                            {japanLanding.trust_intro && (
+                                <p className="text-(--japan-foreground)/80 whitespace-pre-line mb-4">
+                                    {japanLanding.trust_intro}
+                                </p>
+                            )}
+                            <ul className="space-y-3">
+                                {renderBullets(japanLanding.bullet_points, 'trust')}
+                            </ul>
+                            {japanLanding.trust_image && (
+                                <div className="mt-4 rounded-2xl overflow-hidden border border-(--japan-primary)/25 bg-white/80">
+                                    <img
+                                        src={japanLanding.trust_image}
+                                        alt="Trust section illustration"
+                                        className="h-72 w-full object-cover"
+                                    />
+                                </div>
+                            )}
+                        </motion.div>
+
+                        <motion.div
+                            initial={prefersReducedMotion ? false : { opacity: 0, y: 16 }}
+                            whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
+                            viewport={{ once: true, amount: 0.3 }}
+                            transition={{ duration: 0.45, ease: 'easeOut', delay: 0.05 }}
+                        >
+                            <Card className="bg-white/80 border-(--japan-primary)/20 overflow-hidden">
+                                {japanLanding.vision_image && (
+                                    <div className="h-40 w-full overflow-hidden border-b border-(--japan-primary)/15">
+                                        <img
+                                            src={japanLanding.vision_image}
+                                            alt="Vision section illustration"
+                                            className="h-full w-full object-cover"
+                                        />
+                                    </div>
+                                )}
+                                <CardHeader>
+                                    <CardTitle className="text-lg">{japanLanding.vision_title}</CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    {japanLanding.vision_intro && (
+                                        <p className="text-sm text-muted-foreground mb-3 whitespace-pre-line">
+                                            {japanLanding.vision_intro}
+                                        </p>
+                                    )}
+                                    <ul className="space-y-2 text-sm">
+                                        {renderBullets(japanLanding.bullet_points, 'vision')}
+                                    </ul>
+                                </CardContent>
+                            </Card>
+                        </motion.div>
+                    </div>
+                </section>
+            )}
+
+            {/* Floating Stats */}
             <div className="container mx-auto px-4 -mb-16 relative z-10">
                 <motion.div
                     className="bg-card border shadow-xl rounded-2xl p-8"
@@ -273,6 +424,7 @@ export default function HomePage() {
                 </motion.div>
             </div>
 
+            {/* Rest of the sections remain the same... */}
             {/* Trusted Clients Section */}
             <section className="py-24 bg-muted/30">
                 <div className="container mx-auto px-4">
@@ -373,51 +525,6 @@ export default function HomePage() {
                     </div>
                 </div>
             </section>
-            {/* Why Choose KHRM */}
-            {/* <section className="py-24 bg-primary text-primary-foreground">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Why Choose KHRM?
-            </h2>
-            <p className="text-primary-foreground/80 text-lg max-w-2xl mx-auto">
-              Your trusted partner for international recruitment since {data?.company_info?.establishment_year}
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-primary-foreground/10 backdrop-blur rounded-xl p-8 border border-primary-foreground/20">
-              <div className="mb-4">
-                <CheckCircle2 className="h-12 w-12" />
-              </div>
-              <h3 className="text-2xl font-bold mb-3">Licensed & Compliant</h3>
-              <p className="text-primary-foreground/80">
-                Fully licensed by the Government of Nepal and compliant with international labor standards
-              </p>
-            </div>
-
-            <div className="bg-primary-foreground/10 backdrop-blur rounded-xl p-8 border border-primary-foreground/20">
-              <div className="mb-4">
-                <TrendingUp className="h-12 w-12" />
-              </div>
-              <h3 className="text-2xl font-bold mb-3">Proven Track Record</h3>
-              <p className="text-primary-foreground/80">
-                Over {data?.company_info?.total_deployments.toLocaleString()} successful deployments across multiple industries
-              </p>
-            </div>
-
-            <div className="bg-primary-foreground/10 backdrop-blur rounded-xl p-8 border border-primary-foreground/20">
-              <div className="mb-4">
-                <Globe className="h-12 w-12" />
-              </div>
-              <h3 className="text-2xl font-bold mb-3">Global Presence</h3>
-              <p className="text-primary-foreground/80">
-                Offices in Nepal, UAE, and Kuwait ensuring seamless service and support
-              </p>
-            </div>
-          </div>
-        </div>
-      </section> */}
 
             {/* Testimonials */}
             <section className="py-24 bg-muted/30">
@@ -455,7 +562,7 @@ export default function HomePage() {
                             pauseOnHover
                             speed="slow"
                             direction="right"
-                            className="mx-auto [mask-image:none]"
+                            className="mx-auto [mask-none]"
                         />
                     </div>
                 </div>
@@ -498,4 +605,3 @@ export default function HomePage() {
         </div>
     );
 }
-
