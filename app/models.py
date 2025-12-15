@@ -52,6 +52,9 @@ class CompanyInfo(models.Model):
     values_image = models.ImageField(upload_to='company/sections/', blank=True)
     about_background_image = models.ImageField(upload_to='company/sections/', blank=True)
     hero_image = models.ImageField(upload_to='hero/', blank=True)
+    hero_image1 = models.ImageField(upload_to='hero/', blank=True)
+    hero_image2 = models.ImageField(upload_to='hero/', blank=True)
+    hero_image3 = models.ImageField(upload_to='hero/', blank=True)
     hero_headline = models.CharField(max_length=200, default="Trusted International Recruitment Partner Since 2003")
     hero_subtext = models.CharField(max_length=200, default="Nepal • UAE • Kuwait")
     

@@ -96,7 +96,7 @@ class CompanyInfoAdmin(admin.ModelAdmin):
             'fields': ('mission', 'vision', 'values', 'mission_image', 'vision_image', 'values_image')
         }),
         ('Hero Banner', {
-            'fields': ('hero_headline', 'hero_subtext', 'hero_image')
+            'fields': ('hero_headline', 'hero_subtext', 'hero_image', 'hero_image1', 'hero_image2', 'hero_image3')
         }),
     )
     
