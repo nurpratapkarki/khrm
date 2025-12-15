@@ -69,7 +69,7 @@ export default function JapanProgramDetailPage() {
                             <div className="relative mt-8 lg:mt-0 w-full">
                                 <div className="relative rounded-2xl overflow-hidden border-4 border-white/20 shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-500 max-w-[90vw] mx-auto lg:max-w-full">
                                     <img
-                                        src={program.image}
+                                        src={getImageUrl(program.image)}
                                         alt={program.program_type_display}
                                         className="w-full h-auto object-cover aspect-video"
                                     />
