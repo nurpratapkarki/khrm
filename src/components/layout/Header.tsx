@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { cn } from '@/lib/utils';
 import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { useApi } from '@/hooks/useApi';
@@ -7,6 +8,7 @@ import { companyApi } from '@/api';
 import type { CompanyInfo, Office } from '@/api';
 
 export default function Header() {
+  const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { data: companyInfo } = useApi<CompanyInfo>(() => companyApi.getCompanyInfo(), []);
   const { data: offices } = useApi<Office[] | { results: Office[] }>(() => companyApi.getOffices(), []);
@@ -66,7 +68,12 @@ export default function Header() {
               <Link
                 key={item.name}
                 to={item.href}
-                className="text-sm font-medium transition-colors hover:text-primary"
+                className={cn(
+                  "text-sm font-medium transition-colors hover:text-primary relative py-1",
+                  location.pathname === item.href
+                    ? "text-primary after:absolute after:left-0 after:bottom-0 after:h-0.5 after:w-full after:bg-primary"
+                    : "text-muted-foreground"
+                )}
               >
                 {item.name}
               </Link>
@@ -102,7 +109,10 @@ export default function Header() {
                 <Link
                   key={item.name}
                   to={item.href}
-                  className="text-sm font-medium transition-colors hover:text-primary"
+                  className={cn(
+                    "text-sm font-medium transition-colors hover:text-primary py-2",
+                    location.pathname === item.href ? "text-primary font-semibold" : "text-muted-foreground"
+                  )}
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {item.name}
