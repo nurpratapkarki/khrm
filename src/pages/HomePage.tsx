@@ -125,7 +125,7 @@ export default function HomePage() {
     return (
         <div className="flex flex-col">
             {/* Hero Section (global) */}
-            <section className="relative bg-linear-to-br from-primary/10 h-[70vh] via-background to-primary/5 border-b">
+            <section className="relative h-[85vh] border-b overflow-hidden group">
                 {/* Background Image Carousel */}
                 <div className="absolute inset-0 z-0">
                     <AnimatePresence mode="popLayout">
@@ -146,44 +146,63 @@ export default function HomePage() {
                             </motion.div>
                         )}
                     </AnimatePresence>
-                    {/* Gradient overlay */}
-                    {/* <div className="absolute inset-0 bg-linear-to-b from-background/60 via-background/20 to-background/60" /> */}
-                    {/* <div className="absolute inset-0 bg-radial-gradient from-transparent via-background/10 to-background/40" /> */}
+
+                    {/* Dark Gradient Overlay for Text Contrast */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/30" />
+
                     {heroImages.length > 1 && (
-                        <div className="absolute inset-y-0 left-0 right-0 flex items-center justify-between px-4 md:px-8 z-20 pointer-events-none">
+                        <div className="absolute inset-y-0 left-0 right-0 flex items-center justify-between px-4 md:px-8 z-20 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                             <button
                                 type="button"
                                 onClick={handlePrevImage}
-                                className="pointer-events-auto h-11 w-11 rounded-full bg-background/80 border border-border shadow hover:bg-background transition"
+                                className="pointer-events-auto h-12 w-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white shadow-lg hover:bg-white/20 transition-all flex items-center justify-center"
                                 aria-label="Previous hero image"
                             >
-                                <ChevronLeft className="mx-auto h-5 w-5" />
+                                <ChevronLeft className="h-6 w-6" />
                             </button>
                             <button
                                 type="button"
                                 onClick={handleNextImage}
-                                className="pointer-events-auto h-11 w-11 rounded-full bg-background/80 border border-border shadow hover:bg-background transition"
+                                className="pointer-events-auto h-12 w-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white shadow-lg hover:bg-white/20 transition-all flex items-center justify-center"
                                 aria-label="Next hero image"
                             >
-                                <ChevronRight className="mx-auto h-5 w-5" />
+                                <ChevronRight className="h-6 w-6" />
                             </button>
                         </div>
                     )}
                 </div>
 
-                <div className="container mx-auto px-4 py-24 md:py-32 relative z-10">
+                <div className="container mx-auto px-4 h-full flex flex-col justify-center relative z-10">
                     <motion.div
                         className="max-w-4xl mx-auto text-center"
-                        initial={prefersReducedMotion ? false : { opacity: 0, y: 16 }}
+                        initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
                         animate={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
-                        transition={{ duration: 0.4, ease: "easeOut" }}
+                        transition={{ duration: 0.6, ease: "easeOut" }}
                     >
-                        <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6 text-foreground  [text-shadow:_0_2px_10px_rgb(0_0_0_/_40%)]">
+                        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 text-white drop-shadow-lg">
                             {data?.company_info?.hero_headline}
                         </h1>
-                        <p className="text-xl text-foreground/95 mb-8 max-w-2xl mx-auto  [text-shadow:_0_2px_8px_rgb(0_0_0_/_30%)] bg-background/60 backdrop-blur-sm px-6 py-3 rounded-lg">
+                        <p className="text-xl md:text-2xl text-white/90 mb-10 max-w-2xl mx-auto leading-relaxed drop-shadow-md">
                             {data?.company_info?.hero_subtext}
                         </p>
+
+                        {/* <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                            <Button
+                                size="lg"
+                                className="text-lg px-8 py-6 rounded-full bg-primary hover:bg-primary/90 shadow-lg hover:shadow-primary/25 transition-all"
+                                onClick={() => navigate('/contact')}
+                            >
+                                Get Started
+                            </Button>
+                            <Button
+                                size="lg"
+                                variant="outline"
+                                className="text-lg px-8 py-6 rounded-full bg-white/10 backdrop-blur-sm border-white/30 text-white hover:bg-white/20 hover:text-white shadow-lg transition-all"
+                                onClick={() => navigate('/about')}
+                            >
+                                Learn More
+                            </Button>
+                        </div> */}
                     </motion.div>
                 </div>
             </section>
