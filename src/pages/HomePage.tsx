@@ -130,7 +130,7 @@ export default function HomePage() {
                     {heroImages.map((image, index) => (
                         <div
                             key={index}
-                            className={`absolute inset-0 transition-opacity duration-1000 ${index === currentImageIndex ? 'opacity-70' : 'opacity-0'
+                            className={`absolute inset-0 transition-opacity duration-1000 ${index === currentImageIndex ? 'opacity-100' : 'opacity-0'
                                 }`}
                         >
                             <img
@@ -606,7 +606,7 @@ export default function HomePage() {
             </section>
 
             {/* CTA Section */}
-            <section className="py-24 bg-linear-to-r from-primary to-primary/80 text-primary-foreground">
+            <section className="py-24 bg-white text-primary-foreground">
                 <div className="container mx-auto px-4">
                     <div className="text-center mb-12">
                         <h2 className="text-3xl md:text-5xl font-bold mb-6">

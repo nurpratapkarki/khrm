@@ -82,8 +82,19 @@ export default function TrainingPage() {
                     {courses.map((course) => (
                       <Card 
                         key={course.id} 
-                        className="h-full flex flex-col border-2 hover:border-secondary-600/30 hover:shadow-xl transition-all group"
+                        className="h-full flex flex-col border-2 hover:border-secondary-600/30 hover:shadow-xl transition-all group overflow-hidden"
                       >
+                        {course.course_image && (
+                          <div className="relative h-48 w-full overflow-hidden bg-muted">
+                            <img 
+                              src={course.course_image} 
+                              alt={course.name}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            />
+                            <div className="absolute inset-0 bg-linear-to-t from-black/20 to-transparent" />
+                          </div>
+                        )}
+                        
                         <CardHeader className="pb-4">
                           <div className="flex items-start justify-between gap-2 mb-3">
                             <div className="p-2 bg-linear-to-br from-secondary-600/10 to-[#1d4ed8]/5 rounded-lg group-hover:scale-110 transition-transform">
@@ -190,5 +201,5 @@ export default function TrainingPage() {
         </div>
       </section>
     </div>
-  );
-}
+    );
+  }
