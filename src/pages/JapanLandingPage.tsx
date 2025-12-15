@@ -112,7 +112,7 @@ function ProgramCard({ program }: { program: JapanProgramType }) {
             className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
           />
           <div className="absolute inset-0 bg-linear-to-t from-black/40 to-transparent" />
-          <Badge className="absolute top-4 left-4 bg-(--japan-primary) text-white border-none">
+          <Badge className="absolute top-4 left-4 max-w-[calc(100%-2rem)] bg-(--japan-primary) text-white border-none whitespace-normal text-left h-auto py-1">
             {program.program_type_display}
           </Badge>
         </div>
