@@ -1,6 +1,7 @@
 // src/pages/HomePage.tsx
 import { useApi } from "@/hooks/useApi";
 import { apiService, companyApi, japanApi, type HomePageData, type JapanBulletPoint, type JapanLandingPage, type Office } from "@/api";
+import { getImageUrl } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
     Card,
@@ -45,10 +46,10 @@ export default function HomePage() {
     const heroImages = useMemo(
         () =>
             [
-                data?.company_info.hero_image,
-                data?.company_info.hero_image1,
-                data?.company_info.hero_image2,
-                data?.company_info.hero_image3,
+                getImageUrl(data?.company_info.hero_image),
+                getImageUrl(data?.company_info.hero_image1),
+                getImageUrl(data?.company_info.hero_image2),
+                getImageUrl(data?.company_info.hero_image3),
             ].filter(Boolean),
         [data?.company_info],
     );
@@ -265,7 +266,7 @@ export default function HomePage() {
                             {japanLanding.commitment_image && (
                                 <div className="mb-4 rounded-2xl overflow-hidden border border-(--japan-primary)/20 bg-white/80">
                                     <img
-                                        src={japanLanding.commitment_image}
+                                        src={getImageUrl(japanLanding.commitment_image)}
                                         alt="Commitment section illustration"
                                         className="h-52 w-full object-cover"
                                     />
@@ -305,7 +306,7 @@ export default function HomePage() {
                             {japanLanding.preparation_image && (
                                 <div className="mb-4 rounded-2xl overflow-hidden border border-(--japan-primary)/20 bg-white/80">
                                     <img
-                                        src={japanLanding.preparation_image}
+                                        src={getImageUrl(japanLanding.preparation_image)}
                                         alt="Preparation section illustration"
                                         className="h-52 w-full object-cover"
                                     />
@@ -340,7 +341,7 @@ export default function HomePage() {
                             {japanLanding.trust_image && (
                                 <div className="mt-4 rounded-2xl overflow-hidden border border-(--japan-primary)/25 bg-white/80">
                                     <img
-                                        src={japanLanding.trust_image}
+                                        src={getImageUrl(japanLanding.trust_image)}
                                         alt="Trust section illustration"
                                         className="h-72 w-full object-cover"
                                     />
@@ -359,7 +360,7 @@ export default function HomePage() {
                                 {japanLanding.vision_image && (
                                     <div className="h-40 w-full overflow-hidden border-b border-(--japan-primary)/15">
                                         <img
-                                            src={japanLanding.vision_image}
+                                            src={getImageUrl(japanLanding.vision_image)}
                                             alt="Vision section illustration"
                                             className="h-full w-full object-cover"
                                         />
@@ -495,14 +496,14 @@ export default function HomePage() {
                                             className="w-full h-full flex items-center justify-center"
                                         >
                                             <img
-                                                src={client.logo}
+                                                src={getImageUrl(client.logo)}
                                                 alt={client.name}
                                                 className="max-w-full max-h-full object-contain grayscale hover:grayscale-0 transition-all"
                                             />
                                         </a>
                                     ) : (
                                         <img
-                                            src={client.logo}
+                                            src={getImageUrl(client.logo)}
                                             alt={client.name}
                                             className="max-w-full max-h-full object-contain grayscale hover:grayscale-0 transition-all"
                                         />
