@@ -1,6 +1,6 @@
 // src/pages/HomePage.tsx
 import { useApi } from "@/hooks/useApi";
-import { apiService, japanApi, type HomePageData, type JapanBulletPoint, type JapanLandingPage } from "@/api";
+import { apiService, companyApi, japanApi, type HomePageData, type JapanBulletPoint, type JapanLandingPage, type Office } from "@/api";
 import { Button } from "@/components/ui/button";
 import {
     Card,
@@ -18,6 +18,8 @@ import {
     CheckCircle2,
     ChevronLeft,
     ChevronRight,
+    Mail,
+    Phone,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, useReducedMotion } from "framer-motion";
@@ -33,6 +35,10 @@ export default function HomePage() {
     );
     const { data: japanLandingRaw } = useApi<JapanLandingPage | Record<string, never>>(
         () => japanApi.getJapanLanding(),
+        [],
+    );
+    const { data: headquarters } = useApi<Office>(
+        () => companyApi.getHeadquarters(),
         [],
     );
 
@@ -604,35 +610,82 @@ export default function HomePage() {
 
             {/* CTA Section */}
             <section className="py-24 bg-linear-to-r from-primary to-primary/80 text-primary-foreground">
-                <div className="container mx-auto px-4 text-center">
-                    <h2 className="text-3xl md:text-5xl font-bold mb-6">
-                        Ready to Build Your Team?
-                    </h2>
-                    <p className="text-xl text-primary-foreground/90 mb-8 max-w-2xl mx-auto">
-                        Connect with skilled professionals from Nepal. Let us
-                        help you find the perfect candidates for your
-                        organization.
-                    </p>
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <Button
-                            size="lg"
-                            variant="secondary"
-                            className="text-lg px-8"
-                            asChild
-                        >
-                            <Link to="/employer-inquiry">
-                                Request Manpower
-                                <ArrowRight className="ml-2 h-5 w-5" />
-                            </Link>
-                        </Button>
-                        <Button
-                            size="lg"
-                            variant="outline"
-                            className="text-lg px-8 bg-accent-gold border-primary-foreground/20 hover:bg-primary-foreground/10"
-                            asChild
-                        >
-                            <Link to="/contact">Contact Us</Link>
-                        </Button>
+                <div className="container mx-auto px-4">
+                    <div className="text-center mb-12">
+                        <h2 className="text-3xl md:text-5xl font-bold mb-6">
+                            Ready to Build Your Team?
+                        </h2>
+                        <p className="text-xl text-primary-foreground/90 mb-8 max-w-2xl mx-auto">
+                            Connect with skilled professionals from Nepal. Let us
+                            help you find the perfect candidates for your
+                            organization.
+                        </p>
+                    </div>
+
+                    {/* Contact Information Cards */}
+                    <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-8 items-start">
+                        <div className="space-y-4">
+                            {/* Address Card */}
+                            {headquarters && (
+                                <div className="bg-black/40 backdrop-blur-sm border border-white/10 rounded-lg p-4 flex items-start gap-4 hover:bg-black/50 transition-colors">
+                                    <div className="bg-primary/20 p-3 rounded-lg shrink-0">
+                                        <Globe className="h-5 w-5 text-primary-foreground" />
+                                    </div>
+                                    <div className="flex-1">
+                                        <div className="text-sm font-medium text-primary-foreground/80 mb-1">
+                                            Address
+                                        </div>
+                                        <div className="text-primary-foreground">
+                                            {headquarters.address}, {headquarters.city}
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                            {/* Phone Card */}
+                            <div className="bg-black/40 backdrop-blur-sm border border-white/10 rounded-lg p-4 flex items-start gap-4 hover:bg-black/50 transition-colors">
+                                <div className="bg-primary/20 p-3 rounded-lg shrink-0">
+                                    <Phone className="h-5 w-5 text-primary-foreground" />
+                                </div>
+                                <div className="flex-1">
+                                    <div className="text-sm font-medium text-primary-foreground/80 mb-1">
+                                        Call Us
+                                    </div>
+                                    <div className="text-primary-foreground">
+                                        {headquarters?.phone ?? '+977-1-0000000'}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Email Card */}
+                            <div className="bg-black/40 backdrop-blur-sm border border-white/10 rounded-lg p-4 flex items-start gap-4 hover:bg-black/50 transition-colors">
+                                <div className="bg-primary/20 p-3 rounded-lg shrink-0">
+                                    <Mail className="h-5 w-5 text-primary-foreground" />
+                                </div>
+                                <div className="flex-1">
+                                    <div className="text-sm font-medium text-primary-foreground/80 mb-1">
+                                        Email Us
+                                    </div>
+                                    <div className="text-primary-foreground">
+                                        {headquarters?.email ?? 'info@khrm.com.np'}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Map */}
+                        {headquarters && headquarters.latitude && headquarters.longitude && (
+                            <div className="bg-black/40 backdrop-blur-sm border border-white/10 rounded-lg p-2 overflow-hidden h-full min-h-[300px]">
+                                <iframe
+                                    title="Office Location"
+                                    src={`https://maps.google.com/maps?q=${headquarters.latitude},${headquarters.longitude}&z=15&output=embed`}
+                                    className="w-full h-full min-h-[280px] rounded-lg"
+                                    style={{ border: 0 }}
+                                    allowFullScreen
+                                    loading="lazy"
+                                    referrerPolicy="no-referrer-when-downgrade"
+                                />
+                            </div>
+                        )}
                     </div>
                 </div>
             </section>
