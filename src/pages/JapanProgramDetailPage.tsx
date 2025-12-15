@@ -41,39 +41,39 @@ export default function JapanProgramDetailPage() {
                         </Link>
                     </Button>
 
-                    <div className="grid lg:grid-cols-2 gap-12 items-center">
-                        <div className="space-y-6">
-                            <Badge variant="secondary" className="bg-white/20 text-white border-white/30">
-                                <BookOpen className="h-3 w-3 mr-1" />
-                                {program.program_type_display}
+                    <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+                        <div className="space-y-6 max-w-full">
+                            <Badge variant="secondary" className="bg-white/20 text-white border-white/30 whitespace-normal text-left h-auto py-1">
+                                <BookOpen className="h-3 w-3 mr-1 shrink-0 inline" />
+                                <span className="inline">{program.program_type_display}</span>
                             </Badge>
 
-                            <h1 className="text-4xl md:text-5xl font-bold">{program.program_type_display}</h1>
+                            <h1 className="text-3xl md:text-5xl font-bold break-words hyphens-auto">{program.program_type_display}</h1>
 
-                            <p className="text-xl text-white/90 leading-relaxed">
+                            <p className="text-lg md:text-xl text-white/90 leading-relaxed break-words">
                                 {program.subtitle}
                             </p>
 
                             {program.training_duration && (
                                 <div className="flex flex-wrap gap-4">
-                                    <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20">
-                                        <Clock className="h-4 w-4" />
-                                        <span className="text-sm font-medium">{program.training_duration}</span>
+                                    <div className="flex items-start gap-2 px-4 py-2 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 max-w-full">
+                                        <Clock className="h-4 w-4 mt-1 shrink-0" />
+                                        <span className="text-sm font-medium break-words whitespace-normal">{program.training_duration}</span>
                                     </div>
                                 </div>
                             )}
                         </div>
 
                         {program.image && (
-                            <div className="relative hidden lg:block">
-                                <div className="relative rounded-2xl overflow-hidden border-4 border-white/20 shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-500">
+                            <div className="relative mt-8 lg:mt-0 w-full">
+                                <div className="relative rounded-2xl overflow-hidden border-4 border-white/20 shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-500 max-w-[90vw] mx-auto lg:max-w-full">
                                     <img
                                         src={program.image}
                                         alt={program.program_type_display}
-                                        className="w-full h-full object-cover aspect-video"
+                                        className="w-full h-auto object-cover aspect-video"
                                     />
                                 </div>
-                                <div className="absolute -inset-4 bg-white/5 rounded-3xl -z-10 rotate-6 blur-sm" />
+                                <div className="absolute -inset-4 bg-white/5 rounded-3xl -z-10 rotate-6 blur-sm max-w-[90vw] mx-auto lg:max-w-full" />
                             </div>
                         )}
                     </div>
