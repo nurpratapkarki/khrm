@@ -238,7 +238,7 @@ class JobAdmin(admin.ModelAdmin):
     fieldsets = (
         (
             "Basic Information",
-            {"fields": ("title", "slug", "category", "industry", "client")},
+            {"fields": ("title", "slug", "image", "category", "industry", "client")},
         ),
         ("Location", {"fields": ("country", "location")}),
         (
