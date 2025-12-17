@@ -23,10 +23,16 @@ export interface ErrorResponse {
 
 // ==================== COMPANY TYPES ====================
 
+export interface Branch {
+  id: number;
+  country: string;
+}
+
 export interface Office {
   id: number;
   name: string;
-  country: 'nepal' | 'uae' | 'kuwait';
+  branch: number;
+  branch_name: string;
   address: string;
   city: string;
   phone: string;
@@ -35,7 +41,7 @@ export interface Office {
   facebook?: string;
   latitude?: string;
   longitude?: string;
-  is_headquarters: boolean;
+  is_headquarter: boolean;
   office_image?: string;
   is_active: boolean;
   display_order: number;
@@ -45,7 +51,9 @@ export interface CompanyInfo {
   id: number;
   establishment_year: number;
   license_number: string;
-  total_deployments: number;
+  total_deployment: number;
+  experience_years: number;
+  client_satisfaction: number;
   mission: string;
   vision: string;
   values: string;
@@ -61,7 +69,7 @@ export interface CompanyInfo {
   hero_image2?: string;
   hero_image3?: string;
   hero_headline: string;
-  hero_subtext: string;
+  // hero_subtext: string;
 }
 
 export interface Leadership {
@@ -426,13 +434,14 @@ export interface JapanLandingPage {
   team_members: JapanTeamMember[];
 }
 
+
 export interface JapanProgramTrainingPoint {
   id: number;
   point: string;
   order: number;
 }
 
-export interface WhyChooseJapanProgam {
+export interface WhyChooseJapanProgram {
   id: number;
   why_choose: string;
   order: number;
@@ -440,20 +449,30 @@ export interface WhyChooseJapanProgam {
 
 export interface JapanProgramType {
   id: number;
-  program_type: string;
-  program_type_display: string;
+  name: string;
+}
+
+export interface JapanProgram {
+  id: number;
+  program_type: number;
+  program_type_name: string;
+
   subtitle: string;
   overview: string;
+
   language_training_title: string;
-  training_duration?: string;
+  training_duration?: string | null;
   target_level: string;
   objective: string;
-  image?: string;
+
+  image?: string | null;
   is_active: boolean;
+
+  training_points: JapanProgramTrainingPoint[];
+  why_choose_points: WhyChooseJapanProgram[];
+
   created_at: string;
   updated_at: string;
-  training_points: JapanProgramTrainingPoint[];
-  why_choose_japan_programs: WhyChooseJapanProgam[];
 }
 
 
@@ -462,7 +481,7 @@ export interface JapanProgramType {
 export interface HomePageData {
   company_info: CompanyInfo;
   featured_clients: Client[];
-  client: Client;
+  client: Client; // Removed as it is not returned 
   industries: Industry[];
   testimonials: Testimonial[];
   featured_jobs: Job[];

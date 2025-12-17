@@ -47,12 +47,12 @@ export default function AboutPage() {
         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary-600/10 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '8s' }} />
         <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-secondary-600/10 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '10s', animationDelay: '1s' }} />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-accent-gold/5 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '12s', animationDelay: '2s' }} />
-        
+
         {/* Floating cutout shapes */}
         <div className="absolute top-20 right-20 w-32 h-32 border-4 border-primary-600/20 rounded-3xl rotate-12 animate-float" />
         <div className="absolute bottom-40 left-40 w-24 h-24 border-4 border-secondary-600/20 rounded-full animate-float" style={{ animationDelay: '1s' }} />
         <div className="absolute top-1/3 right-1/3 w-20 h-20 border-4 border-accent-gold/20 rounded-2xl -rotate-12 animate-float" style={{ animationDelay: '2s' }} />
-        
+
         <div className="container mx-auto px-4 py-24 relative z-10">
           <div className="grid gap-10 lg:grid-cols-2 items-center">
             <motion.div
@@ -67,18 +67,18 @@ export default function AboutPage() {
                   Established {companyInfo?.establishment_year}
                 </span>
               </div>
-              
+
               <h1 className="text-5xl lg:text-7xl font-bold mb-6 bg-linear-to-br from-primary-600 via-primary-700 to-secondary-600 bg-clip-text text-transparent">
                 About KHRM
               </h1>
-              
+
               <div className="relative">
                 <div className="absolute -left-4 top-0 w-1 h-full bg-linear-to-b from-primary-600 via-accent-gold to-secondary-600 rounded-full" />
                 <p className="text-xl text-muted-foreground leading-relaxed whitespace-pre-line pl-6">
                   {companyInfo?.about_text}
                 </p>
               </div>
-              
+
               <div className="flex flex-wrap gap-4 pt-4">
                 <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary-600/5 border border-primary-600/20">
                   <div className="w-3 h-3 rounded-full bg-primary-600" />
@@ -105,7 +105,7 @@ export default function AboutPage() {
                 {/* linear background layers */}
                 <div className="absolute -inset-8 bg-linear-to-br from-primary-600/20 via-accent-gold/10 to-secondary-600/20 rounded-3xl blur-2xl" aria-hidden="true" />
                 <div className="absolute -inset-4 bg-linear-to-tl from-secondary-600/10 to-primary-600/10 rounded-3xl blur-xl" aria-hidden="true" />
-                
+
                 {/* Image container with linear border */}
                 <div className="relative rounded-3xl overflow-hidden border-2 border-transparent bg-linear-to-br from-primary-600 via-accent-gold to-secondary-600 p-0.5 shadow-2xl">
                   <div className="rounded-3xl overflow-hidden bg-background">
@@ -116,7 +116,7 @@ export default function AboutPage() {
                     />
                   </div>
                 </div>
-                
+
                 {/* Floating accent elements */}
                 <div className="absolute -top-6 -right-6 w-24 h-24 bg-linear-to-br from-primary-600 to-primary-700 rounded-2xl opacity-20 rotate-12 blur-sm" />
                 <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-linear-to-br from-secondary-600 to-[#1d4ed8] rounded-full opacity-20 blur-sm" />
@@ -139,11 +139,11 @@ export default function AboutPage() {
         {/* linear background */}
         <div className="absolute inset-0 bg-linear-to-br from-primary-600/5 via-background to-secondary-600/5" />
         <div className="absolute top-20 left-20 w-96 h-96 bg-primary-600/10 rounded-full blur-3xl" />
-        
+
         {/* Decorative cutout shapes */}
         <div className="absolute top-10 right-10 w-40 h-40 border-8 border-primary-600/10 rounded-[3rem] rotate-12" />
         <div className="absolute bottom-20 left-10 w-32 h-32 border-8 border-accent-gold/10 rounded-full" />
-        
+
         <div className="container mx-auto px-4 py-24 relative z-10">
           <div className="grid gap-12 lg:grid-cols-2 items-center">
             <motion.div
@@ -199,11 +199,11 @@ export default function AboutPage() {
         {/* linear background */}
         <div className="absolute inset-0 bg-linear-to-bl from-secondary-600/5 via-muted/30 to-accent-gold/5" />
         <div className="absolute bottom-20 right-20 w-96 h-96 bg-secondary-600/10 rounded-full blur-3xl" />
-        
+
         {/* Decorative cutout shapes */}
         <div className="absolute top-20 right-20 w-40 h-40 border-8 border-secondary-600/10 rounded-[3rem] -rotate-12" />
         <div className="absolute bottom-10 right-10 w-32 h-32 border-8 border-accent-gold/10 rounded-full" />
-        
+
         <div className="container mx-auto px-4 py-24 relative z-10">
           <div className="grid gap-12 lg:grid-cols-2 items-center">
             {companyInfo?.vision_image && (
@@ -259,11 +259,11 @@ export default function AboutPage() {
         {/* linear background */}
         <div className="absolute inset-0 bg-linear-to-tr from-accent-gold/5 via-background to-primary-600/5" />
         <div className="absolute top-40 right-40 w-96 h-96 bg-accent-gold/10 rounded-full blur-3xl" />
-        
+
         {/* Decorative cutout shapes */}
         <div className="absolute top-20 left-20 w-40 h-40 border-8 border-accent-gold/10 rounded-[3rem] rotate-45" />
         <div className="absolute bottom-10 right-10 w-32 h-32 border-8 border-primary-600/10 rounded-full" />
-        
+
         <div className="container mx-auto px-4 py-24 relative z-10">
           <div className="grid gap-12 lg:grid-cols-2 items-center">
             <motion.div
@@ -318,11 +318,11 @@ export default function AboutPage() {
       <section className="relative py-24 overflow-hidden">
         <div className="absolute inset-0 bg-linear-to-br from-primary-600 via-primary-700 to-[#991b1b]" />
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMSIgb3BhY2l0eT0iMC4xIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-20" />
-        
+
         {/* Floating shapes */}
         <div className="absolute top-10 right-10 w-64 h-64 bg-white/5 rounded-full blur-3xl" />
         <div className="absolute bottom-10 left-10 w-64 h-64 bg-accent-gold/20 rounded-full blur-3xl" />
-        
+
         <div className="container mx-auto px-4 relative z-10">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
             <motion.div
@@ -335,12 +335,12 @@ export default function AboutPage() {
               <div className="absolute inset-0 bg-white/5 rounded-2xl backdrop-blur-sm" />
               <div className="relative p-6">
                 <div className="text-5xl lg:text-6xl font-bold mb-2 bg-linear-to-br from-white to-white/80 bg-clip-text text-transparent">
-                  {companyInfo?.total_deployments.toLocaleString()}+
+                  {companyInfo?.total_deployment?.toLocaleString() || '0'}+
                 </div>
                 <div className="text-white/80 text-lg">Workers Deployed</div>
               </div>
             </motion.div>
-            
+
             <motion.div
               initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
               whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
@@ -351,12 +351,12 @@ export default function AboutPage() {
               <div className="absolute inset-0 bg-white/5 rounded-2xl backdrop-blur-sm" />
               <div className="relative p-6">
                 <div className="text-5xl lg:text-6xl font-bold mb-2 bg-linear-to-br from-white to-white/80 bg-clip-text text-transparent">
-                  {new Date().getFullYear() - (companyInfo?.establishment_year || 2003)}+
+                  {companyInfo?.experience_years}+
                 </div>
                 <div className="text-white/80 text-lg">Years of Experience</div>
               </div>
             </motion.div>
-            
+
             <motion.div
               initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
               whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
@@ -372,7 +372,7 @@ export default function AboutPage() {
                 <div className="text-white/80 text-lg">Global Offices</div>
               </div>
             </motion.div>
-            
+
             <motion.div
               initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
               whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
@@ -383,7 +383,7 @@ export default function AboutPage() {
               <div className="absolute inset-0 bg-white/5 rounded-2xl backdrop-blur-sm" />
               <div className="relative p-6">
                 <div className="text-5xl lg:text-6xl font-bold mb-2 bg-linear-to-br from-white to-white/80 bg-clip-text text-transparent">
-                  100%
+                  {companyInfo?.client_satisfaction || 100}%
                 </div>
                 <div className="text-white/80 text-lg">Client Satisfaction</div>
               </div>
@@ -455,13 +455,13 @@ export default function AboutPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {offices?.map((office) => (
-              <Card key={office.id} className={office.is_headquarters ? 'border-2 border-primary' : ''}>
+              <Card key={office.id} className={office.is_headquarter ? 'border-2 border-primary' : ''}>
                 <CardHeader>
                   <div className="flex items-start justify-between mb-3">
                     <div className="p-3 bg-primary/10 rounded-full">
                       <Building2 className="h-6 w-6 text-primary" />
                     </div>
-                    {office.is_headquarters && (
+                    {office.is_headquarter && (
                       <Badge variant="default">Headquarters</Badge>
                     )}
                   </div>

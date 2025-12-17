@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import React, { useEffect, useState } from "react";
 import { Star } from "lucide-react";
 
-export const InfiniteMovingCards = ({
+export const InfiniteMovingCards = React.memo(({
   items,
   direction = "left",
   speed = "slow",
@@ -132,4 +132,5 @@ export const InfiniteMovingCards = ({
       </ul>
     </div>
   );
-};
+});
+InfiniteMovingCards.displayName = "InfiniteMovingCards";

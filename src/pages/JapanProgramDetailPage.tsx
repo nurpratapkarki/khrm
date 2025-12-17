@@ -1,6 +1,6 @@
 import { Link, useParams } from 'react-router-dom';
 import { useApi } from '@/hooks/useApi';
-import { japanprogramApi, type JapanProgramType } from '@/api';
+import { japanprogramApi, type JapanProgram } from '@/api';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -9,7 +9,7 @@ import { getImageUrl } from '@/lib/utils';
 
 export default function JapanProgramDetailPage() {
     const { id } = useParams<{ id: string }>();
-    const { data: program, loading } = useApi<JapanProgramType | null>(
+    const { data: program, loading } = useApi<JapanProgram | null>(
         () => japanprogramApi.getJapanProgram(Number(id)),
         [id],
     );
@@ -46,10 +46,10 @@ export default function JapanProgramDetailPage() {
                         <div className="space-y-6 max-w-full">
                             <Badge variant="secondary" className="bg-white/20 text-white border-white/30 whitespace-normal text-left h-auto py-1">
                                 <BookOpen className="h-3 w-3 mr-1 shrink-0 inline" />
-                                <span className="inline">{program.program_type_display}</span>
+                                <span className="inline">{program.program_type_name}</span>
                             </Badge>
 
-                            <h1 className="text-3xl md:text-5xl font-bold break-words hyphens-auto">{program.program_type_display}</h1>
+                            <h1 className="text-3xl md:text-5xl font-bold break-words hyphens-auto">{program.program_type_name}</h1>
 
                             <p className="text-lg md:text-xl text-white/90 leading-relaxed break-words">
                                 {program.subtitle}
@@ -70,7 +70,7 @@ export default function JapanProgramDetailPage() {
                                 <div className="relative rounded-2xl overflow-hidden border-4 border-white/20 shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-500 max-w-[90vw] mx-auto lg:max-w-full">
                                     <img
                                         src={getImageUrl(program.image)}
-                                        alt={program.program_type_display}
+                                        alt={program.program_type_name}
                                         className="w-full h-auto object-cover aspect-video"
                                     />
                                 </div>
@@ -197,7 +197,7 @@ export default function JapanProgramDetailPage() {
                                                 <BookOpen className="h-5 w-5 text-(--japan-primary)" />
                                                 <span className="font-semibold text-sm">Program Type</span>
                                             </div>
-                                            <p className="text-muted-foreground text-sm pl-8">{program.program_type_display}</p>
+                                            <p className="text-muted-foreground text-sm pl-8">{program.program_type_name}</p>
                                         </div>
                                     </div>
 
@@ -219,8 +219,8 @@ export default function JapanProgramDetailPage() {
                                 <CardContent className="pt-6">
                                     <h4 className="font-semibold mb-3">Why This Program?</h4>
                                     <ul className="space-y-2 text-sm text-muted-foreground">
-                                        {program.why_choose_japan_programs && program.why_choose_japan_programs.length > 0 ? (
-                                            program.why_choose_japan_programs
+                                        {program.why_choose_points && program.why_choose_points.length > 0 ? (
+                                            program.why_choose_points
                                                 .sort((a, b) => a.order - b.order)
                                                 .map((item) => (
                                                     <li key={item.id} className="flex items-start gap-2">

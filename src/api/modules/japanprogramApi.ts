@@ -1,17 +1,17 @@
 import { apiService } from '@/api/apiService';
-import type { JapanProgramType, PaginatedResponse } from '@/api/types';
+import type { JapanProgram, PaginatedResponse } from '@/api/types';
 
 export const japanprogramApi = {
-    async getJapanPrograms(): Promise<JapanProgramType[]> {
-        const response = await apiService.getReq<PaginatedResponse<JapanProgramType>>(
+    async getJapanPrograms(): Promise<JapanProgram[]> {
+        const response = await apiService.getReq<PaginatedResponse<JapanProgram>>(
             '/japan-programs/'
         );
         return response?.results || [];
     },
 
-    async getJapanProgram(id: number): Promise<JapanProgramType | null> {
+    async getJapanProgram(id: number): Promise<JapanProgram | null> {
         try {
-            const response = await apiService.getReq<JapanProgramType>(
+            const response = await apiService.getReq<JapanProgram>(
                 `/japan-programs/${id}/`
             );
             return response;

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useApi } from '@/hooks/useApi';
-import { japanApi, japanprogramApi, type JapanLandingPage, type JapanBulletPoint, type JapanProgramType } from '@/api';
+import { japanApi, japanprogramApi, type JapanLandingPage, type JapanBulletPoint, type JapanProgram } from '@/api';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -95,7 +95,7 @@ function TeamMemberCard({ member }: { member: any }) {
   );
 }
 
-function ProgramCard({ program }: { program: JapanProgramType }) {
+function ProgramCard({ program }: { program: JapanProgram }) {
   const overviewLength = program.overview?.length || 0;
   const truncatedOverview = overviewLength > 200
     ? program.overview.substring(0, 200) + '...'
@@ -108,12 +108,12 @@ function ProgramCard({ program }: { program: JapanProgramType }) {
         <div className="relative h-48 w-full overflow-hidden bg-linear-to-br from-(--japan-primary-soft)/20 to-(--japan-primary-soft)/10">
           <img
             src={getImageUrl(program.image)}
-            alt={program.program_type_display}
+            alt={program.program_type_name}
             className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
           />
           <div className="absolute inset-0 bg-linear-to-t from-black/40 to-transparent" />
           <Badge className="absolute top-4 left-4 max-w-[calc(100%-2rem)] bg-(--japan-primary) text-white border-none whitespace-normal text-left h-auto py-1">
-            {program.program_type_display}
+            {program.program_type_name}
           </Badge>
         </div>
       )}
@@ -121,7 +121,7 @@ function ProgramCard({ program }: { program: JapanProgramType }) {
       {/* Content Section */}
       <CardHeader className="space-y-2">
         <CardTitle className="text-xl font-bold text-(--japan-foreground)">
-          {program.program_type_display}
+          {program.program_type_name}
         </CardTitle>
         {program.subtitle && (
           <p className="text-sm font-medium text-(--japan-primary)">
@@ -155,7 +155,7 @@ export default function JapanPage() {
     [],
   );
 
-  const { data: programs, loading: programsLoading } = useApi<JapanProgramType[]>(
+  const { data: programs, loading: programsLoading } = useApi<JapanProgram[]>(
     () => japanprogramApi.getJapanPrograms(),
     [],
   );

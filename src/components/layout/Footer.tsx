@@ -2,17 +2,19 @@ import { Link } from 'react-router-dom';
 import { Facebook, Mail, MapPin, Phone, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useApi } from '@/hooks/useApi';
-import { companyApi, type CompanyInfo, type Office } from '@/api';
+import { companyApi, type Branch, type Office } from '@/api';
 
 export default function Footer() {
-  const { data: companyInfo } = useApi<CompanyInfo>(
-    () => companyApi.getCompanyInfo(),
-    []
-  );
+
   const { data: headquarters } = useApi<Office>(
     () => companyApi.getHeadquarters(),
     []
   );
+  const { data: branchesData } = useApi<{ count: number; next: string | null; previous: string | null; results: Branch[] }>(
+    () => companyApi.getBranches(),
+    []
+  );
+  const branches = branchesData?.results;
 
   return (
     <footer className="bg-neutral-900 text-neutral-300 border-t mt-auto">
@@ -23,7 +25,9 @@ export default function Footer() {
           <div className="space-y-4">
             <h3 className="font-bold text-xl text-white mb-4">KHRM</h3>
             <p className="text-sm text-neutral-400 leading-relaxed">
-              {companyInfo?.hero_subtext ?? 'Trusted international recruitment partner from Nepal.'}
+              {Array.isArray(branches) && branches.length > 0
+                ? branches.map(branch => branch.country).join(' • ')
+                : 'Trusted international recruitment partner from Nepal.'}
             </p>
             <p className="text-sm text-neutral-400 leading-relaxed mt-4">
               KHRM (Kanchan Human Resource Management) has been a leading recruitment agency since 2003

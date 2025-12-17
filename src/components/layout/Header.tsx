@@ -120,7 +120,7 @@ export default function Header() {
               ))}
               <div className="flex flex-col gap-2 pt-4 border-t">
                 <Button variant="outline" size="sm" asChild>
-                  <Link to="/employer-inquiry">Hire Workers</Link>
+                  <Link to="/employer-inquiry">Get Started</Link>
                 </Button>
                 <Button size="sm" asChild>
                   <a href={whatsappLink} target="_blank" rel="noreferrer">

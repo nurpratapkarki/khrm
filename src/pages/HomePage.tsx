@@ -1,6 +1,6 @@
 // src/pages/HomePage.tsx
 import { useApi } from "@/hooks/useApi";
-import { apiService, companyApi, japanApi, type HomePageData, type JapanBulletPoint, type JapanLandingPage, type Office } from "@/api";
+import { apiService, companyApi, japanApi, type Branch, type HomePageData, type JapanBulletPoint, type JapanLandingPage, type Office } from "@/api";
 import { getImageUrl } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,13 +24,13 @@ import {
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 
 export default function HomePage() {
     const navigate = useNavigate();
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-    const { data, loading, error } = useApi<HomePageData>(
+    const { data } = useApi<HomePageData>(
         () => apiService.getReq<HomePageData>("/home/"),
         [],
     );
@@ -41,6 +41,16 @@ export default function HomePage() {
     const { data: headquarters } = useApi<Office>(
         () => companyApi.getHeadquarters(),
         [],
+    );
+    const { data: branchesData } = useApi<{ count: number; next: string | null; previous: string | null; results: Branch[] }>(
+        () => companyApi.getBranches(),
+        [],
+    );
+    const branches = useMemo(() => branchesData?.results, [branchesData]);
+
+    const branchesDisplayString = useMemo(() =>
+        Array.isArray(branches) ? branches.map(branch => branch.country).join(' • ') : 'Loading...',
+        [branches]
     );
 
     const heroImages = useMemo(
@@ -54,7 +64,7 @@ export default function HomePage() {
         [data?.company_info],
     );
 
-    function renderBullets(points: JapanBulletPoint[], section: JapanBulletPoint['section']) {
+    const renderBullets = useCallback((points: JapanBulletPoint[], section: JapanBulletPoint['section']) => {
         return points
             .filter((p) => p.section === section)
             .sort((a, b) => a.order - b.order)
@@ -73,7 +83,7 @@ export default function HomePage() {
                     </div>
                 </li>
             ));
-    }
+    }, [navigate]);
 
     useEffect(() => {
         if (heroImages.length === 0) return;
@@ -85,42 +95,46 @@ export default function HomePage() {
         return () => clearInterval(interval);
     }, [heroImages.length]);
 
-    const handlePrevImage = () => {
+    const handlePrevImage = useCallback(() => {
         if (!heroImages.length) return;
         setCurrentImageIndex((prev) => (prev - 1 + heroImages.length) % heroImages.length);
-    };
+    }, [heroImages.length]);
 
-    const handleNextImage = () => {
+    const handleNextImage = useCallback(() => {
         if (!heroImages.length) return;
         setCurrentImageIndex((prev) => (prev + 1) % heroImages.length);
-    };
+    }, [heroImages.length]);
 
     const prefersReducedMotion = useReducedMotion();
 
-    if (loading) {
-        return (
-            <div className="flex items-center justify-center min-h-screen">
-                <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
-            </div>
-        );
-    }
+    const japanLanding = useMemo(() =>
+        japanLandingRaw && (japanLandingRaw as any).id
+            ? (japanLandingRaw as JapanLandingPage)
+            : null,
+        [japanLandingRaw]
+    );
 
-    if (error) {
-        return (
-            <div className="flex items-center justify-center min-h-screen">
-                <div className="text-center">
-                    <h2 className="text-2xl font-bold text-destructive mb-2">
-                        Error Loading Data
-                    </h2>
-                    <p className="text-muted-foreground">{error.message}</p>
-                </div>
-            </div>
-        );
-    }
+    const clientsList = useMemo(() =>
+        [...(data?.featured_clients || []), ...(data?.featured_clients || [])],
+        [data?.featured_clients]
+    );
 
-    const japanLanding = japanLandingRaw && (japanLandingRaw as any).id
-        ? (japanLandingRaw as JapanLandingPage)
-        : null;
+    // Derived state for other sections
+    const industries = useMemo(() => data?.industries || [], [data?.industries]);
+    const testimonials = useMemo(() =>
+        (data?.testimonials || []).map((testimonial) => ({
+            quote: testimonial.testimonial_text,
+            name: testimonial.person_name,
+            rating: testimonial.rating,
+            title: [
+                testimonial.person_position,
+                testimonial.company_name,
+            ]
+                .filter(Boolean)
+                .join(" • "),
+        })),
+        [data?.testimonials]
+    );
 
     return (
         <div className="flex flex-col">
@@ -183,7 +197,7 @@ export default function HomePage() {
                             {data?.company_info?.hero_headline}
                         </h1>
                         <p className="text-xl md:text-2xl text-white/90 mb-10 max-w-2xl mx-auto leading-relaxed drop-shadow-md">
-                            {data?.company_info?.hero_subtext}
+                            {branchesDisplayString}
                         </p>
 
                         {/* <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -289,7 +303,7 @@ export default function HomePage() {
                             {japanLanding.commitment_image && (
                                 <div className="mb-4 rounded-2xl overflow-hidden border border-(--japan-primary)/20 bg-white/80">
                                     <img
-                                        src={getImageUrl(japanLanding.commitment_image)}
+                                        src={getImageUrl(japanLanding.commitment_image) || "/placeholder.svg"}
                                         alt="Commitment section illustration"
                                         className="h-52 w-full object-cover"
                                     />
@@ -329,7 +343,7 @@ export default function HomePage() {
                             {japanLanding.preparation_image && (
                                 <div className="mb-4 rounded-2xl overflow-hidden border border-(--japan-primary)/20 bg-white/80">
                                     <img
-                                        src={getImageUrl(japanLanding.preparation_image)}
+                                        src={getImageUrl(japanLanding.preparation_image) || "/placeholder.svg"}
                                         alt="Preparation section illustration"
                                         className="h-52 w-full object-cover"
                                     />
@@ -364,7 +378,7 @@ export default function HomePage() {
                             {japanLanding.trust_image && (
                                 <div className="mt-4 rounded-2xl overflow-hidden border border-(--japan-primary)/25 bg-white/80">
                                     <img
-                                        src={getImageUrl(japanLanding.trust_image)}
+                                        src={getImageUrl(japanLanding.trust_image) || "/placeholder.svg"}
                                         alt="Trust section illustration"
                                         className="h-72 w-full object-cover"
                                     />
@@ -383,7 +397,7 @@ export default function HomePage() {
                                 {japanLanding.vision_image && (
                                     <div className="h-40 w-full overflow-hidden border-b border-(--japan-primary)/15">
                                         <img
-                                            src={getImageUrl(japanLanding.vision_image)}
+                                            src={getImageUrl(japanLanding.vision_image) || "/placeholder.svg"}
                                             alt="Vision section illustration"
                                             className="h-full w-full object-cover"
                                         />
@@ -443,7 +457,7 @@ export default function HomePage() {
                                 </div>
                             </div>
                             <div className="text-4xl font-bold text-primary">
-                                {data?.company_info?.total_deployments.toLocaleString()}
+                                {data?.company_info?.total_deployment?.toLocaleString() || '0'}
                                 +
                             </div>
                             <div className="text-muted-foreground font-medium">
@@ -483,7 +497,6 @@ export default function HomePage() {
                 </motion.div>
             </div>
 
-            {/* Rest of the sections remain the same... */}
             {/* Trusted Clients Section */}
             <section className="py-24 bg-muted/30">
                 <div className="container mx-auto px-4">
@@ -502,11 +515,13 @@ export default function HomePage() {
                         </p>
                     </motion.div>
 
-                    {/* Infinite Carousel */}
-                    <div className="relative overflow-hidden">
-                        <div className="flex animate-scroll">
-                            {/* Duplicate the array twice for seamless loop */}
-                            {[...(data?.featured_clients || []), ...(data?.featured_clients || [])].map((client, index) => (
+                    {/* Infinite Scroll Logos */}
+                    <div className="relative overflow-hidden [mask-image:linear-gradient(to_right,transparent,white_20%,white_80%,transparent)]">
+                        <div
+                            className="flex w-max animate-scroll hover:[animation-play-state:paused] [--animation-duration:20s] md:[--animation-duration:40s]"
+                        >
+                            {/* Duplicate the clients array for seamless infinite scroll */}
+                            {clientsList.map((client, index) => (
                                 <div
                                     key={`${client.id}-${index}`}
                                     className="shrink-0 w-40 h-24 mx-4 bg-white rounded-lg border p-4 flex items-center justify-center hover:shadow-lg transition-shadow"
@@ -519,14 +534,14 @@ export default function HomePage() {
                                             className="w-full h-full flex items-center justify-center"
                                         >
                                             <img
-                                                src={getImageUrl(client.logo)}
+                                                src={getImageUrl(client.logo) || "/placeholder.svg"}
                                                 alt={client.name}
                                                 className="max-w-full max-h-full object-contain grayscale hover:grayscale-0 transition-all"
                                             />
                                         </a>
                                     ) : (
                                         <img
-                                            src={getImageUrl(client.logo)}
+                                            src={getImageUrl(client.logo) || "/placeholder.svg"}
                                             alt={client.name}
                                             className="max-w-full max-h-full object-contain grayscale hover:grayscale-0 transition-all"
                                         />
@@ -551,7 +566,7 @@ export default function HomePage() {
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {(data?.industries || []).map((industry) => (
+                        {industries.map((industry) => (
                             <Link
                                 key={industry.id}
                                 to={`/industries/${industry.slug}`}
@@ -600,24 +615,7 @@ export default function HomePage() {
 
                     <div className="relative">
                         <InfiniteMovingCards
-                            items={
-                                (data?.testimonials?.length
-                                    ? data.testimonials
-                                    : []
-                                ).map((testimonial) => {
-                                    return {
-                                        quote: testimonial.testimonial_text,
-                                        name: testimonial.person_name,
-                                        rating: testimonial.rating,
-                                        title: [
-                                            testimonial.person_position,
-                                            testimonial.company_name,
-                                        ]
-                                            .filter(Boolean)
-                                            .join(" • "),
-                                    };
-                                })
-                            }
+                            items={testimonials}
                             pauseOnHover
                             speed="slow"
                             direction="left"
